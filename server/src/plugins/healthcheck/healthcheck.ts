@@ -1,0 +1,1 @@
+export { healcheckPlugin } from "./healtcheck-plugin";

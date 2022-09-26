@@ -1,0 +1,25 @@
+{
+  "name": "animate-everything",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:shared": "npm run build -w shared",
+    "start:server": "npm run start:dev -w server",
+    "start:client": "npm run start -w client",
+    "docker:up": "sudo docker-compose -f .docker/docker-compose.dev.yml up",
+    "docker:up:d": "docker-compose -f .docker/docker-compose.dev.yml up -d",
+    "docker:down": "docker-compose -f .docker/docker-compose.dev.yml down"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "server",
+    "client",
+    "shared"
+  ],
+  "devDependencies": {
+    "typescript": "4.7.4"
+  }
+}
