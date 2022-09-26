@@ -11,7 +11,7 @@ services:
       - pgconf_api:/etc/postgresql
       - pglog_api:/var/log/postgresql
     env_file:
-      - ../.env/db.env
+      - ../.env/db.env.example
     logging:
       driver: "json-file"
       options:

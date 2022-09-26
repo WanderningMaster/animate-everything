@@ -13,8 +13,7 @@ export async function gracefulShutdownPlugin(fastify: FastifyInstance, opts: Fas
             process.exit(0);
           })
           .catch((err) => {
-            fastify.log.info(`Application closed on ${signal} signal`);
-            fastify.log.error(err);
+            fastify.log.error(`${err}, Application closed on ${signal} signal`);
             process.exit(1);
           });
       });
