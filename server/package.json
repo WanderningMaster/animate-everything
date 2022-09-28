@@ -11,18 +11,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "dotenv": "^16.0.2",
     "fastify": "^4.6.0",
+    "fastify-decorators": "^3.13.1",
     "fastify-swagger": "^5.2.0",
-    "fastify-typeorm-plugin": "^2.2.1",
     "nodemon": "^2.0.20",
     "pg": "^8.4.0",
     "pino": "^8.6.0",
     "pino-pretty": "^9.1.0",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "0.2.21"
+    "typeorm": "^0.3.10"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/node": "^16.11.10",
     "ts-node": "10.7.0",
     "tsc": "^2.0.4",

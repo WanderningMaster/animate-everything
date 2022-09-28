@@ -11,6 +11,9 @@ export type AppConfig = {
   NODE_ENV: AppEnvironment;
   HOST: string;
   PORT: number;
+  enscryption: {
+    SALT_ROUNDS: number;
+  }
 }
 
 export type DbConfig = {
@@ -32,7 +35,14 @@ const isDevEnvironment = (nodeEnv = ""): boolean => nodeEnv === AppEnvironment.D
 const configuration = (): Config => {
   config();
 
-  const { API_BASE_PREFIX, NODE_ENV, PORT, HOST, DB_HOST, DB_PORT, DB_USERNAME, DB_NAME, DB_PASSWORD } = process.env;
+  const {
+    API_BASE_PREFIX,
+    NODE_ENV, PORT,
+    HOST, DB_HOST,
+    DB_PORT, DB_USERNAME,
+    DB_NAME, DB_PASSWORD,
+    SALT_ROUNDS,
+  } = process.env;
 
   return {
     APP: {
@@ -40,6 +50,9 @@ const configuration = (): Config => {
       NODE_ENV: NODE_ENV as AppEnvironment || AppEnvironment.DEVELOPMENT,
       HOST: HOST || "localhost",
       PORT: Number(PORT) || 5001,
+      enscryption: {
+        SALT_ROUNDS: Number(SALT_ROUNDS) || 10,
+      },
     },
     LOGGER: {
       LOG_LEVEL: isDevEnvironment(NODE_ENV) ? LogLevel.DEBUG : LogLevel.INFO,
