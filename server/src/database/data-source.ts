@@ -1,11 +1,12 @@
 import "reflect-metadata";
-import { Connection } from "typeorm";
+import { DataSource } from "typeorm";
 import { User } from "./entity";
 import { CONFIG } from "~/configuration/config";
 
 const { DB: config } = CONFIG;
 
-export const AppDataSource = new Connection({
+export const AppDataSource = new DataSource({
+  name: "default",
   type: "postgres",
   host: config.DB_HOST,
   port: config.DB_PORT,

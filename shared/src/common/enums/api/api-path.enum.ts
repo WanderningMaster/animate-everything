@@ -1,5 +1,6 @@
 enum ApiPath {
-  HEALTHCHECK = "/healthcheck"
+  HEALTHCHECK = "/healthcheck",
+  USER = "/user",
 }
 
 export { ApiPath };
