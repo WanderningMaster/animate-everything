@@ -1,10 +1,17 @@
-import { DefaultRequestParam, HttpCode, HttpError, Pagination, UserCreateRequestDto } from "shared/build";
+import {
+  DefaultRequestParam,
+  HttpCode,
+  HttpError,
+  Pagination,
+  UserCreateRequestDto,
+  UserResponseDto,
+} from "shared/build";
 import { FastifyRequest } from "fastify";
 import { userService } from "~/services/services";
 
 export class UserController {
 
-  public async getAll(request: FastifyRequest) {
+  public async getAll(request: FastifyRequest): Promise<UserResponseDto[]> {
     const { take, skip } = request.query as Pagination;
     return userService.getAll({
       take,
@@ -12,13 +19,13 @@ export class UserController {
     });
   }
 
-  public async create(request: FastifyRequest) {
+  public async create(request: FastifyRequest): Promise<UserResponseDto> {
     const payload = request.body as UserCreateRequestDto;
 
     return userService.createOne(payload);
   }
 
-  public async getOne(request: FastifyRequest) {
+  public async getOne(request: FastifyRequest): Promise<UserResponseDto> {
     const payload = request.params as DefaultRequestParam;
     const user = await userService.getOne(payload);
     if (!user) {

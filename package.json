@@ -7,6 +7,9 @@
     "build:shared": "npm run build -w shared",
     "start:server": "npm run start:dev -w server",
     "start:client": "npm run start -w client",
+    "lint:server": "npm run lint -w server",
+    "lint:client": "npm run lint -w client",
+    "lint": "npm run lint --workspaces --if-present",
     "docker:up": "sudo docker-compose -f .docker/docker-compose.dev.yml up",
     "docker:up:d": "docker-compose -f .docker/docker-compose.dev.yml up -d",
     "docker:down": "docker-compose -f .docker/docker-compose.dev.yml down"
@@ -20,6 +23,11 @@
     "shared"
   ],
   "devDependencies": {
-    "typescript": "4.7.4"
+    "typescript": "4.7.4",
+    "eslint": "8.19.0",
+    "eslint-plugin-import": "2.26.0"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
   }
 }

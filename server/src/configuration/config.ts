@@ -1,10 +1,9 @@
 import { config } from "dotenv";
 import { AppEnvironment, LogLevel } from "shared/build";
 
-
 export type LoggerConfig = {
   LOG_LEVEL: LogLevel;
-}
+};
 
 export type AppConfig = {
   API_BASE_PREFIX: string;
@@ -14,7 +13,7 @@ export type AppConfig = {
   enscryption: {
     SALT_ROUNDS: number;
   }
-}
+};
 
 export type DbConfig = {
   DB_PORT: number;
@@ -22,13 +21,13 @@ export type DbConfig = {
   DB_NAME: string;
   DB_USERNAME: string;
   DB_PASSWORD: string;
-}
+};
 
 export type Config = {
   APP: AppConfig;
   LOGGER: LoggerConfig;
   DB: DbConfig;
-}
+};
 
 const isDevEnvironment = (nodeEnv = ""): boolean => nodeEnv === AppEnvironment.DEVELOPMENT;
 

@@ -2,7 +2,7 @@ import { FastifyInstance } from "fastify";
 import { UserApiPath } from "shared/build";
 import { userController } from "~/controllers/controllers";
 
-export const UserRouter = async (instance: FastifyInstance) => {
+export const UserRouter = async (instance: FastifyInstance): Promise<void> => {
   instance.route({
     method: "GET",
     url: UserApiPath.$ID,

@@ -1,0 +1,2 @@
+'server/**/*.ts': npm run lint
+'client/**/*.{ts,tsx}': npm run lint
