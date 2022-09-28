@@ -29,7 +29,7 @@ class Application {
       await connect();
       instance.log.info("DB successfully connected");
     } catch (err) {
-      instance.log.error("DB initialization error");
+      instance.log.error(err, "DB initialization error");
       process.exit(0);
     }
   }
