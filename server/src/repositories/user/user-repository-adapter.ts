@@ -2,8 +2,9 @@ import { Repository } from "typeorm";
 import { User } from "~/database/entity";
 import { DefaultRequestParam, UserCreateRequestDto, UserGetAllRequestDto } from "shared/build";
 import { hashValue } from "~/utils/utils";
+import { UserRepository } from "~/services/user/port/user-repository";
 
-export class UserRepository {
+export class UserRepositoryAdapter implements UserRepository {
   private dataSource: Repository<User>;
 
   constructor(dataSource: Repository<User>) {

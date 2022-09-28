@@ -12,16 +12,16 @@ class Application {
       logger,
     });
     await this.initDb(instance);
-    await this.initPlugins(instance);
+    this.initPlugins(instance);
     this.initRoutes(instance);
 
     //TODO: scaffold middlewares, handlers and other stuff...
     return instance;
   }
 
-  public async initPlugins(instance: FastifyInstance): Promise<void> {
-    await instance.register(healcheckPlugin);
-    await instance.register(gracefulShutdownPlugin);
+  public initPlugins(instance: FastifyInstance): void {
+    instance.register(healcheckPlugin);
+    instance.register(gracefulShutdownPlugin);
   }
 
   public async initDb(instance: FastifyInstance): Promise<void> {
@@ -35,9 +35,11 @@ class Application {
   }
 
   public initRoutes(instance: FastifyInstance): void {
-    routes.map(({ router, prefix }) => instance.register(router, {
-      prefix,
-    }));
+    for (const { router, prefix } of routes) {
+      instance.register(router, {
+        prefix,
+      });
+    }
   }
 }
 

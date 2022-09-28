@@ -5,6 +5,11 @@ import { userController } from "~/controllers/controllers";
 export const UserRouter = async (instance: FastifyInstance) => {
   instance.route({
     method: "GET",
+    url: UserApiPath.$ID,
+    handler: userController.getOne,
+  });
+  instance.route({
+    method: "GET",
     url: UserApiPath.ROOT,
     handler: userController.getAll,
   });
