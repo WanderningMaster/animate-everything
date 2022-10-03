@@ -2,7 +2,7 @@ import React, { FC } from "react";
 
 const App: FC = () => {
   return (
-    <div className="underline text-3xl">
+    <div className="flex text-3xl">
       Hello world
     </div>
   );
