@@ -8,6 +8,9 @@ module.exports = {
       fontFamily: {
         sans: ["Roboto Mono", "monospace"],
       },
+      backgroundImage: {
+        "auth-background": "url('images/auth-background.jpg')",
+      },
     },
   },
   plugins: [],
