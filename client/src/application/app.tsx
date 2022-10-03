@@ -1,10 +1,16 @@
 import React, { FC } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Auth } from "../pages/auth/auth";
 
 const App: FC = () => {
   return (
-    <div className="flex text-3xl">
-      Hello world
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path={"/"} element={"Hello world"} />
+        <Route path={"/login"} element={<Auth />} />
+      </Routes>
+    </BrowserRouter>
+
   );
 };
 

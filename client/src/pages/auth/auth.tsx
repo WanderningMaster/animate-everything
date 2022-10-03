@@ -1,9 +1,8 @@
-import * as React from "react";
 import { FC, useState } from "react";
 import { SignUpForm } from "./common/sign-up-form";
 import { SignInForm } from "./common/sign-in-form";
 
-export const SignInPage: FC = () => {
+export const Auth: FC = () => {
 
   const [isSignIn, setIsSignIn] = useState(true);
 
@@ -16,7 +15,7 @@ export const SignInPage: FC = () => {
   };
 
   return (
-    <div className={"w-screen h-screen bg-purple-700 flex flex-row"}>
+    <div className={"w-screen h-screen bg-auth-background flex flex-row"}>
       <div className={"flex justify-center backdrop-blur-xl bg-white/10 w-6/12 h-full"}>
         <div className={"flex flex-col w-96 justify-center items-center"}>
           <div className={"flex flex-row justify-between items-center rounded-3xl bg-gray-700 w-full h-10 mb-3"}>
