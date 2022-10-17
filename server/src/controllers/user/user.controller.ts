@@ -2,6 +2,7 @@ import {
   DefaultRequestParam,
   HttpCode,
   HttpError,
+  JwtPair,
   Pagination,
   UserCreateRequestDto,
   UserResponseDto,
@@ -29,7 +30,37 @@ export class UserController {
     const payload = request.params as DefaultRequestParam;
     const user = await userService.getOne(payload);
     if (!user) {
-      throw new HttpError({ message: "User not found", status: HttpCode.NOT_FOUND });
+      throw new HttpError({ message: "UserEntity not found", status: HttpCode.NOT_FOUND });
+    }
+
+    return user;
+  }
+
+  public async signIn(request: FastifyRequest): Promise<UserResponseDto & JwtPair> {
+    const payload = request.body as Omit<UserCreateRequestDto, "username">;
+
+    const user = await userService.signIn(payload);
+
+    if (!user) {
+      throw new HttpError({
+        message: "Wrong email or password",
+        status: HttpCode.BAD_REQUEST,
+      });
+    }
+
+    return user;
+  }
+
+  public async signUp(request: FastifyRequest): Promise<UserResponseDto> {
+    const payload = request.body as UserCreateRequestDto;
+
+    const user = await userService.signUp(payload);
+
+    if (!user) {
+      throw new HttpError({
+        message: "User already created",
+        status: HttpCode.BAD_REQUEST,
+      });
     }
 
     return user;

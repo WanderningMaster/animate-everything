@@ -1,7 +1,14 @@
-import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { TokenModel } from "shared/build";
 import { User } from "~/database/entity/user.entity";
-import { JoinColumn } from "typeorm/browser";
 
 @Entity()
 export class Token implements TokenModel {

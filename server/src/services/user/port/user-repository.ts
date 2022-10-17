@@ -6,5 +6,7 @@ export interface UserRepository {
 
   getById({ id }: DefaultRequestParam): Promise<User | null>;
 
+  getByEmailOrUsername({ email, username }: { email?: string, username?: string }): Promise<User | null>;
+
   createOne(payload: UserCreateRequestDto): Promise<User>;
 }

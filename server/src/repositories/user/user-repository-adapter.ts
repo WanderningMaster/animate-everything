@@ -30,4 +30,13 @@ export class UserRepositoryAdapter implements UserRepository {
     const hashedPayload = { password: await hashValue(password), ...rest };
     return this.dataSource.save(hashedPayload);
   }
+
+  getByEmailOrUsername({ email, username }: { email?: string, username?: string }): Promise<User | null> {
+    return this.dataSource.findOne({
+      where: [
+        { email },
+        { username },
+      ],
+    });
+  }
 }

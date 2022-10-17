@@ -12,6 +12,10 @@ export type AppConfig = {
   PORT: number;
   enscryption: {
     SALT_ROUNDS: number;
+    ACCESS_TOKEN_SECRET: string;
+    REFRESH_TOKEN_SECRET: string;
+    ACCESS_TOKEN_LIFETIME: string,
+    REFRESH_TOKEN_LIFETIME: string,
   }
 };
 
@@ -41,7 +45,15 @@ const configuration = (): Config => {
     DB_PORT, DB_USERNAME,
     DB_NAME, DB_PASSWORD,
     SALT_ROUNDS,
+    ACCESS_TOKEN_SECRET,
+    REFRESH_TOKEN_SECRET,
+    ACCESS_TOKEN_LIFETIME,
+    REFRESH_TOKEN_LIFETIME,
   } = process.env;
+
+  if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
+    throw new Error("Missing jwt token secrets");
+  }
 
   return {
     APP: {
@@ -51,6 +63,10 @@ const configuration = (): Config => {
       PORT: Number(PORT) || 5001,
       enscryption: {
         SALT_ROUNDS: Number(SALT_ROUNDS) || 10,
+        ACCESS_TOKEN_SECRET,
+        REFRESH_TOKEN_SECRET,
+        ACCESS_TOKEN_LIFETIME: ACCESS_TOKEN_LIFETIME || "30m",
+        REFRESH_TOKEN_LIFETIME: REFRESH_TOKEN_LIFETIME || "10d",
       },
     },
     LOGGER: {

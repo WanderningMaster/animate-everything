@@ -18,4 +18,15 @@ export const UserRouter = async (instance: FastifyInstance): Promise<void> => {
     url: UserApiPath.ROOT,
     handler: userController.create,
   });
+
+  instance.route({
+    method: "POST",
+    url: UserApiPath.SIGN_IN,
+    handler: userController.signIn,
+  });
+  instance.route({
+    method: "POST",
+    url: UserApiPath.SIGN_UP,
+    handler: userController.signUp,
+  });
 };
