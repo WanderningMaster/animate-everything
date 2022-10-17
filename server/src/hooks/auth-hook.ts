@@ -3,9 +3,7 @@ import { HttpCode, HttpError } from "shared/build";
 import { verifyJwt } from "~/utils/utils";
 import { CONFIG } from "~/configuration/config";
 
-export const authHook = async (request: FastifyRequest & {
-  user: { id: string }
-}, reply: FastifyReply, done: HookHandlerDoneFunction): Promise<void> => {
+export const authHook = async (request: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction): Promise<void> => {
   const authHeader = request.headers.authorization;
   if (!authHeader) {
     throw new HttpError({

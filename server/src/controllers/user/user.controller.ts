@@ -28,6 +28,14 @@ export class UserController {
 
   public async getOne(request: FastifyRequest): Promise<UserResponseDto> {
     const payload = request.params as DefaultRequestParam;
+    const { id } = request.user;
+    if (id !== payload.id) {
+      throw new HttpError({
+        message: "Access denied",
+        status: HttpCode.SERVICE_UNAVAILABLE,
+      });
+    }
+
     const user = await userService.getOne(payload);
     if (!user) {
       throw new HttpError({ message: "UserEntity not found", status: HttpCode.NOT_FOUND });
@@ -60,6 +68,21 @@ export class UserController {
       throw new HttpError({
         message: "User already created",
         status: HttpCode.BAD_REQUEST,
+      });
+    }
+
+    return user;
+  }
+
+  public async signOut(request: FastifyRequest): Promise<boolean> {
+    const { id } = request.user;
+    console.log({ id });
+
+    const user = await userService.signOut({ id });
+    if (!user) {
+      throw new HttpError({
+        message: "User does not exists",
+        status: HttpCode.NOT_FOUND,
       });
     }
 

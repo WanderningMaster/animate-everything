@@ -85,7 +85,6 @@ export class UserService {
   }
 
   async signUp(payload: UserCreateRequestDto): Promise<UserResponseDto | null> {
-
     const alreadyCreatedUser = await this.userRepository.getByEmailOrUsername({
       email: payload.email,
       username: payload.username,
@@ -95,5 +94,19 @@ export class UserService {
     }
 
     return this.createOne(payload);
+  }
+
+  async signOut({ id }: DefaultRequestParam): Promise<boolean> {
+    const isUserExists = await this.userRepository.getById({
+      id,
+    });
+    if (!isUserExists) {
+      return false;
+    }
+    await this.tokenRepository.deleteToken({
+      id,
+    });
+
+    return true;
   }
 }
