@@ -76,7 +76,6 @@ export class UserController {
 
   public async signOut(request: FastifyRequest): Promise<boolean> {
     const { id } = request.user;
-    console.log({ id });
 
     const user = await userService.signOut({ id });
     if (!user) {
@@ -87,5 +86,38 @@ export class UserController {
     }
 
     return user;
+  }
+
+  public async me(request: FastifyRequest): Promise<UserResponseDto> {
+    const { id } = request.user;
+
+    const user = await userService.getOne({
+      id,
+    });
+
+    if (!user) {
+      throw new HttpError({
+        message: "User does not exists",
+        status: HttpCode.NOT_FOUND,
+      });
+    }
+
+    return user;
+  }
+
+  public async refresh(request: FastifyRequest): Promise<JwtPair> {
+    const { token } = request.body as { token: string };
+    const tokenPair = await userService.refresh({ token });
+
+    if (!tokenPair) {
+      throw new HttpError({
+        message: "Invalid or expired token",
+        status: HttpCode.UNAUTHORIZED,
+      });
+    }
+
+    return {
+      ...tokenPair,
+    };
   }
 }

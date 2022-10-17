@@ -37,4 +37,16 @@ export const UserRouter = async (instance: FastifyInstance): Promise<void> => {
     url: UserApiPath.SIGN_OUT,
     handler: userController.signOut,
   });
+  instance.route({
+    preHandler: authHook,
+    method: "GET",
+    url: UserApiPath.ME,
+    handler: userController.me,
+  });
+  instance.route({
+    preHandler: authHook,
+    method: "POST",
+    url: UserApiPath.REFRESH,
+    handler: userController.refresh,
+  });
 };

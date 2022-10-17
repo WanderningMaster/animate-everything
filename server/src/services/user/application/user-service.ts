@@ -109,4 +109,25 @@ export class UserService {
 
     return true;
   }
+
+  async refresh({ token }: { token: string }): Promise<JwtPair | null> {
+    const user = await this.tokenRepository.getUserByToken({
+      refreshToken: token,
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    const accessToken = await generateJwt<{ id: string }>({
+      payload: { id: user.id },
+      lifetime: CONFIG.APP.enscryption.ACCESS_TOKEN_LIFETIME,
+      secret: CONFIG.APP.enscryption.ACCESS_TOKEN_SECRET,
+    });
+
+    return {
+      refreshToken: token,
+      accessToken,
+    };
+  }
 }
