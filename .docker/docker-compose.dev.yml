@@ -1,17 +1,56 @@
 version: "3.9"
 services:
+  client:
+    image: client
+    container_name: client
+    depends_on:
+      - server
+    ports:
+      - "8080:80"
+      - "443:443"
+    env_file:
+      - ../.env/client.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    volumes:
+      - ../nginx/nginx.dev.conf:/etc/nginx/nginx.conf
+    networks:
+      - client_network
+      - server_network
+  server:
+    image: server
+    container_name: server
+    depends_on:
+      - postgres
+    ports:
+      - "5001:5001"
+    env_file:
+      - ../.env/api.env
+    networks:
+      - server_network
+      - client_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
   postgres:
     image: postgres:14
     hostname: postgres
-    container_name: 'postgres'
+    container_name: "postgres"
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - pgdata_api:/var/lib/postgresql/data
       - pgconf_api:/etc/postgresql
       - pglog_api:/var/log/postgresql
     env_file:
       - ../.env/db.env
+    networks:
+      - server_network
     logging:
       driver: "json-file"
       options:
@@ -24,3 +63,8 @@ volumes:
     driver: local
   pglog_api:
     driver: local
+networks:
+  client_network:
+    driver: bridge
+  server_network:
+    driver: bridge

@@ -5,14 +5,20 @@
   "main": "index.js",
   "scripts": {
     "build:shared": "npm run build -w shared",
+    "build:client": "npm run build -w client",
+    "build:server": "npm run build -w server",
     "start:server": "npm run start:dev -w server",
     "start:client": "npm run start -w client",
     "lint:server": "npm run lint -w server",
     "lint:client": "npm run lint -w client",
+    "postinstall": "npm run build:shared",
     "lint": "npm run lint --workspaces --if-present",
-    "docker:up": "sudo docker-compose -f .docker/docker-compose.dev.yml up",
+    "docker:up": "docker-compose -f .docker/docker-compose.dev.yml up",
+    "docker:up:debug": "docker-compose -f .docker/docker-compose.dev.yml up postgres server",
     "docker:up:d": "docker-compose -f .docker/docker-compose.dev.yml up -d",
-    "docker:down": "docker-compose -f .docker/docker-compose.dev.yml down"
+    "docker:down": "docker-compose -f .docker/docker-compose.dev.yml down",
+    "docker:build:client": "docker build --build-arg REACT_APP_API_ORIGIN_URL=/api/v1 -f .docker/client.dockerfile -t client .",
+    "docker:build:server": "docker build -f .docker/server.dockerfile -t server ."
   },
   "keywords": [],
   "author": "",
@@ -23,11 +29,15 @@
     "shared"
   ],
   "devDependencies": {
-    "typescript": "4.7.4",
     "eslint": "8.19.0",
-    "eslint-plugin-import": "2.26.0"
+    "eslint-plugin-import": "2.26.0",
+    "typescript": "^4.7.4"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
+  },
+  "dependencies": {
+    "-": "^0.0.1",
+    "g": "^2.0.1"
   }
 }
