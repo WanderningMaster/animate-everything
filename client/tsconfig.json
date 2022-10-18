@@ -1,17 +1,8 @@
 {
   "extends": "../tsconfig.json",
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  "include": ["src"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
-    "paths": {
-      "~/*": [
-        "src/*"
-      ]
-    },
     "baseUrl": "src",
     "allowJs": true,
     "skipLibCheck": true,
@@ -25,8 +16,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "typeRoots": [
-    "../node_modules/@types",
-    "../@types"
-  ]
+  "typeRoots": ["../node_modules/@types", "../@types"]
 }
