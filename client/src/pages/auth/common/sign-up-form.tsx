@@ -1,22 +1,20 @@
 import { FC } from "react";
+import { Button, Input, Link } from "components/components";
+import { AppRoute } from "shared/build";
 
 export const SignUpForm: FC = () => {
   return (
     <>
       <form className={"flex flex-col justify-center w-full"}>
-        <label className={"text-white px-4"}>Email</label>
-        <input className={"input"} placeholder={"Email"} />
-        <label className={"text-white px-4"}>Username</label>
-        <input className={"input"} placeholder={"Username"} />
-        <label className={"text-white px-4"}>Password</label>
-        <input className={"input"} type={"password"} placeholder={"Password"} />
-        <label className={"text-white px-4"}>Confirm Password</label>
-        <input className={"input"} type={"password"} placeholder={"Confirm your password"} />
-        <button className={"btn-primary"}>Sign up</button>
+        <Input label="Email" placeholder="Email" type="email" />
+        <Input label="Username" placeholder="Username" type="text" />
+        <Input label="Password" placeholder="Password" type="password" />
+        <Input label="Confirm Password" placeholder="Confirm your password" type="password" />
+        <Button title={"Sign up"} />
       </form>
-      <div className={"link mt-3"}>
+      <Link to={AppRoute.ROOT} className={"link mt-3"}>
         Already have account?
-      </div>
+      </Link>
     </>
   );
 };

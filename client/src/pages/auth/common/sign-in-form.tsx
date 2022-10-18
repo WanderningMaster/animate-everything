@@ -1,18 +1,18 @@
 import { FC } from "react";
+import { Button, Input, Link } from "components/components";
+import { AppRoute } from "shared/build";
 
 export const SignInForm: FC = () => {
   return (
     <>
       <form className={"flex flex-col justify-center w-full"}>
-        <label className={"text-white px-4"}>Email</label>
-        <input className={"input"} placeholder={"Email"} />
-        <label className={"text-white px-4"}>Password</label>
-        <input className={"input"} type={"password"} placeholder={"Password"} />
-        <button className={"btn-primary"}>Sign in</button>
+        <Input label="Email" placeholder="Email" type="email" />
+        <Input label="Password" placeholder="Password" type="password" />
+        <Button title={"Sign in"} />
       </form>
-      <div className={"link mt-3"}>
+      <Link to={AppRoute.ROOT} className={"link mt-3"}>
         Forgot your password?
-      </div>
+      </Link>
     </>
   );
 };
