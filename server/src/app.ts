@@ -1,13 +1,12 @@
 import Fastify, { FastifyInstance } from "fastify";
 import { logger } from "~/configuration/logger";
 import { gracefulShutdownPlugin, healcheckPlugin } from "~/plugins/plugins";
+import corsPlugin from "@fastify/cors";
 import { connect } from "~/database/connection";
 import { routes } from "~/routes/routes";
 
 class Application {
-
   public async initialize(): Promise<FastifyInstance> {
-
     const instance = Fastify({
       logger,
     });
@@ -22,6 +21,10 @@ class Application {
   public initPlugins(instance: FastifyInstance): void {
     instance.register(healcheckPlugin);
     instance.register(gracefulShutdownPlugin);
+    instance.register(corsPlugin, {
+      origin: "*",
+      methods: ["GET", "PUT", "POST"],
+    });
   }
 
   public async initDb(instance: FastifyInstance): Promise<void> {
