@@ -1,3 +1,4 @@
+import { Interceptor } from "./interceptors/interceptors";
 import { HttpError, checkIsOneOf, ContentType, HttpHeader, HttpMethod } from "shared/build";
 
 export type HttpOptions = {
@@ -7,10 +8,23 @@ export type HttpOptions = {
 };
 
 class Http {
-  public load<T = unknown>(url: string, options: Partial<HttpOptions> = {}): Promise<T> {
+  constructor(private preInterceptors: Interceptor[]) {}
+
+  public async load<T = unknown>(
+    url: string,
+    options: Partial<HttpOptions> = {},
+    preInterceptors = this.preInterceptors,
+  ): Promise<T> {
     const { method = HttpMethod.GET, payload = null, contentType } = options;
-    const headers = this._getHeaders(contentType);
+    let headers = this._getHeaders(contentType);
     const isJSON = checkIsOneOf(contentType, ContentType.JSON);
+
+    for (const preInterceptor of preInterceptors) {
+      const modifiedOpts = await preInterceptor({ url, options, headers });
+      headers = modifiedOpts.headers;
+      url = modifiedOpts.url;
+      options = modifiedOpts.options;
+    }
 
     return fetch(url, {
       method,
