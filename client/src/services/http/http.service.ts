@@ -1,3 +1,4 @@
+import { CONFIG } from "config/config";
 import { Interceptor } from "./interceptors/interceptors";
 import { HttpError, checkIsOneOf, ContentType, HttpHeader, HttpMethod } from "shared/build";
 
@@ -26,7 +27,7 @@ class Http {
       options = modifiedOpts.options;
     }
 
-    return fetch(url, {
+    return fetch(`${CONFIG.BASE_URL}${url}`, {
       method,
       headers,
       body: isJSON ? JSON.stringify(payload) : (payload as string),
@@ -42,6 +43,8 @@ class Http {
     if (contentType) {
       headers.append(HttpHeader.CONTENT_TYPE, contentType);
     }
+
+    headers.append("Access-Control-Allow-Origin", "*");
 
     return headers;
   }
