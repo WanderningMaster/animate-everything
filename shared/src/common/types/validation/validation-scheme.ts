@@ -1,0 +1,1 @@
+export { Schema as ValidationScheme } from "joi";

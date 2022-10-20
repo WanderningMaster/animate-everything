@@ -6,11 +6,12 @@ type ButtonProps = {
   title: string;
   onClick?: () => void;
   disabled?: boolean;
+  type?: "submit" | "reset" | "button" | undefined;
 };
 
-export const Button: FC<ButtonProps> = ({ title, onClick, disabled }) => {
+export const Button: FC<ButtonProps> = ({ title, onClick, disabled, type = "button" }) => {
   return (
-    <button onClick={onClick} className={clsx(style["btn"], disabled && style["btn-disabled"])} disabled={disabled}>
+    <button type={type} onClick={onClick} className={clsx(style["btn"], disabled && style["btn-disabled"])}>
       {title}
     </button>
   );

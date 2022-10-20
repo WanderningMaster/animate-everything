@@ -1,6 +1,9 @@
-import React, { FC } from "react";
+import React, { ReactElement } from "react";
+import { Control, FieldValues, Path, useController } from "react-hook-form";
 
-type InputProps = {
+type InputProps<T extends FieldValues> = {
+  control: Control<T>;
+  name: Path<T>;
   label: string;
   placeholder?: string;
   type?: "text" | "email" | "date" | "password";
@@ -8,14 +11,24 @@ type InputProps = {
   onFocus?: () => void;
 };
 
-export const Input: FC<InputProps> = ({ label, placeholder, type, disabled, onFocus }) => {
-  //TODO: add react form support
+export const Input = <T extends FieldValues>({
+                                               control,
+                                               name,
+                                               label,
+                                               placeholder,
+                                               type,
+                                               disabled,
+                                               onFocus,
+                                             }: InputProps<T>): ReactElement | null => {
+  const { field, fieldState: { error } } = useController({ name, control });
   return (
     <div className={"flex flex-col"}>
       <label className={"text-white px-4"}>
         <span>{label}</span>
+        {error && <span>{error.message}</span>}
       </label>
-      <input className={"input"} type={type} onFocus={onFocus} disabled={disabled} placeholder={placeholder} />
+      <input  {...field} className={"input"} type={type} onFocus={onFocus} disabled={disabled}
+              placeholder={placeholder} />
     </div>
   );
 };

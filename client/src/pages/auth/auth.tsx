@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
-import { SignUpForm } from "./common/sign-up-form";
-import { SignInForm } from "./common/sign-in-form";
+import { SignUpForm, SignUpFormValues } from "./common/sign-up-form";
+import { SignInForm, SignInFormValues } from "./common/sign-in-form";
 
 export const Auth: FC = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -11,6 +11,14 @@ export const Auth: FC = () => {
 
   const handleClickSignUp = (): void => {
     setIsSignIn(false);
+  };
+
+  const onSignIn = (formValues: SignInFormValues): void => {
+    console.log(formValues);
+  };
+
+  const onSignUp = (formValues: SignUpFormValues): void => {
+    console.log(formValues);
   };
 
   return (
@@ -35,7 +43,8 @@ export const Auth: FC = () => {
               Sign up
             </div>
           </div>
-          {isSignIn ? <SignInForm /> : <SignUpForm />}
+          {isSignIn ? <SignInForm onSubmit={onSignIn} isLoading={false} /> :
+            <SignUpForm onSubmit={onSignUp} isLoading={false} />}
         </div>
       </div>
       <div className={"pl-10 w-6/12 h-full flex flex-col justify-center"}>
