@@ -9,9 +9,19 @@ export class UserService {
     this.http = http;
   }
 
-  async getAll(): Promise<UserResponseDto[]> {
+  getAll(): Promise<UserResponseDto[]> {
     return this.http.load<UserResponseDto[]>(
       `${this.baseUrl}${UserApiPath.ROOT}`,
+      {
+        method: HttpMethod.GET,
+      },
+      [],
+    );
+  }
+
+  getOne(id: string): Promise<UserResponseDto> {
+    return this.http.load<UserResponseDto>(
+      `${this.baseUrl}${UserApiPath.ROOT}${id}`,
       {
         method: HttpMethod.GET,
       },

@@ -1,7 +1,6 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { SignUpForm } from "./common/sign-up-form";
 import { SignInForm } from "./common/sign-in-form";
-import { userService } from "services/services";
 
 export const Auth: FC = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -13,13 +12,6 @@ export const Auth: FC = () => {
   const handleClickSignUp = (): void => {
     setIsSignIn(false);
   };
-
-  useEffect(() => {
-    (async (): Promise<void> => {
-      const users = await userService.getAll();
-      console.log(users);
-    })();
-  }, []);
 
   return (
     <div className={"w-screen h-screen bg-auth-background flex flex-row"}>
