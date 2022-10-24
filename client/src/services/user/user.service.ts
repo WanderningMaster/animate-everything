@@ -1,7 +1,8 @@
 import { Http } from "services/http/http.service";
 import { ApiPath, HttpMethod, UserApiPath, UserResponseDto } from "shared/build";
+
 export class UserService {
-  private baseUrl: ApiPath;
+  private readonly baseUrl: ApiPath;
   private http: Http;
 
   constructor(baseUrl: ApiPath, http: Http) {

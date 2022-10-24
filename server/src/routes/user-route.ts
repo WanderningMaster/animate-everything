@@ -44,7 +44,6 @@ export const UserRouter = async (instance: FastifyInstance): Promise<void> => {
     handler: userController.me,
   });
   instance.route({
-    preHandler: authHook,
     method: "POST",
     url: UserApiPath.REFRESH,
     handler: userController.refresh,
