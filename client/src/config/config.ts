@@ -6,7 +6,7 @@ const configure = (): Config => {
   const { REACT_APP_API_ORIGIN_URL } = process.env;
 
   return {
-    BASE_URL: REACT_APP_API_ORIGIN_URL || "/api/v1",
+    BASE_URL: REACT_APP_API_ORIGIN_URL || "http://localhost:5001/api/v1",
   };
 };
 

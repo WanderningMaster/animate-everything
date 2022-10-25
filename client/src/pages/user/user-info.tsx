@@ -16,12 +16,11 @@ export const UserInfo: FC = () => {
 
   return (
     <div>
-      <div>{id}</div>
       {isFetched && user && (
         <ul>
-          <li>{user.id}</li>
-          <li>{user.username}</li>
-          <li>{user.email}</li>
+          <li>ID: {user.id}</li>
+          <li>Username: {user.username}</li>
+          <li>Email: {user.email}</li>
         </ul>
       )}
     </div>

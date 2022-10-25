@@ -16,12 +16,20 @@ export const updateAccessToken: PostInterceptor = async ({
   if (!token) {
     return Promise.resolve(response);
   }
+  try {
+    const { accessToken, refreshToken } = await authService.refresh(token);
 
-  const { accessToken, refreshToken } = await authService.refresh(token);
-  _localStorage.save<string>("accessToken", accessToken);
-  _localStorage.save<string>("refreshToken", refreshToken);
+    _localStorage.save<string>("accessToken", accessToken);
+    _localStorage.save<string>("refreshToken", refreshToken);
 
-  const newOptions = (await modifyAuthHeader({ options, url }))[1];
+    const newOptions = (await modifyAuthHeader({ options, url }))[1];
+    const newResponse = await makeRequestFn(url, newOptions);
 
-  return makeRequestFn(url, newOptions);
+    return newResponse;
+  } catch (e: unknown) {
+    _localStorage.remove("accessToken");
+    _localStorage.remove("refreshToken");
+
+    throw e;
+  }
 };

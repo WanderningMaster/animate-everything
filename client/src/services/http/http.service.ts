@@ -21,7 +21,6 @@ class Http {
   ): Promise<T> {
     const { method = HttpMethod.GET, payload = null, contentType } = options;
     const headers = this._getHeaders(contentType);
-    // const isJSON = checkIsOneOf(contentType, ContentType.JSON);
 
     let requestOptions: RequestInit = {
       method,
@@ -34,7 +33,7 @@ class Http {
     }
 
     const makeRequest = (url: string, options: RequestInit): Promise<Response> => fetch(url, options);
-    let response = await makeRequest(url, options);
+    let response = await makeRequest(url, requestOptions);
 
     for (const postInterceptor of postInterceptors) {
       response = await postInterceptor({
@@ -57,7 +56,6 @@ class Http {
     }
 
     headers.append("Access-Control-Allow-Origin", "*");
-
     return headers;
   }
 

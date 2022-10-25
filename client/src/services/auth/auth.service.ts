@@ -1,12 +1,21 @@
 import { Http } from "services/http/http.service";
-import { ApiPath, HttpMethod, JwtPair, UserApiPath, UserCreateRequestDto, UserResponseDto } from "shared/build";
+import {
+  ApiPath,
+  ContentType,
+  HttpMethod,
+  JwtPair,
+  UserApiPath,
+  UserCreateRequestDto,
+  UserResponseDto,
+} from "shared/build";
+import { CONFIG } from "../../config/config";
 
 export class AuthService {
-  private readonly baseUrl: ApiPath;
+  private readonly baseUrl: string;
   private http: Http;
 
   constructor(baseUrl: ApiPath, http: Http) {
-    this.baseUrl = baseUrl;
+    this.baseUrl = CONFIG.BASE_URL + baseUrl;
     this.http = http;
   }
 
@@ -15,8 +24,10 @@ export class AuthService {
       `${this.baseUrl}${UserApiPath.SIGN_UP}`,
       {
         method: HttpMethod.POST,
+        contentType: ContentType.JSON,
         payload: JSON.stringify(payload),
       },
+      [],
       [],
     );
   }
@@ -26,8 +37,10 @@ export class AuthService {
       `${this.baseUrl}${UserApiPath.SIGN_IN}`,
       {
         method: HttpMethod.POST,
+        contentType: ContentType.JSON,
         payload: JSON.stringify(payload),
       },
+      [],
       [],
     );
   }
@@ -36,7 +49,7 @@ export class AuthService {
     return this.http.load<boolean>(
       `${this.baseUrl}${UserApiPath.SIGN_OUT}`,
       {
-        method: HttpMethod.GET,
+        method: HttpMethod.POST,
       },
     );
   }
@@ -46,8 +59,11 @@ export class AuthService {
       `${this.baseUrl}${UserApiPath.REFRESH}`,
       {
         method: HttpMethod.POST,
+        contentType: ContentType.JSON,
         payload: JSON.stringify({ token }),
       },
+      [],
+      [],
     );
   }
 

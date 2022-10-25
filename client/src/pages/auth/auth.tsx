@@ -1,9 +1,14 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { SignUpForm, SignUpFormValues } from "./common/sign-up-form";
 import { SignInForm, SignInFormValues } from "./common/sign-in-form";
+import { useSignIn, useSignUp } from "api/api";
+import { useNavigate } from "react-router-dom";
 
 export const Auth: FC = () => {
   const [isSignIn, setIsSignIn] = useState(true);
+  const navigate = useNavigate();
+  const { isSuccess: isSuccessSignIn, mutateAsync: signInAsync } = useSignIn();
+  const { isSuccess: isSuccessSignUp, mutateAsync: signUpAsync } = useSignUp();
 
   const handleClickSignIn = (): void => {
     setIsSignIn(true);
@@ -13,13 +18,28 @@ export const Auth: FC = () => {
     setIsSignIn(false);
   };
 
-  const onSignIn = (formValues: SignInFormValues): void => {
+  const onSignIn = async (formValues: SignInFormValues): Promise<void> => {
     console.log(formValues);
+    await signInAsync(formValues);
   };
 
-  const onSignUp = (formValues: SignUpFormValues): void => {
-    console.log(formValues);
+  const onSignUp = async ({ username, password, email }: SignUpFormValues): Promise<void> => {
+    await signUpAsync({
+      username,
+      password,
+      email,
+    });
   };
+
+  if (isSuccessSignIn) {
+    navigate("/");
+  }
+
+  useEffect(() => {
+    if (isSuccessSignUp) {
+      setIsSignIn(true);
+    }
+  }, [isSuccessSignUp]);
 
   return (
     <div className={"w-screen h-screen bg-auth-background flex flex-row"}>
