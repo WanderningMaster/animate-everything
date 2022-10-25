@@ -9,9 +9,9 @@ export const userSignIn = Joi.object<Omit<UserCreateRequestDto, "username">, tru
     .pattern(/[а-яА-ЯЁёІіЄєЇї]/, { invert: true })
     .required()
     .messages({
-      "string.email": "Email no valid",
-      "string.empty": "Email is required",
-      "string.min": "Email too small",
+      "string.email": "email not valid",
+      "string.empty": "email is required",
+      "string.min": "email too small",
     }),
   password: Joi.string()
     .trim()
@@ -19,8 +19,8 @@ export const userSignIn = Joi.object<Omit<UserCreateRequestDto, "username">, tru
     .max(16)
     .required()
     .messages({
-      "string.empty": "Password is required",
-      "string.min": "Password should have 8-16 characters",
-      "string.max": "Password should have 8-16 characters",
+      "string.empty": "password is required",
+      "string.min": "password too small",
+      "string.max": "Password too big",
     }),
 });
