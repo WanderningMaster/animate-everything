@@ -1,38 +1,49 @@
-import { CONFIG } from "config/config";
-import { Interceptor } from "./interceptors/interceptors";
-import { HttpError, checkIsOneOf, ContentType, HttpHeader, HttpMethod } from "shared/build";
+import { PostInterceptor, PreInterceptor } from "./interceptors/interceptors";
+import { ContentType, HttpError, HttpHeader, HttpMethod } from "shared/build";
 
 export type HttpOptions = {
   method: HttpMethod;
   contentType: ContentType;
-  payload: Record<string, unknown> | string;
+  payload: BodyInit | null;
 };
 
 class Http {
-  constructor(private preInterceptors: Interceptor[]) {}
+  constructor(
+    private preInterceptors: PreInterceptor[],
+    private postInterceptors: PostInterceptor[]) {
+  }
 
   public async load<T = unknown>(
     url: string,
     options: Partial<HttpOptions> = {},
     preInterceptors = this.preInterceptors,
+    postInterceptors = this.postInterceptors,
   ): Promise<T> {
     const { method = HttpMethod.GET, payload = null, contentType } = options;
-    let headers = this._getHeaders(contentType);
-    const isJSON = checkIsOneOf(contentType, ContentType.JSON);
+    const headers = this._getHeaders(contentType);
 
-    for (const preInterceptor of preInterceptors) {
-      const modifiedOpts = await preInterceptor({ url, options, headers });
-      headers = modifiedOpts.headers;
-      url = modifiedOpts.url;
-      options = modifiedOpts.options;
-    }
-
-    return fetch(`${CONFIG.BASE_URL}${url}`, {
+    let requestOptions: RequestInit = {
       method,
       headers,
-      body: isJSON ? JSON.stringify(payload) : (payload as string),
-    })
-      .then(this._checkStatus)
+      body: payload,
+    };
+
+    for (const preInterceptor of preInterceptors) {
+      [url, requestOptions] = await preInterceptor({ url, options: requestOptions });
+    }
+
+    const makeRequest = (url: string, options: RequestInit): Promise<Response> => fetch(url, options);
+    let response = await makeRequest(url, requestOptions);
+
+    for (const postInterceptor of postInterceptors) {
+      response = await postInterceptor({
+        initialRequest: { options: requestOptions, url },
+        makeRequestFn: makeRequest,
+        response,
+      });
+    }
+
+    return this._checkStatus(response)
       .then((res) => this._parseJSON<T>(res))
       .catch(this._throwError);
   }
@@ -45,11 +56,10 @@ class Http {
     }
 
     headers.append("Access-Control-Allow-Origin", "*");
-
     return headers;
   }
 
-  private _checkStatus(response: Response): Response {
+  private async _checkStatus(response: Response): Promise<Response> {
     if (!response.ok) {
       throw new HttpError({
         status: response.status,

@@ -1,9 +1,14 @@
-import { FC, useState } from "react";
-import { SignUpForm } from "./common/sign-up-form";
-import { SignInForm } from "./common/sign-in-form";
+import { FC, useEffect, useState } from "react";
+import { SignUpForm, SignUpFormValues } from "./common/sign-up-form";
+import { SignInForm, SignInFormValues } from "./common/sign-in-form";
+import { useSignIn, useSignUp } from "api/api";
+import { useNavigate } from "react-router-dom";
 
 export const Auth: FC = () => {
   const [isSignIn, setIsSignIn] = useState(true);
+  const navigate = useNavigate();
+  const { isSuccess: isSuccessSignIn, mutateAsync: signInAsync } = useSignIn();
+  const { isSuccess: isSuccessSignUp, mutateAsync: signUpAsync } = useSignUp();
 
   const handleClickSignIn = (): void => {
     setIsSignIn(true);
@@ -13,9 +18,31 @@ export const Auth: FC = () => {
     setIsSignIn(false);
   };
 
+  const onSignIn = async (formValues: SignInFormValues): Promise<void> => {
+    await signInAsync(formValues);
+  };
+
+  const onSignUp = async ({ username, password, email }: SignUpFormValues): Promise<void> => {
+    await signUpAsync({
+      username,
+      password,
+      email,
+    });
+  };
+
+  if (isSuccessSignIn) {
+    navigate("/");
+  }
+
+  useEffect(() => {
+    if (isSuccessSignUp) {
+      setIsSignIn(true);
+    }
+  }, [isSuccessSignUp]);
+
   return (
     <div className={"w-screen h-screen bg-auth-background flex flex-row"}>
-      <div className={"flex justify-center backdrop-blur-xl bg-white/10 w-6/12 h-full"}>
+      <div className={"flex justify-center backdrop-blur-xl bg-white/10 w-5/12 h-full"}>
         <div className={"flex flex-col w-96 justify-center items-center"}>
           <div className={"flex flex-row justify-between items-center rounded-3xl bg-gray-700 w-full h-10 mb-3"}>
             <div
@@ -35,7 +62,8 @@ export const Auth: FC = () => {
               Sign up
             </div>
           </div>
-          {isSignIn ? <SignInForm /> : <SignUpForm />}
+          {isSignIn ? <SignInForm onSubmit={onSignIn} isLoading={false} /> :
+            <SignUpForm onSubmit={onSignUp} isLoading={false} />}
         </div>
       </div>
       <div className={"pl-10 w-6/12 h-full flex flex-col justify-center"}>

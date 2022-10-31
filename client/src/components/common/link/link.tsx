@@ -4,7 +4,7 @@ import { AppRoute } from "shared/build";
 
 type LinkProps = {
   to: AppRoute;
-  className: string;
+  className?: string;
   children: ReactNode;
 };
 

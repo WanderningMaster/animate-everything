@@ -1,7 +1,7 @@
 export type StorageKeys = "accessToken" | "refreshToken";
 
 class LocalStorageService {
-  save<T>(key: string, data: T): void {
+  save<T>(key: StorageKeys, data: T): void {
     localStorage.setItem(key, JSON.stringify(data));
   }
 
@@ -13,7 +13,7 @@ class LocalStorageService {
     return JSON.parse(data) as T;
   }
 
-  remove(key: string): void {
+  remove(key: StorageKeys): void {
     localStorage.removeItem(key);
   }
 }
