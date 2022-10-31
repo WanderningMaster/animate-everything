@@ -21,10 +21,10 @@ export const Input = <T extends FieldValues>({
                                                onFocus,
                                              }: InputProps<T>): ReactElement | null => {
   const { field, fieldState: { error } } = useController({ name, control });
-  
+
   return (
     <div className={"flex flex-col"}>
-      <label className={"text-white px-4 flex flex-row justify-between"}>
+      <label className={"text-white px-1 flex flex-row justify-between"}>
         <div>{label}</div>
         {error && <div className={"text-red-300"}>{error.message}</div>}
       </label>

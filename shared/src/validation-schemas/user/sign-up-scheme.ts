@@ -20,7 +20,7 @@ export const userSignUp = Joi.object<UserCreateRequestDto & { confirmPassword: s
     .messages({
       "string.username": "Username no valid",
       "string.empty": "Username is required",
-      "string.min": "Username too small",
+      "string.min": "Username too short",
     }),
   password: Joi.string()
     .trim()
@@ -29,14 +29,13 @@ export const userSignUp = Joi.object<UserCreateRequestDto & { confirmPassword: s
     .required()
     .messages({
       "string.empty": "Password is required",
-      "string.min": "Password should have 8-16 characters",
-      "string.max": "Password should have 8-16 characters",
+      "string.min": "Password is too short",
+      "string.max": "Password is too long",
     }),
   confirmPassword: Joi.string()
+    .equal(Joi.ref("password"))
     .required()
-    .valid(Joi.ref("password"))
     .messages({
-      "string.required": "Confirm password is required",
-      "string.valid": "Passwords should match",
+      "any.only": "Password not match",
     }),
 });

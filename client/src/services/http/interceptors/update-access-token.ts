@@ -27,6 +27,7 @@ export const updateAccessToken: PostInterceptor = async ({
 
     return newResponse;
   } catch (e: unknown) {
+    await authService.signOut();
     _localStorage.remove("accessToken");
     _localStorage.remove("refreshToken");
 

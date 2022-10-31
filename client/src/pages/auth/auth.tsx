@@ -19,7 +19,6 @@ export const Auth: FC = () => {
   };
 
   const onSignIn = async (formValues: SignInFormValues): Promise<void> => {
-    console.log(formValues);
     await signInAsync(formValues);
   };
 
@@ -43,7 +42,7 @@ export const Auth: FC = () => {
 
   return (
     <div className={"w-screen h-screen bg-auth-background flex flex-row"}>
-      <div className={"flex justify-center backdrop-blur-xl bg-white/10 w-6/12 h-full"}>
+      <div className={"flex justify-center backdrop-blur-xl bg-white/10 w-5/12 h-full"}>
         <div className={"flex flex-col w-96 justify-center items-center"}>
           <div className={"flex flex-row justify-between items-center rounded-3xl bg-gray-700 w-full h-10 mb-3"}>
             <div

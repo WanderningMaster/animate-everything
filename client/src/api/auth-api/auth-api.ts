@@ -1,11 +1,12 @@
 import { JwtPair, UserCreateRequestDto, UserResponseDto } from "shared/build";
 import { _localStorage, authService } from "services/services";
-import { UseMutateAsyncFunction, UseMutateFunction, useMutation } from "react-query";
+import { UseMutateAsyncFunction, UseMutateFunction, useMutation, useQuery } from "react-query";
 
 export enum AuthQuery {
   SIGN_IN = "auth/sign-in",
   SIGN_OUT = "auth/sign-out",
   SIGN_UP = "auth/sign-up",
+  ME = "auth/me",
 }
 
 export const useSignIn = (): {
@@ -82,6 +83,25 @@ export const useSignUp = (): {
     isLoading,
     isSuccess,
     mutateAsync,
+    user,
+  };
+};
+
+export const useMe = (): {
+  isError: boolean;
+  isFetched: boolean;
+  isAuth: boolean;
+  isLoading: boolean;
+  user: UserResponseDto | undefined;
+} => {
+  const fetcher = (): Promise<UserResponseDto> => authService.me();
+  const { isError, isFetched, isSuccess, isLoading, data: user } = useQuery(AuthQuery.ME, fetcher);
+
+  return {
+    isError,
+    isFetched,
+    isAuth: isSuccess && user ? true : false,
+    isLoading,
     user,
   };
 };

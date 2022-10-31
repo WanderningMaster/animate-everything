@@ -9,6 +9,7 @@ import {
   UserResponseDto,
 } from "shared/build";
 import { CONFIG } from "../../config/config";
+import { modifyAuthHeader } from "../http/interceptors/modify-auth-header";
 
 export class AuthService {
   private readonly baseUrl: string;
@@ -51,6 +52,8 @@ export class AuthService {
       {
         method: HttpMethod.POST,
       },
+      [modifyAuthHeader],
+      [],
     );
   }
 
