@@ -1,4 +1,4 @@
-import { UserRouter } from "./user-route";
+import { UserRouter } from "./user/user-route";
 import { ApiPath } from "shared/build";
 import { createApiPath } from "~/utils/utils";
 

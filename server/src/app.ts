@@ -2,8 +2,11 @@ import Fastify, { FastifyInstance } from "fastify";
 import { logger } from "~/configuration/logger";
 import { gracefulShutdownPlugin, healcheckPlugin } from "~/plugins/plugins";
 import corsPlugin from "@fastify/cors";
+import fastifySwagger from "@fastify/swagger";
 import { connect } from "~/database/connection";
 import { routes } from "~/routes/routes";
+import fastifySwaggerUi from "@fastify/swagger-ui";
+import { swaggerOpts } from "~/configuration/swagger-conf";
 
 class Application {
   public async initialize(): Promise<FastifyInstance> {
@@ -12,7 +15,10 @@ class Application {
     });
     await this.initDb(instance);
     this.initPlugins(instance);
+    await this.initSwagger(instance);
     this.initRoutes(instance);
+    await instance.ready();
+    instance.swagger();
 
     //TODO: scaffold middlewares, handlers and other stuff...
     return instance;
@@ -25,6 +31,25 @@ class Application {
       origin: "*",
       methods: ["GET", "PUT", "POST"],
     });
+  }
+
+  public async initSwagger(instance: FastifyInstance): Promise<void> {
+    await instance.register(fastifySwagger, {
+      swagger: {
+        info: {
+          title: "Animate-Everything API documentation",
+          version: "0.1.0",
+        },
+        securityDefinitions: {
+          Bearer: {
+            type: "apiKey",
+            name: "Authorization",
+            in: "header",
+          },
+        },
+      },
+    });
+    await instance.register(fastifySwaggerUi, swaggerOpts);
   }
 
   public async initDb(instance: FastifyInstance): Promise<void> {
