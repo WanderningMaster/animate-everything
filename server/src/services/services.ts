@@ -1,3 +1,5 @@
+import { initFirebaseStorage } from "./../configuration/firebase-conf";
+import { CloudService } from "~/services/common/cloud/application/cloud-service";
 import { UserServiceContainer } from "~/services/user/user-service-container";
 import { UserRepositoryAdapter } from "~/repositories/user/user-repository-adapter";
 import { AppDataSource } from "~/database/data-source";
@@ -11,7 +13,13 @@ const userServiceContainer: UserServiceContainer = {
 };
 const userService = new UserService(userServiceContainer);
 
-export {
-  userService,
-  userServiceContainer,
-};
+let cloudService: CloudService;
+(async (): Promise<void> => {
+  const storage = await initFirebaseStorage();
+
+  cloudService = new CloudService({
+    storage,
+  });
+})();
+
+export { userService, userServiceContainer, cloudService };

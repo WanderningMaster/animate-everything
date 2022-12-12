@@ -14,9 +14,9 @@ export type AppConfig = {
     SALT_ROUNDS: number;
     ACCESS_TOKEN_SECRET: string;
     REFRESH_TOKEN_SECRET: string;
-    ACCESS_TOKEN_LIFETIME: string,
-    REFRESH_TOKEN_LIFETIME: string,
-  }
+    ACCESS_TOKEN_LIFETIME: string;
+    REFRESH_TOKEN_LIFETIME: string;
+  };
 };
 
 export type DbConfig = {
@@ -27,10 +27,17 @@ export type DbConfig = {
   DB_PASSWORD: string;
 };
 
+export type CloundConfig = {
+  SERVICE_ACCOUNT_PATH: string;
+  DEFAULT_BUCKET: string;
+  CLOUD_SIGNED_URL_EXPIRATION: string;
+};
+
 export type Config = {
   APP: AppConfig;
   LOGGER: LoggerConfig;
   DB: DbConfig;
+  CLOUD: CloundConfig;
 };
 
 const isDevEnvironment = (nodeEnv = ""): boolean => nodeEnv === AppEnvironment.DEVELOPMENT;
@@ -40,25 +47,36 @@ const configuration = (): Config => {
 
   const {
     API_BASE_PREFIX,
-    NODE_ENV, PORT,
-    HOST, DB_HOST,
-    DB_PORT, DB_USERNAME,
-    DB_NAME, DB_PASSWORD,
+    NODE_ENV,
+    PORT,
+    HOST,
+    DB_HOST,
+    DB_PORT,
+    DB_USERNAME,
+    DB_NAME,
+    DB_PASSWORD,
     SALT_ROUNDS,
     ACCESS_TOKEN_SECRET,
     REFRESH_TOKEN_SECRET,
     ACCESS_TOKEN_LIFETIME,
     REFRESH_TOKEN_LIFETIME,
+    SERVICE_ACCOUNT_PATH,
+    DEFAULT_BUCKET,
+    CLOUD_SIGNED_URL_EXPIRATION,
   } = process.env;
 
   if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
     throw new Error("Missing jwt token secrets");
   }
 
+  if (!SERVICE_ACCOUNT_PATH || !DEFAULT_BUCKET) {
+    throw new Error("Missing firestore secrets");
+  }
+
   return {
     APP: {
       API_BASE_PREFIX: API_BASE_PREFIX || "/api/v1",
-      NODE_ENV: NODE_ENV as AppEnvironment || AppEnvironment.DEVELOPMENT,
+      NODE_ENV: (NODE_ENV as AppEnvironment) || AppEnvironment.DEVELOPMENT,
       HOST: HOST || "localhost",
       PORT: Number(PORT) || 5001,
       enscryption: {
@@ -78,6 +96,11 @@ const configuration = (): Config => {
       DB_USERNAME: DB_USERNAME || "",
       DB_NAME: DB_NAME || "",
       DB_PASSWORD: DB_PASSWORD || "",
+    },
+    CLOUD: {
+      SERVICE_ACCOUNT_PATH,
+      DEFAULT_BUCKET,
+      CLOUD_SIGNED_URL_EXPIRATION: CLOUD_SIGNED_URL_EXPIRATION || "2100-03-09",
     },
   };
 };
