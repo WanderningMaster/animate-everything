@@ -8,10 +8,9 @@ import {
   UserResponseDto,
 } from "shared/build";
 import { FastifyRequest } from "fastify";
-import { userService } from "~/services/services";
+import { userService, cloudService } from "~/services/services";
 
 export class UserController {
-
   public async getAll(request: FastifyRequest): Promise<UserResponseDto[]> {
     const { take, skip } = request.query as Pagination;
     return userService.getAll({
@@ -119,5 +118,17 @@ export class UserController {
     return {
       ...tokenPair,
     };
+  }
+
+  //NOTE: only for test purposes
+  public async upload(request: FastifyRequest): Promise<string> {
+    const { base64Str, dest } = request.body as { base64Str: string; dest: string };
+
+    const signedUrl = await cloudService.upload({
+      base64Str,
+      dest,
+    });
+
+    return signedUrl;
   }
 }

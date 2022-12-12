@@ -82,4 +82,10 @@ export const UserRouter = async (instance: FastifyInstance): Promise<void> => {
     },
     handler: userController.refresh,
   });
+
+  instance.route({
+    method: "POST",
+    url: "/upload",
+    handler: userController.upload,
+  });
 };
