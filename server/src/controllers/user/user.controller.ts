@@ -11,22 +11,34 @@ import { FastifyRequest } from "fastify";
 import { userService, cloudService } from "~/services/services";
 
 export class UserController {
-  public async getAll(request: FastifyRequest): Promise<UserResponseDto[]> {
-    const { take, skip } = request.query as Pagination;
+  public async getAll(
+    request: FastifyRequest<{
+      Querystring: Pagination;
+    }>,
+  ): Promise<UserResponseDto[]> {
+    const { take, skip } = request.query;
     return userService.getAll({
       take,
       skip,
     });
   }
 
-  public async create(request: FastifyRequest): Promise<UserResponseDto> {
-    const payload = request.body as UserCreateRequestDto;
+  public async create(
+    request: FastifyRequest<{
+      Body: UserCreateRequestDto;
+    }>,
+  ): Promise<UserResponseDto> {
+    const payload = request.body;
 
     return userService.createOne(payload);
   }
 
-  public async getOne(request: FastifyRequest): Promise<UserResponseDto> {
-    const payload = request.params as DefaultRequestParam;
+  public async getOne(
+    request: FastifyRequest<{
+      Params: DefaultRequestParam;
+    }>,
+  ): Promise<UserResponseDto> {
+    const payload = request.params;
     const { id } = request.user;
     if (id !== payload.id) {
       throw new HttpError({
@@ -43,8 +55,12 @@ export class UserController {
     return user;
   }
 
-  public async signIn(request: FastifyRequest): Promise<UserResponseDto & JwtPair> {
-    const payload = request.body as Omit<UserCreateRequestDto, "username">;
+  public async signIn(
+    request: FastifyRequest<{
+      Body: Omit<UserCreateRequestDto, "username">;
+    }>,
+  ): Promise<UserResponseDto & JwtPair> {
+    const payload = request.body;
 
     const user = await userService.signIn(payload);
 
@@ -58,8 +74,12 @@ export class UserController {
     return user;
   }
 
-  public async signUp(request: FastifyRequest): Promise<UserResponseDto> {
-    const payload = request.body as UserCreateRequestDto;
+  public async signUp(
+    request: FastifyRequest<{
+      Body: UserCreateRequestDto;
+    }>,
+  ): Promise<UserResponseDto> {
+    const payload = request.body;
 
     const user = await userService.signUp(payload);
 
@@ -104,8 +124,12 @@ export class UserController {
     return user;
   }
 
-  public async refresh(request: FastifyRequest): Promise<JwtPair> {
-    const { token } = request.body as { token: string };
+  public async refresh(
+    request: FastifyRequest<{
+      Body: { token: string };
+    }>,
+  ): Promise<JwtPair> {
+    const { token } = request.body;
     const tokenPair = await userService.refresh({ token });
 
     if (!tokenPair) {
@@ -121,8 +145,12 @@ export class UserController {
   }
 
   //NOTE: only for test purposes
-  public async upload(request: FastifyRequest): Promise<string> {
-    const { base64Str, dest } = request.body as { base64Str: string; dest: string };
+  public async upload(
+    request: FastifyRequest<{
+      Body: { base64Str: string; dest: string };
+    }>,
+  ): Promise<string> {
+    const { base64Str, dest } = request.body;
 
     const signedUrl = await cloudService.upload({
       base64Str,
