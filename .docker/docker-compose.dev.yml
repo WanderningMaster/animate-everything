@@ -45,7 +45,21 @@ services:
       - "3306:3306"
     env_file:
       - ../.env/db.env
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    hostname: rabbit
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq/mnesia
+    networks:
+      - server_network
+    ports:
+      # AMQP protocol port
+      - "5672:5672"
+      # HTTP management UI
+      - "15672:15672"
 volumes:
+  rabbitmq:
+    driver: local
   mysql-data:
     driver: local
 networks:
