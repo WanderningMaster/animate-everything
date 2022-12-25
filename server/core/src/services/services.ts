@@ -1,5 +1,6 @@
 import { initFirebaseStorage } from "./../configuration/firebase-conf";
 import { CloudService } from "~/services/common/cloud/application/cloud-service";
+import { AmqpService } from "~/services/common/amqp/application/amqp-service";
 import { UserServiceContainer } from "~/services/user/user-service-container";
 import { UserRepositoryAdapter } from "~/repositories/user/user-repository-adapter";
 import { AppDataSource } from "~/database/data-source";
@@ -22,4 +23,6 @@ let cloudService: CloudService;
   });
 })();
 
-export { userService, userServiceContainer, cloudService };
+const amqpService = new AmqpService();
+
+export { userService, userServiceContainer, cloudService, amqpService };

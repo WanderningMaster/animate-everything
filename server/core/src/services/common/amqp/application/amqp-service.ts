@@ -1,7 +1,7 @@
 import { Channel, Connection } from "amqplib";
-import { AmqpConsumeDto, AmqpQueue, AmqpSendToQueueDto } from "~/shared";
-import { logger } from "~/config/logger";
-import { tryConnect } from "~/config/amqp-connection";
+import { AmqpConsumeDto, AmqpQueue, AmqpSendToQueueDto } from "shared/build";
+import { logger } from "~/configuration/logger";
+import { tryConnect } from "~/configuration/amqp-connection";
 
 export class AmqpService {
   public amqpChannel!: Channel;
@@ -18,7 +18,7 @@ export class AmqpService {
   }
 
   async initQueues(amqpChannel: Channel): Promise<void> {
-    await Promise.all([amqpChannel.assertQueue(AmqpQueue.GIF_OUTPUT)]);
+    await Promise.all([amqpChannel.assertQueue(AmqpQueue.VIDEO_INPUT)]);
   }
 
   async sendToQueue({ queue, content, options }: AmqpSendToQueueDto): Promise<boolean> {

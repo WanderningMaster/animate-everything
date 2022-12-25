@@ -10,6 +10,7 @@ export type AppConfig = {
   NODE_ENV: AppEnvironment;
   HOST: string;
   PORT: number;
+  RABBITMQ_URL: string;
   enscryption: {
     SALT_ROUNDS: number;
     ACCESS_TOKEN_SECRET: string;
@@ -63,6 +64,8 @@ const configuration = (): Config => {
     SERVICE_ACCOUNT_PATH,
     DEFAULT_BUCKET,
     CLOUD_SIGNED_URL_EXPIRATION,
+    RABBITMQ_HOST,
+    RABBITMQ_PORT,
   } = process.env;
 
   if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
@@ -79,6 +82,7 @@ const configuration = (): Config => {
       NODE_ENV: (NODE_ENV as AppEnvironment) || AppEnvironment.DEVELOPMENT,
       HOST: HOST || "localhost",
       PORT: Number(PORT) || 5001,
+      RABBITMQ_URL: `amqp://${RABBITMQ_HOST || "localhost"}:${Number(RABBITMQ_PORT) || 5672}`,
       enscryption: {
         SALT_ROUNDS: Number(SALT_ROUNDS) || 10,
         ACCESS_TOKEN_SECRET,

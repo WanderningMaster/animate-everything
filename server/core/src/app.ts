@@ -7,6 +7,7 @@ import { connect } from "~/database/connection";
 import { routes } from "~/routes/routes";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import { swaggerOpts } from "~/configuration/swagger-conf";
+import { amqpService } from "./services/services";
 
 class Application {
   public async initialize(): Promise<FastifyInstance> {
@@ -14,6 +15,7 @@ class Application {
       logger,
     });
     await this.initDb(instance);
+    await this.initAmqp(instance);
     this.initPlugins(instance);
     await this.initSwagger(instance);
     this.initRoutes(instance);
@@ -58,6 +60,16 @@ class Application {
       instance.log.info("DB successfully connected");
     } catch (err) {
       instance.log.error(err, "DB initialization error");
+      process.exit(0);
+    }
+  }
+
+  public async initAmqp(instance: FastifyInstance): Promise<void> {
+    try {
+      await amqpService.connect();
+      instance.log.info("AMQP successfully connected");
+    } catch (err) {
+      instance.log.error(err, "AMQP initialization error");
       process.exit(0);
     }
   }
