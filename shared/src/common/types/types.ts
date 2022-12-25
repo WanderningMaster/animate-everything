@@ -4,3 +4,4 @@ export * from "./common/common";
 export * from "./token/token";
 export * from "./jwt/jwt";
 export * from "./validation/validation";
+export * from "./amqp/amqp";

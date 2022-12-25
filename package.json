@@ -6,8 +6,9 @@
   "scripts": {
     "build:shared": "npm run build -w shared",
     "build:client": "npm run build -w client",
-    "build:server": "npm run build -w server",
-    "start:server": "npm run start:dev -w server",
+    "build:server": "npm run build -w server/core",
+    "start:server": "npm run start:dev -w server/core",
+    "start:transcoder": "npm run start:dev -w server/transcoding-server",
     "start:client": "npm run start -w client",
     "lint:server": "npm run lint -w server",
     "lint:client": "npm run lint -w client",
@@ -25,7 +26,8 @@
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "server",
+    "server/core",
+    "server/transcoding-server",
     "client",
     "shared"
   ],
