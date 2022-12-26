@@ -1,9 +1,9 @@
-import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import { FastifyRequest } from "fastify";
 import { HttpCode, HttpError } from "shared/build";
 import { verifyJwt } from "~/utils/utils";
 import { CONFIG } from "~/configuration/config";
 
-export const authHook = async (request: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction): Promise<void> => {
+export const authHook = async (request: FastifyRequest): Promise<void> => {
   const authHeader = request.headers.authorization;
   if (!authHeader) {
     throw new HttpError({
@@ -30,8 +30,6 @@ export const authHook = async (request: FastifyRequest, reply: FastifyReply, don
       status: HttpCode.UNAUTHORIZED,
     });
   }
-
-  done();
 };
 
 const getBearerTokenFromAuthHeader = (authHeader: string): string => {
