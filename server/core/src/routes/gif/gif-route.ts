@@ -12,12 +12,19 @@ export const GifRouter = async (instance: FastifyInstance): Promise<void> => {
   instance.route({
     method: "POST",
     url: GifApiPath.ROOT,
-    preHandler: authHook,
+    preHandler: authHook(false),
     handler: gifController.create,
+  });
+  instance.route({
+    method: "POST",
+    url: "/react",
+    preHandler: authHook(false),
+    handler: gifController.addReaction,
   });
   instance.route({
     method: "GET",
     url: GifApiPath.ROOT,
     handler: gifController.getAll,
+    preHandler: authHook(true),
   });
 };

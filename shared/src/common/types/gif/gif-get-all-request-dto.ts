@@ -1,5 +1,7 @@
 import { Pagination } from "~/common/types/pagination/pagination-dto";
 
-type GifGetAllRequestDto = Pagination;
+type GifGetAllRequestDto = Pagination & {
+  userId?: string;
+};
 
 export { GifGetAllRequestDto };

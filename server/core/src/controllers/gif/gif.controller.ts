@@ -1,13 +1,15 @@
 import {
   DefaultRequestParam,
+  GifAddReactionRequestDto,
   GifCreateRequestDto,
   GifResponseDto,
   HttpCode,
   HttpError,
   Pagination,
 } from "shared/build";
-import { FastifyRequest } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { gifService } from "~/services/services";
+import { Reaction } from "~/database/entity";
 
 export class GifController {
   public async getAll(
@@ -19,6 +21,7 @@ export class GifController {
     return gifService.getAll({
       take,
       skip,
+      userId: request?.user?.id,
     });
   }
 
@@ -31,6 +34,29 @@ export class GifController {
     const { id } = request.user;
 
     return gifService.createOne({ authorId: id, ...payload });
+  }
+
+  public async addReaction(
+    request: FastifyRequest<{
+      Body: Omit<GifAddReactionRequestDto, "authorId">;
+    }>,
+    reply: FastifyReply,
+  ): Promise<Reaction | undefined> {
+    const payload = request.body;
+    const { id } = request.user;
+
+    const reaction = await gifService.addReaction({ authorId: id, ...payload });
+    if (reaction === null) {
+      throw new HttpError({
+        message: "Gif not found",
+        status: HttpCode.NOT_FOUND,
+      });
+    }
+    if (!reaction) {
+      return reply.status(HttpCode.OK).send({ message: "Reaction deleted" });
+    }
+
+    return reaction;
   }
 
   public async getOne(

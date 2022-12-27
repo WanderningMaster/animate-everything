@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { UserModel } from "shared/build";
 import { Gif } from "./gif.entity";
+import { Reaction } from "./reaction.entity";
 
 @Entity()
 export class User implements UserModel {
@@ -18,6 +19,9 @@ export class User implements UserModel {
 
   @OneToMany(() => Gif, (gif) => gif.author)
   gifs!: Gif[];
+
+  @OneToMany(() => Reaction, (reaction) => reaction.author)
+  reactions!: Reaction[];
 
   @CreateDateColumn()
   createdAt!: Date;

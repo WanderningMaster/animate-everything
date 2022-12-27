@@ -4,7 +4,7 @@ import { AmqpService } from "~/services/common/amqp/application/amqp-service";
 import { UserServiceContainer } from "~/services/user/user-service-container";
 import { UserRepositoryAdapter } from "~/repositories/user/user-repository-adapter";
 import { AppDataSource } from "~/database/data-source";
-import { Gif, Token, User } from "~/database/entity";
+import { Gif, Reaction, Token, User } from "~/database/entity";
 import { UserService } from "~/services/user/application/user-service";
 import { TokenRepositoryAdapter } from "~/repositories/token/token-repository-adapter";
 import { GifServiceContainer } from "./gif/gif-service-container";
@@ -18,7 +18,10 @@ const userServiceContainer: UserServiceContainer = {
 const userService = new UserService(userServiceContainer);
 
 const gifServiceContainer: GifServiceContainer = {
-  gifRepository: new GifRepositoryAdapter(AppDataSource.getRepository(Gif)),
+  gifRepository: new GifRepositoryAdapter({
+    gif: AppDataSource.getRepository(Gif),
+    reaction: AppDataSource.getRepository(Reaction),
+  }),
 };
 const gifService = new GifService(gifServiceContainer);
 

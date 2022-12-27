@@ -4,27 +4,23 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { GifModel } from "shared/build";
 import { User } from "~/database/entity/user.entity";
-import { Reaction } from "./reaction.entity";
+import { Gif } from "./gif.entity";
 
 @Entity()
-export class Gif implements GifModel {
+export class Reaction {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column()
-  mediaSrc!: string;
+  @ManyToOne(() => Gif, { cascade: true })
+  @JoinColumn({ name: "gifId" })
+  gif!: Gif;
 
   @Column()
-  title!: string;
-
-  @Column({ default: 0 })
-  liked!: number;
+  gifId!: string;
 
   @ManyToOne(() => User, { cascade: true })
   @JoinColumn({ name: "authorId" })
@@ -32,9 +28,6 @@ export class Gif implements GifModel {
 
   @Column()
   authorId!: string;
-
-  @OneToMany(() => Reaction, (reaction) => reaction.gif)
-  reactions!: Reaction[];
 
   @CreateDateColumn()
   createdAt!: Date;
