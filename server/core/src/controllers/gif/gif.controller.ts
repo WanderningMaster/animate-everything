@@ -73,4 +73,19 @@ export class GifController {
 
     return gif;
   }
+
+  public async processVideoAndReturnGif(request: FastifyRequest): Promise<string> {
+    const data = await request
+      .file()
+      .then((val) => val?.toBuffer())
+      .then((buff) => buff?.toString("base64"));
+    if (!data) {
+      throw new HttpError({
+        message: "File not found",
+        status: HttpCode.BAD_REQUEST,
+      });
+    }
+    const res = await gifService.uploadVideo(data);
+    return res;
+  }
 }

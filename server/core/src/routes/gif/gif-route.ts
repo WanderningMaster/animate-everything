@@ -27,4 +27,9 @@ export const GifRouter = async (instance: FastifyInstance): Promise<void> => {
     handler: gifController.getAll,
     preHandler: authHook(true),
   });
+  instance.route({
+    method: "POST",
+    url: "/upload",
+    handler: gifController.processVideoAndReturnGif,
+  });
 };

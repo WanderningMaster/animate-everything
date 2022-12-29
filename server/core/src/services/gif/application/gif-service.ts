@@ -1,4 +1,6 @@
+import { genUUID } from "~/utils/generate-uuid";
 import {
+  AmqpQueue,
   DefaultRequestParam,
   GifAddReactionRequestDto,
   GifCreateRequestDto,
@@ -10,12 +12,19 @@ import { GifServiceContainer } from "../gif-service-container";
 import { castToGifDto } from "./dtos/cast-to-gif-dto";
 import { Reaction } from "~/database/entity";
 import { castToGifWithReactionDto } from "./dtos/cast-to-gif-with-reaction-dto";
+import { CloudService } from "~/services/common/cloud/application/cloud-service";
+import { AmqpService } from "~/services/common/amqp/application/amqp-service";
+import { amqpService } from "~/services/services";
 
 export class GifService {
   private gifRepository: GifRepository;
+  private cloudService: CloudService;
+  private amqpService: AmqpService;
 
-  constructor({ gifRepository }: GifServiceContainer) {
+  constructor({ gifRepository, cloudService, amqpService }: GifServiceContainer) {
     this.gifRepository = gifRepository;
+    this.cloudService = cloudService;
+    this.amqpService = amqpService;
   }
 
   async getAll({ take, skip, userId }: GifGetAllRequestDto): Promise<Array<GifResponseDto & { isLiked: boolean }>> {
@@ -59,5 +68,25 @@ export class GifService {
     const reaction = await this.gifRepository.addReaction(payload);
 
     return reaction;
+  }
+
+  async uploadVideo(data: string): Promise<string> {
+    const id = genUUID();
+    const input = await this.cloudService.upload({
+      base64Str: data,
+      dest: `temp/${id}.mp4`,
+    });
+    await amqpService.sendToQueue({
+      queue: AmqpQueue.VIDEO_INPUT,
+      content: Buffer.from(
+        JSON.stringify({
+          input,
+          videoId: id,
+        }),
+      ),
+    });
+    const url = await this.cloudService.getDownLoadUrl(`gif/${id}.gif`);
+
+    return url;
   }
 }

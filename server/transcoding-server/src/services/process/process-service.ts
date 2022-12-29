@@ -25,7 +25,7 @@ export class ProcessService {
 
         const { input, videoId } = JSON.parse(videoData.toString("utf-8"));
         logger.info({ input, videoId });
-        await transcode(input, videoId);
+        await transcode(input, videoId, this.amqpService);
       },
     });
   }
