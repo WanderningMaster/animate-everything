@@ -7,10 +7,10 @@ import { connect } from "~/database/connection";
 import { routes } from "~/routes/routes";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import { swaggerOpts } from "~/configuration/swagger-conf";
-import { amqpService, cloudService } from "./services/services";
+import { amqpService, cloudService, eventEmitter } from "./services/services";
 import multipart from "@fastify/multipart";
 import { AmqpQueue } from "shared/build";
-import { readFile } from "fs/promises";
+import { readFile, rm } from "fs/promises";
 
 class Application {
   public async initialize(): Promise<FastifyInstance> {
@@ -81,10 +81,16 @@ class Application {
           const { videoId } = JSON.parse(data.toString("utf-8"));
           const gifDest = `/home/andrii/repo/animate-everything/output/${videoId}/output.gif`;
           const base64Str = await readFile(gifDest, { encoding: "base64" });
+          await cloudService.remove({
+            dest: `temp/${videoId}.mp4`,
+          });
           await cloudService.upload({
             base64Str,
             dest: `gif/${videoId}.gif`,
           });
+          await rm(gifDest);
+          eventEmitter.emit(`${videoId}`);
+          logger.info("Data cleared");
         },
       });
       instance.log.info("AMQP successfully connected");

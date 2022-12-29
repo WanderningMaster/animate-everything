@@ -1,4 +1,3 @@
-import { genUUID } from "~/utils/generate-uuid";
 import {
   AmqpQueue,
   DefaultRequestParam,
@@ -14,7 +13,9 @@ import { Reaction } from "~/database/entity";
 import { castToGifWithReactionDto } from "./dtos/cast-to-gif-with-reaction-dto";
 import { CloudService } from "~/services/common/cloud/application/cloud-service";
 import { AmqpService } from "~/services/common/amqp/application/amqp-service";
-import { amqpService } from "~/services/services";
+import { amqpService, eventEmitter } from "~/services/services";
+import { logger } from "~/configuration/logger";
+import { genUUID } from "~/utils/generate-uuid";
 
 export class GifService {
   private gifRepository: GifRepository;
@@ -85,7 +86,9 @@ export class GifService {
         }),
       ),
     });
+    await new Promise((resolve) => eventEmitter.once(`${id}`, resolve));
     const url = await this.cloudService.getDownLoadUrl(`gif/${id}.gif`);
+    logger.info({ url });
 
     return url;
   }

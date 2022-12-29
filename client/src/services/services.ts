@@ -5,6 +5,7 @@ import { LocalStorageService } from "./storage/local-storage.service";
 import { UserService } from "./user/user.service";
 import { AuthService } from "./auth/auth.service";
 import { updateAccessToken } from "./http/interceptors/update-access-token";
+import { GifService } from "./gif/gif.service";
 
 export const _localStorage = new LocalStorageService();
 export const http = new Http([modifyAuthHeader], [updateAccessToken]);
@@ -12,3 +13,4 @@ export const http = new Http([modifyAuthHeader], [updateAccessToken]);
 //apis
 export const userService = new UserService(ApiPath.USER, http);
 export const authService = new AuthService(ApiPath.USER, http);
+export const gifService = new GifService(ApiPath.GIF, http);

@@ -74,7 +74,7 @@ export class GifController {
     return gif;
   }
 
-  public async processVideoAndReturnGif(request: FastifyRequest): Promise<string> {
+  public async processVideoAndReturnGif(request: FastifyRequest): Promise<{ res: string }> {
     const data = await request
       .file()
       .then((val) => val?.toBuffer())
@@ -86,6 +86,6 @@ export class GifController {
       });
     }
     const res = await gifService.uploadVideo(data);
-    return res;
+    return { res };
   }
 }

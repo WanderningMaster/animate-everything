@@ -37,4 +37,9 @@ export class CloudService {
 
     return url;
   }
+
+  public async remove({ dest }: { dest: string }): Promise<void> {
+    const fileToDelete = this.storage.bucket().file(dest);
+    await fileToDelete.delete();
+  }
 }

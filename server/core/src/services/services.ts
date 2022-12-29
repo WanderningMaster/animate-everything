@@ -9,6 +9,7 @@ import { UserService } from "~/services/user/application/user-service";
 import { TokenRepositoryAdapter } from "~/repositories/token/token-repository-adapter";
 import { GifRepositoryAdapter } from "~/repositories/gif/gif-repository-adapter";
 import { GifService } from "./gif/application/gif-service";
+import EventEmitter from "events";
 
 const userServiceContainer: UserServiceContainer = {
   userRepository: new UserRepositoryAdapter(AppDataSource.getRepository(User)),
@@ -18,6 +19,7 @@ const userService = new UserService(userServiceContainer);
 
 let cloudService: CloudService;
 let gifService: GifService;
+
 const amqpService = new AmqpService();
 (async (): Promise<void> => {
   const storage = await initFirebaseStorage();
@@ -34,5 +36,6 @@ const amqpService = new AmqpService();
     amqpService,
   });
 })();
+const eventEmitter = new EventEmitter();
 
-export { userService, userServiceContainer, cloudService, amqpService, gifService };
+export { userService, userServiceContainer, cloudService, amqpService, gifService, eventEmitter };
