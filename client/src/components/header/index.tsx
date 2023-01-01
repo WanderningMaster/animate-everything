@@ -9,10 +9,12 @@ export const Header: FC = () => {
   const { isAuth } = useMe();
   return (
     <div className={"flex flex-row justify-between"}>
-      <div className={"flex flex-row space-x-4 items-end"}>
-        <Logo className={"w-10 h-auto fill-white"} />
-        <Typography type="heading" text="Animate everything" />
-      </div>
+      <Link to={AppRoute.ROOT}>
+        <div className={"flex flex-row space-x-4 items-end"}>
+          <Logo className={"w-10 h-auto fill-white"} />
+          <Typography type="heading" text="Animate everything" />
+        </div>
+      </Link>
       <div className={"flex space-x-4 justify-end w-6/12"}>
         <div className={"w-3/12"}>
           <Button disabled={!isAuth} title={"Upload"} />

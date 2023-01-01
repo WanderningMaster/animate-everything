@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { AppRoute } from "shared/build";
 
 type LinkProps = {
-  to: AppRoute;
+  to: AppRoute | string;
   className?: string;
   children: ReactNode;
 };

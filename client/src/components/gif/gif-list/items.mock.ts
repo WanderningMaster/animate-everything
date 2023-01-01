@@ -1,6 +1,7 @@
 export const listItems = [
   {
     id: "1",
+    title: "something whatever...",
     src: "https://media.giphy.com/media/JVGLHEuzbVviw/giphy.gif",
     author: "Kimmy Ramone",
     isFavorite: true,
@@ -9,6 +10,7 @@ export const listItems = [
   },
   {
     id: "2",
+    title: "something whatever...",
     src: "https://media.giphy.com/media/JVGLHEuzbVviw/giphy.gif",
     author: "Kimmy Ramone",
     isFavorite: true,
@@ -16,6 +18,7 @@ export const listItems = [
   },
   {
     id: "3",
+    title: "something whatever...",
     src: "https://media.giphy.com/media/JVGLHEuzbVviw/giphy.gif",
     author: "Kimmy Ramone",
     isFavorite: false,
@@ -23,6 +26,7 @@ export const listItems = [
   },
   {
     id: "4",
+    title: "something whatever...",
     src: "https://media.giphy.com/media/JVGLHEuzbVviw/giphy.gif",
     author: "Kimmy Ramone",
     isFavorite: true,

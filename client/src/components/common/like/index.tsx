@@ -4,7 +4,7 @@ import { ReactComponent as HeartActive } from "assets/images/heart-filled.svg";
 
 type LikeButtonProps = {
   isActive: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 export const LikeButton: FC<LikeButtonProps> = ({ isActive, onClick }) => {

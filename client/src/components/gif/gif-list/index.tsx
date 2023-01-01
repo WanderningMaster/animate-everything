@@ -15,7 +15,7 @@ export const GifList: FC<GifListProps> = ({ list }) => {
   return (
     <div className="grid grid-cols-3 gap-4">
       {list.map(({ id, ...props }) => (
-        <GifCard key={id} {...props} />
+        <GifCard key={id} id={id} {...props} />
       ))}
     </div>
   );
