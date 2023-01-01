@@ -1,15 +1,11 @@
-import { Typography } from "components/common/typography";
+import { GifList } from "components/gif/gif-list";
 import React, { FC } from "react";
+import { listItems } from "components/gif/gif-list/items.mock";
 
 export const MainPage: FC = () => {
   return (
-    <div className="h-[2000px]">
-      <Typography
-        type="heading"
-        text={
-          "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis maxime, voluptates saepe fuga dolores commodi atque quaerat eligendi deserunt, numquam omnis reprehenderit nesciunt in est, odio officia odit ducimus esse."
-        }
-      />
+    <div className="pt-8 h-[2000px]">
+      <GifList list={listItems} />
     </div>
   );
 };

@@ -17,7 +17,7 @@ export const SearchInput: FC = () => {
           >
             <svg
               aria-hidden="true"
-              className="w-10 h-[44px]"
+              className="w-14 h-[44px]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

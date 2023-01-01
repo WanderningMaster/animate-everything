@@ -12,12 +12,12 @@ export const AppLayout: FC<AppLayoutProps> = ({ children }) => {
   const isUseLayout = location.pathname !== "/login";
   return isUseLayout ? (
     <div className={"flex flex-row w-full h-full justify-center bg-slate-800"}>
-      <div className={"flex flex-col space-y-6 w-8/12 py-8"}>
+      <div className={"flex flex-col w-8/12 py-8"}>
         <Header />
-        <div className="bg-slate-800 sticky my-8 top-0 z-50">
+        <div className="bg-slate-800 sticky top-0 z-50 py-8">
           <SearchInput />
         </div>
-        <div className="overflow-y-auto">{children}</div>
+        <div className="">{children}</div>
       </div>
     </div>
   ) : (

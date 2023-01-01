@@ -2,7 +2,8 @@ import { useMe } from "api/api";
 import React, { FC } from "react";
 import { ReactComponent as Logo } from "assets/images/logo.svg";
 import { Typography } from "components/common/typography";
-import { Button } from "components/common";
+import { Button, Link } from "components/common";
+import { AppRoute } from "shared/build";
 
 export const Header: FC = () => {
   const { isAuth } = useMe();
@@ -17,7 +18,9 @@ export const Header: FC = () => {
           <Button disabled={!isAuth} title={"Upload"} />
         </div>
         <div className={"w-5/12"}>
-          <Button title={isAuth ? "Profile" : "Sign in"} />
+          <Link to={isAuth ? AppRoute.ROOT : AppRoute.LOGIN}>
+            <Button title={isAuth ? "Profile" : "Sign in"} />
+          </Link>
         </div>
       </div>
     </div>
