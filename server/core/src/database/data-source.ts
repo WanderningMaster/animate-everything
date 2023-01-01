@@ -1,7 +1,8 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { CONFIG } from "~/configuration/config";
-import { Token, User } from "~/database/entity";
+import { Gif, Token, User } from "~/database/entity";
+import { Reaction } from "./entity/reaction.entity";
 
 const { DB: config } = CONFIG;
 
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
   database: config.DB_NAME,
   synchronize: true,
   logging: false,
-  entities: [User, Token],
+  entities: [User, Token, Gif, Reaction],
   migrations: [],
   subscribers: [],
 });

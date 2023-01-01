@@ -21,7 +21,7 @@ export const UserRouter = async (instance: FastifyInstance): Promise<void> => {
       ...getOneUserSchema,
     },
     handler: userController.getOne,
-    preHandler: authHook, //FIXME: added only for test purposes and should be removed in future
+    preHandler: authHook(false), //FIXME: added only for test purposes and should be removed in future
   });
   instance.route({
     method: "GET",
@@ -57,7 +57,7 @@ export const UserRouter = async (instance: FastifyInstance): Promise<void> => {
     handler: userController.signUp,
   });
   instance.route({
-    preHandler: authHook,
+    preHandler: authHook(false),
     method: "POST",
     url: UserApiPath.SIGN_OUT,
     schema: {
@@ -66,7 +66,7 @@ export const UserRouter = async (instance: FastifyInstance): Promise<void> => {
     handler: userController.signOut,
   });
   instance.route({
-    preHandler: authHook,
+    preHandler: authHook(false),
     method: "GET",
     url: UserApiPath.ME,
     schema: {

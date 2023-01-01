@@ -5,3 +5,4 @@ export { verifyJwt } from "./verify-jwt";
 export { generateJwt } from "./generate-jwt";
 export { geometricProgressionByIndex } from "./geometric-progression";
 export { timeout } from "./timeout";
+export { genUUID } from "./generate-uuid";

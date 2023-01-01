@@ -18,7 +18,7 @@ export class AmqpService {
   }
 
   async initQueues(amqpChannel: Channel): Promise<void> {
-    await Promise.all([amqpChannel.assertQueue(AmqpQueue.GIF_OUTPUT)]);
+    await Promise.all([amqpChannel.assertQueue(AmqpQueue.GIF_OUTPUT), amqpChannel.assertQueue(AmqpQueue.VIDEO_INPUT)]);
   }
 
   async sendToQueue({ queue, content, options }: AmqpSendToQueueDto): Promise<boolean> {

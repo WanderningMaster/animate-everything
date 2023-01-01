@@ -1,13 +1,14 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { UserModel } from "shared/build";
+import { Gif } from "./gif.entity";
+import { Reaction } from "./reaction.entity";
 
 @Entity()
 export class User implements UserModel {
-
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column()
+  @Column({ unique: true })
   email!: string;
 
   @Column()
@@ -15,6 +16,12 @@ export class User implements UserModel {
 
   @Column()
   password!: string;
+
+  @OneToMany(() => Gif, (gif) => gif.author)
+  gifs!: Gif[];
+
+  @OneToMany(() => Reaction, (reaction) => reaction.author)
+  reactions!: Reaction[];
 
   @CreateDateColumn()
   createdAt!: Date;
