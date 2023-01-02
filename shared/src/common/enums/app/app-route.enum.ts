@@ -3,4 +3,5 @@ export enum AppRoute {
   LOGIN = "/login",
   $ID = "/:id",
   ME = "/me",
+  GIF = "/gif/:id",
 }
