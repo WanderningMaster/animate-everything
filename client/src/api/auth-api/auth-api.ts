@@ -1,32 +1,28 @@
-import { JwtPair, UserCreateRequestDto, UserResponseDto } from "shared/build";
+import { JwtPair, UserCreateRequestDto, UserResponseDto, QueryKeys } from "shared/build";
 import { _localStorage, authService } from "services/services";
 import { UseMutateAsyncFunction, UseMutateFunction, useMutation, useQuery } from "react-query";
-
-export enum AuthQuery {
-  SIGN_IN = "auth/sign-in",
-  SIGN_OUT = "auth/sign-out",
-  SIGN_UP = "auth/sign-up",
-  ME = "auth/me",
-}
 
 export const useSignIn = (): {
   isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
-  userWithToken: UserResponseDto & JwtPair | undefined;
+  userWithToken: (UserResponseDto & JwtPair) | undefined;
   mutateAsync: UseMutateFunction<UserResponseDto & JwtPair, unknown, Omit<UserCreateRequestDto, "username">>;
 } => {
-  const fetcher = (payload: Omit<UserCreateRequestDto, "username">): Promise<UserResponseDto & JwtPair> => authService.signIn(payload);
-  const { isError, isLoading, isSuccess, data: userWithToken, mutateAsync } = useMutation(
-    AuthQuery.SIGN_IN,
-    fetcher,
-    {
-      onSuccess: (data) => {
-        _localStorage.save("accessToken", data.accessToken);
-        _localStorage.save("refreshToken", data.refreshToken);
-      },
+  const fetcher = (payload: Omit<UserCreateRequestDto, "username">): Promise<UserResponseDto & JwtPair> =>
+    authService.signIn(payload);
+  const {
+    isError,
+    isLoading,
+    isSuccess,
+    data: userWithToken,
+    mutateAsync,
+  } = useMutation([QueryKeys.AUTH, QueryKeys.USER], fetcher, {
+    onSuccess: (data) => {
+      _localStorage.save("accessToken", data.accessToken);
+      _localStorage.save("refreshToken", data.refreshToken);
     },
-  );
+  });
 
   return {
     isError,
@@ -45,16 +41,12 @@ export const useSignOut = (): {
 } => {
   const fetcher = (): Promise<boolean> => authService.signOut();
 
-  const { isError, isLoading, isSuccess, mutateAsync } = useMutation(
-    AuthQuery.SIGN_OUT,
-    fetcher,
-    {
-      onSuccess: () => {
-        _localStorage.remove("accessToken");
-        _localStorage.remove("refreshToken");
-      },
+  const { isError, isLoading, isSuccess, mutateAsync } = useMutation([QueryKeys.AUTH, QueryKeys.USER], fetcher, {
+    onSuccess: () => {
+      _localStorage.remove("accessToken");
+      _localStorage.remove("refreshToken");
     },
-  );
+  });
 
   return {
     isError,
@@ -73,10 +65,13 @@ export const useSignUp = (): {
 } => {
   const fetcher = (payload: UserCreateRequestDto): Promise<UserResponseDto> => authService.signUp(payload);
 
-  const { isError, isLoading, isSuccess, mutateAsync, data: user } = useMutation(
-    AuthQuery.SIGN_UP,
-    fetcher,
-  );
+  const {
+    isError,
+    isLoading,
+    isSuccess,
+    mutateAsync,
+    data: user,
+  } = useMutation([QueryKeys.AUTH, QueryKeys.USER], fetcher);
 
   return {
     isError,
@@ -95,7 +90,7 @@ export const useMe = (): {
   user: UserResponseDto | undefined;
 } => {
   const fetcher = (): Promise<UserResponseDto> => authService.me();
-  const { isError, isFetched, isSuccess, isLoading, data: user } = useQuery(AuthQuery.ME, fetcher);
+  const { isError, isFetched, isSuccess, isLoading, data: user } = useQuery([QueryKeys.USER], fetcher);
 
   return {
     isError,

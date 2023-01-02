@@ -1,11 +1,6 @@
 import { useQuery } from "react-query";
 import { userService } from "services/services";
-import { UserResponseDto } from "shared/build";
-
-export enum UserQuery {
-  FETCH_ALL = "user/fetch-all",
-  FETCH_ONE = "user/fetch-one",
-}
+import { UserResponseDto, QueryKeys } from "shared/build";
 
 export const useFetchAllUsers = (): {
   isError: boolean;
@@ -14,7 +9,7 @@ export const useFetchAllUsers = (): {
   users: UserResponseDto[] | undefined;
 } => {
   const fetcher = (): Promise<UserResponseDto[]> => userService.getAll();
-  const { isError, isFetched, isLoading, data: users } = useQuery(UserQuery.FETCH_ALL, fetcher);
+  const { isError, isFetched, isLoading, data: users } = useQuery([QueryKeys.USER], fetcher);
 
   return {
     isError,
@@ -33,7 +28,7 @@ export const useFetchOneUser = (
   user: UserResponseDto | undefined;
 } => {
   const fetcher = (): Promise<UserResponseDto> => userService.getOne(id);
-  const { isError, isFetched, isLoading, data: user } = useQuery(UserQuery.FETCH_ONE, fetcher);
+  const { isError, isFetched, isLoading, data: user } = useQuery([QueryKeys.USER], fetcher);
 
   return {
     isError,

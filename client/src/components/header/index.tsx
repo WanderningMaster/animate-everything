@@ -1,12 +1,12 @@
-import { useMe } from "api/api";
 import React, { FC } from "react";
 import { ReactComponent as Logo } from "assets/images/logo.svg";
 import { Typography } from "components/common/typography";
 import { Button, Link } from "components/common";
 import { AppRoute } from "shared/build";
+import { useAuth } from "hooks/use-auth-hook";
 
 export const Header: FC = () => {
-  const { isAuth } = useMe();
+  const { isAuth } = useAuth();
   return (
     <div className={"flex flex-row justify-between"}>
       <Link to={AppRoute.ROOT}>

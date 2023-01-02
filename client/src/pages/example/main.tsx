@@ -2,14 +2,15 @@ import { useFetchAllUsers } from "api/user-api/user-api";
 import React, { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Link, UploadFile } from "components/common";
-import { useMe, useSignOut } from "api/auth-api/auth-api";
+import { useSignOut } from "api/auth-api/auth-api";
 import { AppRoute } from "shared/build";
 import { useMutation } from "react-query";
 import { gifService } from "services/services";
+import { useAuth } from "hooks/use-auth-hook";
 
 export const Main: FC = () => {
   const { isLoading, users, isError, isFetched } = useFetchAllUsers();
-  const { isAuth } = useMe();
+  const { isAuth } = useAuth();
   const { mutateAsync: signOutAsync } = useSignOut();
   const [url, setUrl] = useState<string | undefined>(undefined);
   const navigate = useNavigate();

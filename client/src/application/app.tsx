@@ -7,20 +7,24 @@ import { GifPage } from "pages/gif-page";
 import { GifPageFullScreen } from "pages/gif-page/full-screen";
 import { GifPageShared } from "pages/gif-page/shared";
 import { AuthorPage } from "pages/author-page";
+import { AuthProvider } from "providers/auth-provider";
+import "react-toastify/dist/ReactToastify.css";
 
 const App: FC = () => {
   return (
     <BrowserRouter>
-      <AppLayout>
-        <Routes>
-          <Route path={"/"} element={<MainPage />} />
-          <Route path={"/author/:id"} element={<AuthorPage />} />
-          <Route path={"/gif/:id"} element={<GifPage />} />
-          <Route path={"/gif/fullscreen/:id"} element={<GifPageFullScreen />} />
-          <Route path={"/gif/shared/:id"} element={<GifPageShared />} />
-          <Route path={"/login"} element={<Auth />} />
-        </Routes>
-      </AppLayout>
+      <AuthProvider>
+        <AppLayout>
+          <Routes>
+            <Route path={"/"} element={<MainPage />} />
+            <Route path={"/author/:id"} element={<AuthorPage />} />
+            <Route path={"/gif/:id"} element={<GifPage />} />
+            <Route path={"/gif/fullscreen/:id"} element={<GifPageFullScreen />} />
+            <Route path={"/gif/shared/:id"} element={<GifPageShared />} />
+            <Route path={"/login"} element={<Auth />} />
+          </Routes>
+        </AppLayout>
+      </AuthProvider>
     </BrowserRouter>
   );
 };

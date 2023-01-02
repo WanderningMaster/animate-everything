@@ -4,7 +4,7 @@ import { listItems } from "components/gif/gif-list/items.mock";
 
 export const MainPage: FC = () => {
   return (
-    <div className="pt-8 h-[2000px]">
+    <div className="pt-8">
       <GifList list={listItems} />
     </div>
   );

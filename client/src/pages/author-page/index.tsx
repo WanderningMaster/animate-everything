@@ -15,7 +15,7 @@ export const AuthorPage: FC = () => {
         <img src={avatar} className={" w-32 h-32 object-cover"} />
         <Typography type="heading" text={author} />
       </div>
-      <div className="pt-8 h-[2000px] flex flex-col space-y-8">
+      <div className="pt-8 flex flex-col space-y-8">
         <Typography type="heading" text={"Gif`s:"} />
         <GifList list={gifs} />
       </div>
