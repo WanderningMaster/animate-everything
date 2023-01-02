@@ -35,7 +35,9 @@ export const GifPage: FC = () => {
       <div className="flex flex-col space-y-2 w-8/12">
         <div>
           <Typography text={`${title}`} />
-          <Typography bold text={` by ${author}`} />
+          <Link to={`/author/${author}`}>
+            <Typography bold text={` by ${author}`} />
+          </Link>
         </div>
         <div>
           <img src={src} className={"w-full h-8/12 object-cover"} />

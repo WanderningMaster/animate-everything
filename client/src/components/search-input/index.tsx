@@ -13,7 +13,7 @@ export const SearchInput: FC = () => {
           />
           <button
             type="submit"
-            className="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-blue-500 rounded-r-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300"
+            className="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-slate-600 rounded-r-lg hover:bg-slate-500 focus:ring-4 focus:outline-none focus:ring-blue-300"
           >
             <svg
               aria-hidden="true"

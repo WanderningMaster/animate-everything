@@ -29,10 +29,12 @@ export const GifCard: FC<GifCardProps> = ({ id, src, author, avatar, isFavorite 
         />
       </Link>
       <div className="flex relative items-end group-hover:brightness-90 justify-between w-[calc(100%-16px)] space-x-4 bottom-12 left-2">
-        <div className="flex items-end space-x-4">
-          <img src={avatar} className={"w-9 h-9 object-cover ml-2"} />
-          <Typography bold text={author} />
-        </div>
+        <Link to={`/author/${author}`}>
+          <div className="flex items-end space-x-4">
+            <img src={avatar} className={"w-9 h-9 object-cover ml-2"} />
+            <Typography bold text={author} />
+          </div>
+        </Link>
         <div className={"w-9"}>
           <LikeButton onClick={handleClickLike} isActive={isLiked} />
         </div>

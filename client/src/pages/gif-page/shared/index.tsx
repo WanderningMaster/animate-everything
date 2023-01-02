@@ -3,6 +3,7 @@ import { listItems } from "components/gif/gif-list/items.mock";
 import React, { FC } from "react";
 import { useParams } from "react-router-dom";
 import { UploadButton } from "components/upload-button";
+import { Link } from "components/common";
 
 export const GifPageShared: FC = () => {
   const { id } = useParams();
@@ -18,7 +19,9 @@ export const GifPageShared: FC = () => {
         <div className="flex flex-row justify-between">
           <div>
             <Typography type="heading" text={`${title}`} />
-            <Typography type="heading" text={` by ${author}`} />
+            <Link to={`/author/${author}`}>
+              <Typography type="heading" text={` by ${author}`} />
+            </Link>
           </div>
           <div className="w-9">
             <UploadButton cb={(): void => console.log("uploaded")} title={title} url={src} />
