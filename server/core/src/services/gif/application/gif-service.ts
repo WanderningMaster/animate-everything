@@ -32,15 +32,19 @@ export class GifService {
     const gifs = await this.gifRepository.getAll({
       take,
       skip,
+      userId,
     });
-    console.log({ userId });
 
     return gifs.map((gif) => castToGifWithReactionDto(userId, gif));
   }
 
-  async getOne({ id }: DefaultRequestParam): Promise<(GifResponseDto & { likeCount: number }) | null> {
+  async getOne({
+    id,
+    userId,
+  }: DefaultRequestParam & { userId?: string }): Promise<(GifResponseDto & { likeCount: number }) | null> {
     const { gif, likeCount } = await this.gifRepository.getById({
       id,
+      userId,
     });
 
     if (!gif) {

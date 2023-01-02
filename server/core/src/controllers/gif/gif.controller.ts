@@ -64,9 +64,9 @@ export class GifController {
       Params: DefaultRequestParam;
     }>,
   ): Promise<GifResponseDto> {
-    const payload = request.params;
+    const { id } = request.params;
 
-    const gif = await gifService.getOne(payload);
+    const gif = await gifService.getOne({ id, userId: request?.user?.id });
     if (!gif) {
       throw new HttpError({ message: "GifEntity not found", status: HttpCode.NOT_FOUND });
     }

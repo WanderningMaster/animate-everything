@@ -7,6 +7,7 @@ export const GifRouter = async (instance: FastifyInstance): Promise<void> => {
   instance.route({
     method: "GET",
     url: GifApiPath.$ID,
+    preHandler: authHook(true),
     handler: gifController.getOne,
   });
   instance.route({
