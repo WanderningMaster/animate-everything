@@ -4,9 +4,10 @@ import { Typography } from "components/common/typography";
 import { Button, Link } from "components/common";
 import { AppRoute } from "shared/build";
 import { useAuth } from "hooks/use-auth-hook";
+import { ProfileButton } from "components/profile-button";
 
 export const Header: FC = () => {
-  const { isAuth } = useAuth();
+  const { isAuth, data } = useAuth();
   return (
     <div className={"flex flex-row justify-between"}>
       <Link to={AppRoute.ROOT}>
@@ -20,9 +21,16 @@ export const Header: FC = () => {
           <Button disabled={!isAuth} title={"Upload"} />
         </div>
         <div className={"w-5/12"}>
-          <Link to={isAuth ? AppRoute.ROOT : AppRoute.LOGIN}>
-            <Button title={isAuth ? "Profile" : "Sign in"} />
-          </Link>
+          {isAuth && data ? (
+            <ProfileButton
+              author="WanderningMaster"
+              avatar="https://www.npmjs.com/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci9lZmRmZjIwN2Y0NDY5NjYyNDJkZDY4Y2EzNzc2NTJkOT9zaXplPTQ5NiZkZWZhdWx0PXJldHJvIn0.n0Mx4FBTk1TVCk7D4zDnOC1QVIF87_rEZ8xsdZPUYkI"
+            />
+          ) : (
+            <Link to={isAuth ? AppRoute.ROOT : AppRoute.LOGIN}>
+              <Button title={"Sign in"} />
+            </Link>
+          )}
         </div>
       </div>
     </div>
