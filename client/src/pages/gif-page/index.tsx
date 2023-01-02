@@ -39,8 +39,8 @@ export const GifPage: FC = () => {
             <Typography bold text={` by ${author}`} />
           </Link>
         </div>
-        <div>
-          <img src={src} className={"w-full h-8/12 object-cover"} />
+        <div className=" w-full h-full">
+          <img src={src} className={"w-full object-cover"} />
           <Link to={`/gif/fullscreen/${id}`}>
             <div className="relative bottom-16 left-6 w-10 cursor-pointer">
               <FullScreen className="fill-white" />
