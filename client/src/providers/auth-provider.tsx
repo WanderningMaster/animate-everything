@@ -33,7 +33,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const { isLoading } = useQuery([QueryKeys.USER], () => authService.me(), {
     onSuccess: (data) => {
-      setUser({ me: { id: data.id, email: data.email, username: data.username } });
+      setUser({
+        me: { id: data.id, email: data.email, username: data.username, privacy: data.privacy, avatar: data.avatar },
+      });
     },
   });
 
@@ -44,7 +46,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       onSuccess: (data) => {
         _localStorage.save("accessToken", data.accessToken);
         _localStorage.save("refreshToken", data.refreshToken);
-        setUser({ me: { id: data.id, email: data.email, username: data.username } });
+        setUser({
+          me: { id: data.id, email: data.email, username: data.username, privacy: data.privacy, avatar: data.avatar },
+        });
         notifySignIn();
         navigate("/");
       },

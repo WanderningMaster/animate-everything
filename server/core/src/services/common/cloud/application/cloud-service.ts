@@ -1,4 +1,4 @@
-import { Storage } from "firebase-admin/storage";
+import { Storage } from "@google-cloud/storage";
 import { CONFIG } from "~/configuration/config";
 import { CloudServiceContainer } from "../cloud-service-container";
 
@@ -11,7 +11,7 @@ export class CloudService {
 
   public async getDownLoadUrl(dest: string): Promise<string> {
     const url = await this.storage
-      .bucket()
+      .bucket("gs://animate-everything-373519.appspot.com")
       .file(dest)
       .getSignedUrl({
         action: "read",
@@ -23,7 +23,7 @@ export class CloudService {
   }
 
   public async upload({ base64Str, dest }: { base64Str: string; dest: string }): Promise<string> {
-    const file = this.storage.bucket().file(dest);
+    const file = this.storage.bucket("gs://animate-everything-373519.appspot.com").file(dest);
 
     const imageBuff = Buffer.from(base64Str, "base64");
     await file.save(imageBuff);
@@ -39,7 +39,7 @@ export class CloudService {
   }
 
   public async remove({ dest }: { dest: string }): Promise<void> {
-    const fileToDelete = this.storage.bucket().file(dest);
+    const fileToDelete = this.storage.bucket("default").file(dest);
     await fileToDelete.delete();
   }
 }

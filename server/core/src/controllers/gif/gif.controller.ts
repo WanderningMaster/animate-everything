@@ -45,6 +45,8 @@ export class GifController {
     const payload = request.body;
     const { id } = request.user;
 
+    console.log({ payload });
+
     const reaction = await gifService.addReaction({ authorId: id, ...payload });
     if (reaction === null) {
       throw new HttpError({

@@ -1,17 +1,23 @@
 import { Typography } from "components/common/typography";
-import { listItems } from "components/gif/gif-list/items.mock";
 import React, { FC } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "components/common";
+import { useQuery } from "react-query";
+import { QueryKeys } from "shared/build";
+import { gifService } from "services/services";
 
 export const GifPageFullScreen: FC = () => {
-  const { id } = useParams();
-  const gif = listItems.find((gif) => gif.id === id);
+  const { id } = useParams() as { id: string };
+  const { data: gif, isLoading, isFetching } = useQuery([QueryKeys.GIF], () => gifService.getOne(id));
+
+  if (isLoading || isFetching) {
+    return <Typography text={"Loading..."} />;
+  }
   if (!gif) {
     return <Typography text={"Failed to fetch"} />;
   }
 
-  const { src } = gif;
+  const { mediaSrc: src } = gif;
 
   return (
     <Link to={`/gif/${id}`}>

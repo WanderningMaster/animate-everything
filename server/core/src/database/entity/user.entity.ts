@@ -17,7 +17,7 @@ export class User implements UserModel {
   @Column()
   password!: string;
 
-  @Column({ type: "text" })
+  @Column({ type: "varchar", default: "" })
   avatar!: string;
 
   @Column({ type: "bool", width: 1, default: false })

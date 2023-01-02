@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Button, Input } from "components/components";
-import { UserUpdateRequestDto } from "shared/build";
+import { UserResponseDto, UserUpdateRequestDto } from "shared/build";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { userUpdate } from "shared/build/validation-schemas/validation-schemas";
@@ -13,18 +13,19 @@ export type UpdateProfileFormValues = Partial<{
 }>;
 
 type Props = {
+  data: UserResponseDto;
   isLoading: boolean;
   onSubmit: (formValue: UpdateProfileFormValues) => void;
 };
 
-export const UpdateProfileForm: FC<Props> = ({ isLoading, onSubmit }) => {
+export const UpdateProfileForm: FC<Props> = ({ isLoading, onSubmit, data }) => {
   const {
     control,
     handleSubmit,
     setValue,
     formState: { isValid },
   } = useForm<UserUpdateRequestDto>({
-    defaultValues: { username: "WanderningMaster", email: "user12341528@gmail.com", isPrivate: true },
+    defaultValues: { username: data.username, email: data.email, isPrivate: data.privacy },
     resolver: joiResolver(userUpdate),
     mode: "onChange",
   });
@@ -37,7 +38,7 @@ export const UpdateProfileForm: FC<Props> = ({ isLoading, onSubmit }) => {
         <label className={"text-white px-1 flex flex-row justify-between"}>
           <div>{"Privacy"}</div>
         </label>
-        <Toggle control={control} setValue={setValue} name={"isPrivate"} defaultValue={true} />
+        <Toggle control={control} setValue={setValue} name={"isPrivate"} defaultValue={data.privacy} />
         <Button type={"submit"} title={"Save"} disabled={isLoading || !isValid} />
       </form>
     </>

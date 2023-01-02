@@ -8,7 +8,6 @@ import {
 } from "shared/build";
 import { GifRepository } from "../port/gif-repository";
 import { GifServiceContainer } from "../gif-service-container";
-import { castToGifDto } from "./dtos/cast-to-gif-dto";
 import { Reaction } from "~/database/entity";
 import { castToGifWithReactionDto } from "./dtos/cast-to-gif-with-reaction-dto";
 import { CloudService } from "~/services/common/cloud/application/cloud-service";
@@ -41,7 +40,9 @@ export class GifService {
   async getOne({
     id,
     userId,
-  }: DefaultRequestParam & { userId?: string }): Promise<(GifResponseDto & { likeCount: number }) | null> {
+  }: DefaultRequestParam & { userId?: string }): Promise<
+    (GifResponseDto & { isLiked: boolean } & { likeCount: number }) | null
+  > {
     const { gif, likeCount } = await this.gifRepository.getById({
       id,
       userId,
@@ -52,7 +53,7 @@ export class GifService {
     }
 
     return {
-      ...castToGifDto(gif),
+      ...castToGifWithReactionDto(userId, gif),
       likeCount,
     };
   }

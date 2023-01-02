@@ -1,7 +1,11 @@
 import { Link } from "components/common";
 import { LikeButton } from "components/common/like";
 import { Typography } from "components/common/typography";
+import { useAuth } from "hooks/use-auth-hook";
 import React, { FC, useState } from "react";
+import { useMutation } from "react-query";
+import { gifService } from "services/services";
+import { QueryKeys } from "shared/build";
 
 type GifCardProps = {
   id: string;
@@ -13,9 +17,15 @@ type GifCardProps = {
 
 export const GifCard: FC<GifCardProps> = ({ id, src, author, avatar, isFavorite }) => {
   const [isLiked, setIsLiked] = useState(isFavorite);
+  const { isAuth } = useAuth();
+
+  const { mutateAsync: addReactionAsync } = useMutation([QueryKeys.GIF, QueryKeys.USER], (payload: { gifId: string }) =>
+    gifService.addReaction(payload),
+  );
 
   const handleClickLike = (): void => {
     setIsLiked((state) => !state);
+    addReactionAsync({ gifId: id });
   };
 
   return (
@@ -35,9 +45,7 @@ export const GifCard: FC<GifCardProps> = ({ id, src, author, avatar, isFavorite 
             <Typography bold text={author} />
           </div>
         </Link>
-        <div className={"w-9"}>
-          <LikeButton onClick={handleClickLike} isActive={isLiked} />
-        </div>
+        <div className={"w-9"}>{isAuth && <LikeButton onClick={handleClickLike} isActive={isLiked} />}</div>
       </div>
     </div>
   );

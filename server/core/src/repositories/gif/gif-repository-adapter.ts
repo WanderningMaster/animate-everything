@@ -70,6 +70,7 @@ export class GifRepositoryAdapter implements GifRepository {
         where: query,
         relations: {
           author: true,
+          reactions: true,
         },
       });
       const res = await manager.query("CALL COUNT_REACTIONS(?)", [id]);
