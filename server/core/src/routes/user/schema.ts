@@ -26,6 +26,12 @@ export const getOneUserSchema: FastifySchema = {
         username: {
           type: "string",
         },
+        avatar: {
+          type: "string",
+        },
+        privacy: {
+          type: "boolean",
+        },
         email: {
           type: "string",
           format: "email",
@@ -79,6 +85,12 @@ export const getAllUserSchema: FastifySchema = {
           username: {
             type: "string",
           },
+          avatar: {
+            type: "string",
+          },
+          privacy: {
+            type: "boolean",
+          },
           email: {
             type: "string",
             format: "email",
@@ -120,6 +132,12 @@ export const createUserSchema: FastifySchema = {
         username: {
           type: "string",
         },
+        avatar: {
+          type: "string",
+        },
+        privacy: {
+          type: "boolean",
+        },
         email: {
           type: "string",
           format: "email",
@@ -156,6 +174,12 @@ export const signInSchema: FastifySchema = {
         },
         username: {
           type: "string",
+        },
+        avatar: {
+          type: "string",
+        },
+        privacy: {
+          type: "boolean",
         },
         email: {
           type: "string",
@@ -219,6 +243,12 @@ export const signUpSchema: FastifySchema = {
         },
         username: {
           type: "string",
+        },
+        avatar: {
+          type: "string",
+        },
+        privacy: {
+          type: "boolean",
         },
         email: {
           type: "string",
@@ -295,6 +325,12 @@ export const getMeSchema: FastifySchema = {
         },
         username: {
           type: "string",
+        },
+        avatar: {
+          type: "string",
+        },
+        privacy: {
+          type: "boolean",
         },
         email: {
           type: "string",
