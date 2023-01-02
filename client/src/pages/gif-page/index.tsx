@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { ReactComponent as Copy } from "assets/images/copy.svg";
 import { ReactComponent as FullScreen } from "assets/images/full-screen.svg";
 import { Link } from "components/common";
+import { UploadButton } from "components/upload-button";
 
 export const GifPage: FC = () => {
   const { id } = useParams();
@@ -60,6 +61,14 @@ export const GifPage: FC = () => {
               <Copy className="fill-white" />
             </div>
             <Typography bold text={copy} />
+          </div>
+        </div>
+        <div className="flex flex-col cursor-pointer">
+          <div className={"flex flex-row items-end space-x-8"}>
+            <div className="w-9">
+              <UploadButton cb={(): void => console.log("uploaded")} title={title} url={src} />
+            </div>
+            <Typography bold text={"Upload"} />
           </div>
         </div>
       </div>
