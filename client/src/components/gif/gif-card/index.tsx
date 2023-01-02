@@ -24,7 +24,7 @@ export const GifCard: FC<GifCardProps> = ({ id, src, author, avatar, isFavorite 
         <img
           src={src}
           className={
-            "w-full h-full object-cover filter brightness-100 group-hover:brightness-50 transition duration-500 ease-in-out"
+            "rounded-xl drop-shadow-2xl w-full h-full object-cover filter brightness-100 group-hover:brightness-50 transition duration-500 ease-in-out"
           }
         />
       </Link>

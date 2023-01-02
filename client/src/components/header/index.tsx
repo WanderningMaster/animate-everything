@@ -23,7 +23,7 @@ export const Header: FC = () => {
         <div className={"w-5/12"}>
           {isAuth && data ? (
             <ProfileButton
-              author="WanderningMaster"
+              author={data.me.username}
               avatar="https://www.npmjs.com/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci9lZmRmZjIwN2Y0NDY5NjYyNDJkZDY4Y2EzNzc2NTJkOT9zaXplPTQ5NiZkZWZhdWx0PXJldHJvIn0.n0Mx4FBTk1TVCk7D4zDnOC1QVIF87_rEZ8xsdZPUYkI"
             />
           ) : (

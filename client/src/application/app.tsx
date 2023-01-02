@@ -9,6 +9,7 @@ import { GifPageShared } from "pages/gif-page/shared";
 import { AuthorPage } from "pages/author-page";
 import { AuthProvider } from "providers/auth-provider";
 import "react-toastify/dist/ReactToastify.css";
+import { SettingsPage } from "pages/settings-page";
 
 const App: FC = () => {
   return (
@@ -22,6 +23,7 @@ const App: FC = () => {
             <Route path={"/gif/fullscreen/:id"} element={<GifPageFullScreen />} />
             <Route path={"/gif/shared/:id"} element={<GifPageShared />} />
             <Route path={"/login"} element={<Auth />} />
+            <Route path={"/settings"} element={<SettingsPage />} />
           </Routes>
         </AppLayout>
       </AuthProvider>
