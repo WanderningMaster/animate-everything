@@ -1,5 +1,5 @@
 import { Http } from "services/http/http.service";
-import { ApiPath, HttpMethod, UserApiPath, UserResponseDto } from "shared/build";
+import { ApiPath, ContentType, HttpMethod, UserApiPath, UserResponseDto, UserUpdateRequestDto } from "shared/build";
 import { CONFIG } from "../../config/config";
 
 export class UserService {
@@ -23,11 +23,23 @@ export class UserService {
   }
 
   getOne(id: string): Promise<UserResponseDto> {
-    return this.http.load<UserResponseDto>(
-      `${this.baseUrl}${UserApiPath.ROOT}${id}`,
-      {
-        method: HttpMethod.GET,
-      },
-    );
+    return this.http.load<UserResponseDto>(`${this.baseUrl}${UserApiPath.ROOT}${id}`, {
+      method: HttpMethod.GET,
+    });
+  }
+
+  updateProfile(payload: UserUpdateRequestDto): Promise<UserResponseDto> {
+    return this.http.load<UserResponseDto>(`${this.baseUrl}/profile`, {
+      method: HttpMethod.PUT,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(payload),
+    });
+  }
+
+  updateAvatar(data: FormData): Promise<UserResponseDto> {
+    return this.http.load<UserResponseDto>(`${this.baseUrl}/avatar`, {
+      method: HttpMethod.PUT,
+      payload: data,
+    });
   }
 }

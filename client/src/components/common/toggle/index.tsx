@@ -11,7 +11,7 @@ type ToggleProps<T extends FieldValues> = {
     Partial<{
       email: string;
       username: string;
-      isPrivate: boolean;
+      privacy: boolean;
     }>
   >;
 };
@@ -21,7 +21,7 @@ export const Toggle = <T extends FieldValues>({ defaultValue, setValue }: Toggle
 
   const handleClick = (): void => {
     setIsChecked((state) => !state);
-    setValue("isPrivate", !isChecked);
+    setValue("privacy", !isChecked);
   };
 
   return (

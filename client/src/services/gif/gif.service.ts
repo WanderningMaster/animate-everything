@@ -15,6 +15,10 @@ export class GifService {
     return this.http.load<(GifResponseDto & { isLiked: boolean })[]>(`${this.baseUrl}`);
   }
 
+  getByAuthor(id: string): Promise<(GifResponseDto & { isLiked: boolean })[]> {
+    return this.http.load<(GifResponseDto & { isLiked: boolean })[]>(`${this.baseUrl}/author/${id}`);
+  }
+
   getOne(id: string): Promise<GifResponseDto & { isLiked: boolean; likeCount: number }> {
     return this.http.load<GifResponseDto & { isLiked: boolean; likeCount: number }>(`${this.baseUrl}/${id}`);
   }

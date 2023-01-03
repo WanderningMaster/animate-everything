@@ -64,9 +64,16 @@ export class GifService {
     return gif;
   }
 
+  async getByAuthorId(id: string, userId?: string): Promise<GifResponseDto[]> {
+    const gifs = await this.gifRepository.getByAuthor(id, userId);
+
+    return gifs.map((gif) => castToGifWithReactionDto(userId, gif));
+  }
+
   async addReaction(payload: GifAddReactionRequestDto): Promise<Reaction | undefined | null> {
     const { gif: isGifExists } = await this.gifRepository.getById({
       id: payload.gifId,
+      userId: payload.authorId,
     });
     if (!isGifExists) {
       return null;

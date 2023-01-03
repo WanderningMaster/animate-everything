@@ -9,7 +9,7 @@ import { Toggle } from "components/common/toggle";
 export type UpdateProfileFormValues = Partial<{
   username: string;
   email: string;
-  isPrivate: boolean;
+  privacy: boolean;
 }>;
 
 type Props = {
@@ -25,7 +25,7 @@ export const UpdateProfileForm: FC<Props> = ({ isLoading, onSubmit, data }) => {
     setValue,
     formState: { isValid },
   } = useForm<UserUpdateRequestDto>({
-    defaultValues: { username: data.username, email: data.email, isPrivate: data.privacy },
+    defaultValues: { username: data.username, email: data.email, privacy: data.privacy },
     resolver: joiResolver(userUpdate),
     mode: "onChange",
   });
@@ -38,7 +38,7 @@ export const UpdateProfileForm: FC<Props> = ({ isLoading, onSubmit, data }) => {
         <label className={"text-white px-1 flex flex-row justify-between"}>
           <div>{"Privacy"}</div>
         </label>
-        <Toggle control={control} setValue={setValue} name={"isPrivate"} defaultValue={data.privacy} />
+        <Toggle control={control} setValue={setValue} name={"privacy"} defaultValue={data.privacy} />
         <Button type={"submit"} title={"Save"} disabled={isLoading || !isValid} />
       </form>
     </>

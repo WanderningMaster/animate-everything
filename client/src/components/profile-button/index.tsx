@@ -9,9 +9,10 @@ import { useAuth } from "hooks/use-auth-hook";
 type ProfileButoonProps = {
   avatar: string;
   author: string;
+  authorId: string;
 };
 
-export const ProfileButton: FC<ProfileButoonProps> = ({ author, avatar }) => {
+export const ProfileButton: FC<ProfileButoonProps> = ({ author, avatar, authorId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -51,7 +52,7 @@ export const ProfileButton: FC<ProfileButoonProps> = ({ author, avatar }) => {
          z-50 w-[14%]
          flex-col bg-slate-700 drop-shadow-xl divide-solid`}
       >
-        <Link to={"/author/Kimmy Ramone"} className={"text-lg text-slate-200 hover:text-white font-bold"}>
+        <Link to={`/author/${authorId}`} className={"text-lg text-slate-200 hover:text-white font-bold"}>
           <div className="px-5 py-3">{"My profile"}</div>
         </Link>
         <Link to={AppRoute.ROOT} className={"text-lg text-slate-200 hover:text-white font-bold"}>

@@ -76,6 +76,17 @@ export class GifController {
     return gif;
   }
 
+  public async getByAuthorId(
+    request: FastifyRequest<{
+      Params: DefaultRequestParam;
+    }>,
+  ): Promise<GifResponseDto[]> {
+    const { id } = request.params;
+    const gifs = await gifService.getByAuthorId(id, request?.user?.id);
+
+    return gifs;
+  }
+
   public async processVideoAndReturnGif(request: FastifyRequest): Promise<{ res: string }> {
     const data = await request
       .file()

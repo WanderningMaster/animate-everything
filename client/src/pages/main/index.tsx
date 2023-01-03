@@ -18,10 +18,11 @@ export const MainPage: FC = () => {
     return <div>Failed to fetch</div>;
   }
 
-  const listItems = data.map(({ id, mediaSrc, isLiked, author: { username, avatar } }) => ({
+  const listItems = data.map(({ id, mediaSrc, isLiked, author: { username, avatar, id: authorId } }) => ({
     id,
     src: mediaSrc,
     author: username,
+    authorId,
     avatar,
     isFavorite: isLiked,
   }));

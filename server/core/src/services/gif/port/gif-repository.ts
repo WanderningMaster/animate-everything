@@ -9,4 +9,6 @@ export interface GifRepository {
   createOne(payload: GifCreateRequestDto): Promise<Gif>;
 
   addReaction({ authorId, gifId }: GifAddReactionRequestDto): Promise<Reaction | undefined>;
+
+  getByAuthor(id: string, userId?: string): Promise<Gif[]>;
 }

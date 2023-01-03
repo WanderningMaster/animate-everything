@@ -14,8 +14,26 @@ export const useAuth = (): {
     unknown
   >;
   signOutAsync: UseMutateAsyncFunction<boolean, unknown, void, unknown>;
+  updateAvatarAsync: UseMutateAsyncFunction<UserResponseDto, unknown, FormData, unknown>;
+  updateProfileAsync: UseMutateAsyncFunction<
+    UserResponseDto,
+    unknown,
+    Partial<{
+      email: string;
+      username: string;
+      privacy: boolean;
+    }>,
+    unknown
+  >;
 } => {
-  const { user: data, isLoading, signInAsync, signOutAsync } = useContext(AuthContext);
+  const {
+    user: data,
+    isLoading,
+    signInAsync,
+    signOutAsync,
+    updateAvatarAsync,
+    updateProfileAsync,
+  } = useContext(AuthContext);
 
   return {
     data,
@@ -23,5 +41,7 @@ export const useAuth = (): {
     isLoading,
     signInAsync,
     signOutAsync,
+    updateAvatarAsync,
+    updateProfileAsync,
   };
 };

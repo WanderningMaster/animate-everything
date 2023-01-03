@@ -1,7 +1,7 @@
 type UserUpdateRequestDto = Partial<{
   email: string;
   username: string;
-  isPrivate: boolean;
+  privacy: boolean;
 }>;
 
 export { UserUpdateRequestDto };

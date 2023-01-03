@@ -10,12 +10,12 @@ import { useMutation, useQuery } from "react-query";
 import { QueryKeys } from "shared/build";
 import { gifService } from "services/services";
 import { useAuth } from "hooks/use-auth-hook";
+import { toast, Id } from "react-toastify";
 
 export const GifPage: FC = () => {
   const { id } = useParams() as { id: string };
   const [isLiked, setIsLiked] = useState<boolean | undefined>(undefined);
   const [likeCount, setLikeCount] = useState(0);
-  const [copy, setCopy] = useState("Copy");
   const { isAuth } = useAuth();
 
   const {
@@ -45,7 +45,7 @@ export const GifPage: FC = () => {
   }
 
   const {
-    author: { username: author },
+    author: { username: author, id: authorId },
     mediaSrc: src,
     title,
   } = gif;
@@ -56,11 +56,10 @@ export const GifPage: FC = () => {
     await addReactionAsync({ gifId: id });
   };
 
+  const notifyCopied = (): Id => toast("Copied", { type: "info" });
   const handleClickCopy = (): void => {
-    setCopy("Copied...");
-    setTimeout(() => {
-      setCopy("Copy");
-    }, 1000);
+    navigator.clipboard.writeText(`http://localhost:3000/gif/shared/${id}`);
+    notifyCopied();
   };
 
   return (
@@ -68,7 +67,7 @@ export const GifPage: FC = () => {
       <div className="flex flex-col space-y-2 w-8/12">
         <div>
           <Typography text={`${title}`} />
-          <Link to={`/author/${author}`}>
+          <Link to={`/author/${authorId}`}>
             <Typography bold text={` by ${author}`} />
           </Link>
         </div>
@@ -97,7 +96,7 @@ export const GifPage: FC = () => {
             <div className="w-9">
               <Copy className="fill-white" />
             </div>
-            <Typography bold text={copy} />
+            <Typography bold text={"Share link"} />
           </div>
         </div>
         <div className="flex flex-col cursor-pointer">

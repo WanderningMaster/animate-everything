@@ -18,5 +18,5 @@ export const userUpdate = Joi.object<UserUpdateRequestDto>({
     .messages({
       "string.min": "email too small",
     }),
-  isPrivate: Joi.boolean(),
+  privacy: Joi.boolean(),
 });

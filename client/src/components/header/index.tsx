@@ -22,7 +22,7 @@ export const Header: FC = () => {
         </div>
         <div className={"w-5/12"}>
           {isAuth && data ? (
-            <ProfileButton author={data.me.username} avatar={data.me.avatar} />
+            <ProfileButton author={data.me.username} authorId={data.me.id} avatar={data.me.avatar} />
           ) : (
             <Link to={isAuth ? AppRoute.ROOT : AppRoute.LOGIN}>
               <Button title={"Sign in"} />

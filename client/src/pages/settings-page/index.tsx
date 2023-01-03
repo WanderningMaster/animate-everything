@@ -5,8 +5,17 @@ import React, { FC, useState } from "react";
 import { UpdateProfileForm, UpdateProfileFormValues } from "./form/update-profile-form";
 
 export const SettingsPage: FC = () => {
-  const handleClickUpdateProfile = (values: UpdateProfileFormValues): void => {
-    console.log(values);
+  const { updateAvatarAsync, updateProfileAsync } = useAuth();
+
+  const handleClickUpdateProfile = async (values: UpdateProfileFormValues): Promise<void> => {
+    await updateProfileAsync(values);
+  };
+
+  const handleClickUpdateAvatar = async (file: File): Promise<void> => {
+    const data = new FormData();
+    data.append("data", file);
+    const user = await updateAvatarAsync(data);
+    setAvatar(user.avatar);
   };
 
   const { data } = useAuth();
@@ -15,13 +24,15 @@ export const SettingsPage: FC = () => {
     return <div>Error</div>;
   }
 
-  const [avatar] = useState(data.me.avatar);
+  const [avatar, setAvatar] = useState(data.me.avatar);
 
   return (
     <div className="flex flex-row h-auto space-x-4">
-      <div className="w-3/12 h-1/2">
-        <img className="w-full" src={avatar} />
-        <UploadFile eventCb={(): void => console.log("test")} />
+      <div className="w-3/12 h-96">
+        <div className="w-full h-2/3">
+          <img className="w-full h-full object-cover" src={avatar} />
+        </div>
+        <UploadFile eventCb={handleClickUpdateAvatar} />
       </div>
       <div className="w-9/12 h-1/2 flex flex-col space-y-6">
         <div className=" bg-slate-900 rounded-xl w-full h-full p-12 flex flex-col items-center space-y-10">

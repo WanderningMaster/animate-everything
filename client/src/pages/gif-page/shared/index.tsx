@@ -21,7 +21,7 @@ export const GifPageShared: FC = () => {
   const {
     mediaSrc: src,
     title,
-    author: { username: author },
+    author: { username: author, id: authorId },
   } = gif;
   return (
     <div className={"bg-slate-800 h-screen w-full flex items-center justify-center"}>
@@ -29,7 +29,7 @@ export const GifPageShared: FC = () => {
         <div className="flex flex-row w-10/12 self-center justify-between">
           <div>
             <Typography type="heading" text={`${title}`} />
-            <Link to={`/author/${author}`}>
+            <Link to={`/author/${authorId}`}>
               <Typography type="heading" text={` by ${author}`} />
             </Link>
           </div>

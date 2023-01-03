@@ -134,4 +134,29 @@ export class GifRepositoryAdapter implements GifRepository {
 
     return createdGif;
   }
+
+  public async getByAuthor(id: string, userId?: string): Promise<Gif[]> {
+    const query =
+      userId === id
+        ? {
+            author: {
+              id,
+            },
+          }
+        : {
+            author: {
+              privacy: false,
+              id,
+            },
+          };
+    const gifs = await this.dataSource.gif.find({
+      where: query,
+      relations: {
+        author: true,
+        reactions: true,
+      },
+    });
+
+    return gifs;
+  }
 }

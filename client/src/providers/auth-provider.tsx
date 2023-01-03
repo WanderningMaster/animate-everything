@@ -3,8 +3,8 @@ import { Typography } from "components/common/typography";
 import React, { createContext, FC, PropsWithChildren, useMemo, useState } from "react";
 import { UseMutateAsyncFunction, useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { authService, _localStorage } from "services/services";
-import { QueryKeys, UserResponseDto, UserCreateRequestDto, JwtPair } from "shared/build";
+import { authService, userService, _localStorage } from "services/services";
+import { QueryKeys, UserResponseDto, UserCreateRequestDto, JwtPair, UserUpdateRequestDto } from "shared/build";
 import { toast, Id } from "react-toastify";
 
 interface AuthContextType {
@@ -20,6 +20,17 @@ interface AuthContextType {
     unknown
   >;
   signOutAsync: UseMutateAsyncFunction<boolean, unknown, void, unknown>;
+  updateAvatarAsync: UseMutateAsyncFunction<UserResponseDto, unknown, FormData, unknown>;
+  updateProfileAsync: UseMutateAsyncFunction<
+    UserResponseDto,
+    unknown,
+    Partial<{
+      email: string;
+      username: string;
+      privacy: boolean;
+    }>,
+    unknown
+  >;
 }
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -74,6 +85,48 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     },
   );
 
+  const notifyUpdateAvatar = (): Id => toast("Successfully updated avatar", { type: "success" });
+  const { mutateAsync: updateAvatarAsync } = useMutation(
+    [QueryKeys.USER],
+    (payload: FormData) => userService.updateAvatar(payload),
+    {
+      onSuccess: (data) => {
+        if (data) {
+          setUser((state) => {
+            if (!state) {
+              return undefined;
+            }
+            return {
+              me: { ...state?.me, avatar: data.avatar },
+            };
+          });
+          notifyUpdateAvatar();
+        }
+      },
+    },
+  );
+
+  const notifyUpdateProfile = (): Id => toast("Successfully updated profile", { type: "success" });
+  const { mutateAsync: updateProfileAsync } = useMutation(
+    [QueryKeys.USER],
+    (payload: UserUpdateRequestDto) => userService.updateProfile(payload),
+    {
+      onSuccess: (data) => {
+        if (data) {
+          setUser((state) => {
+            if (!state) {
+              return undefined;
+            }
+            return {
+              me: { ...state?.me, username: data.username, email: data.avatar, privacy: data.privacy },
+            };
+          });
+          notifyUpdateProfile();
+        }
+      },
+    },
+  );
+
   const memoedData = useMemo(
     () => ({
       user,
@@ -83,8 +136,20 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       isLoadingSignOut,
       signInAsync,
       signOutAsync,
+      updateAvatarAsync,
+      updateProfileAsync,
     }),
-    [user, isLoading, error, isLoadingSignIn, isLoadingSignOut, signInAsync, signOutAsync],
+    [
+      user,
+      isLoading,
+      error,
+      isLoadingSignIn,
+      isLoadingSignOut,
+      signInAsync,
+      signOutAsync,
+      updateAvatarAsync,
+      updateProfileAsync,
+    ],
   );
 
   return (
