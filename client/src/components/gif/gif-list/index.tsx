@@ -6,6 +6,7 @@ type GifListProps = {
     id: string;
     src: string;
     author: string;
+    authorId: string;
     avatar: string;
     isFavorite: boolean;
   }>;

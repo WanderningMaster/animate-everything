@@ -36,7 +36,11 @@ class Application {
       origin: "*",
       methods: ["GET", "PUT", "POST"],
     });
-    instance.register(multipart);
+    instance.register(multipart, {
+      limits: {
+        fileSize: 10000000,
+      },
+    });
   }
 
   public async initSwagger(instance: FastifyInstance): Promise<void> {

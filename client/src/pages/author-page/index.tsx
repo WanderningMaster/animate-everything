@@ -1,23 +1,43 @@
 import { GifList } from "components/gif/gif-list";
 import React, { FC } from "react";
-import { listItems } from "components/gif/gif-list/items.mock";
 import { useParams } from "react-router-dom";
 import { Typography } from "components/common/typography";
+import { useQuery } from "react-query";
+import { QueryKeys } from "shared/build";
+import { gifService } from "services/services";
 
 export const AuthorPage: FC = () => {
-  const { id } = useParams();
-  const gifs = listItems.filter((gif) => gif.author === id);
-  const { author, avatar } = gifs[0];
+  const { id } = useParams() as { id: string };
+  const { isLoading, isFetching, data } = useQuery([QueryKeys.GIF, QueryKeys.USER], () => gifService.getByAuthor(id), {
+    refetchOnMount: true,
+  });
+
+  if (isLoading || isFetching) {
+    return <div>Loading...</div>;
+  }
+
+  if (!data) {
+    return <div>Failed to fetch</div>;
+  }
+
+  const listItems = data.map(({ id, mediaSrc, isLiked, author: { username, avatar, id: authorId } }) => ({
+    id,
+    src: mediaSrc,
+    author: username,
+    authorId,
+    avatar,
+    isFavorite: isLiked,
+  }));
 
   return (
     <div className="flex flex-col space-y-4 mt-10">
       <div className="flex items-end space-x-10">
-        <img src={avatar} className={" w-32 h-32 object-cover"} />
-        <Typography type="heading" text={author} />
+        <img src={data[0].author.avatar} className={" w-32 h-32 object-cover"} />
+        <Typography type="heading" text={data[0].author.username} />
       </div>
-      <div className="pt-8 h-[2000px] flex flex-col space-y-8">
+      <div className="pt-8 flex flex-col space-y-8">
         <Typography type="heading" text={"Gif`s:"} />
-        <GifList list={gifs} />
+        <GifList list={listItems} />
       </div>
     </div>
   );

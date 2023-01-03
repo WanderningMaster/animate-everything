@@ -4,9 +4,11 @@ import { Gif, Reaction } from "~/database/entity";
 export interface GifRepository {
   getAll({ take, skip }: GifGetAllRequestDto): Promise<Gif[]>;
 
-  getById({ id }: DefaultRequestParam): Promise<{ gif: Gif | null; likeCount: number }>;
+  getById({ id, userId }: DefaultRequestParam & { userId?: string }): Promise<{ gif: Gif | null; likeCount: number }>;
 
   createOne(payload: GifCreateRequestDto): Promise<Gif>;
 
   addReaction({ authorId, gifId }: GifAddReactionRequestDto): Promise<Reaction | undefined>;
+
+  getByAuthor(id: string, userId?: string): Promise<Gif[]>;
 }

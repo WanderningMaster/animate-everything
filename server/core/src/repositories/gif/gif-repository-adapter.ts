@@ -13,10 +13,30 @@ export class GifRepositoryAdapter implements GifRepository {
     this.dataSource = dataSource;
   }
 
-  public getAll({ take, skip }: GifGetAllRequestDto): Promise<Gif[]> {
+  public getAll({ take, skip, userId }: GifGetAllRequestDto): Promise<Gif[]> {
+    const query = userId
+      ? [
+          {
+            author: {
+              privacy: false,
+            },
+          },
+          {
+            author: {
+              id: userId,
+            },
+          },
+        ]
+      : {
+          author: {
+            privacy: false,
+          },
+        };
+
     return this.dataSource.gif.find({
       take,
       skip,
+      where: query,
       relations: {
         author: true,
         reactions: true,
@@ -24,14 +44,33 @@ export class GifRepositoryAdapter implements GifRepository {
     });
   }
 
-  public async getById({ id }: DefaultRequestParam): Promise<{ gif: Gif | null; likeCount: number }> {
+  public async getById({
+    id,
+    userId,
+  }: DefaultRequestParam & { userId?: string }): Promise<{ gif: Gif | null; likeCount: number }> {
     const { gif, likeCount } = await this.dataSource.gif.manager.transaction(async (manager) => {
+      const query = !userId
+        ? {
+            id,
+            author: { privacy: false },
+          }
+        : [
+            {
+              id,
+              author: { privacy: false },
+            },
+            {
+              id,
+              author: {
+                id: userId,
+              },
+            },
+          ];
       const gif = await manager.findOne(Gif, {
-        where: {
-          id,
-        },
+        where: query,
         relations: {
           author: true,
+          reactions: true,
         },
       });
       const res = await manager.query("CALL COUNT_REACTIONS(?)", [id]);
@@ -94,5 +133,30 @@ export class GifRepositoryAdapter implements GifRepository {
     })) as Gif;
 
     return createdGif;
+  }
+
+  public async getByAuthor(id: string, userId?: string): Promise<Gif[]> {
+    const query =
+      userId === id
+        ? {
+            author: {
+              id,
+            },
+          }
+        : {
+            author: {
+              privacy: false,
+              id,
+            },
+          };
+    const gifs = await this.dataSource.gif.find({
+      where: query,
+      relations: {
+        author: true,
+        reactions: true,
+      },
+    });
+
+    return gifs;
   }
 }

@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from "react";
 import { SignUpForm, SignUpFormValues } from "./common/sign-up-form";
 import { SignInForm, SignInFormValues } from "./common/sign-in-form";
-import { useSignIn, useSignUp } from "api/api";
-import { useNavigate } from "react-router-dom";
+import { useSignUp } from "api/api";
+import { useAuth } from "hooks/use-auth-hook";
+import { toast, Id } from "react-toastify";
 
 export const Auth: FC = () => {
   const [isSignIn, setIsSignIn] = useState(true);
-  const navigate = useNavigate();
-  const { isSuccess: isSuccessSignIn, mutateAsync: signInAsync } = useSignIn();
+  const { signInAsync } = useAuth();
   const { isSuccess: isSuccessSignUp, mutateAsync: signUpAsync } = useSignUp();
 
   const handleClickSignIn = (): void => {
@@ -22,17 +22,15 @@ export const Auth: FC = () => {
     await signInAsync(formValues);
   };
 
+  const nofitySignUp = (): Id => toast("You successfully signed up");
   const onSignUp = async ({ username, password, email }: SignUpFormValues): Promise<void> => {
     await signUpAsync({
       username,
       password,
       email,
     });
+    nofitySignUp();
   };
-
-  if (isSuccessSignIn) {
-    navigate("/");
-  }
 
   useEffect(() => {
     if (isSuccessSignUp) {

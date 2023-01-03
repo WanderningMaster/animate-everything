@@ -1,4 +1,4 @@
-import { DefaultRequestParam, UserCreateRequestDto, UserGetAllRequestDto } from "shared/build";
+import { DefaultRequestParam, UserCreateRequestDto, UserGetAllRequestDto, UserUpdateRequestDto } from "shared/build";
 import { User } from "~/database/entity";
 
 export interface UserRepository {
@@ -9,4 +9,6 @@ export interface UserRepository {
   getByEmailOrUsername({ email, username }: { email?: string; username?: string }): Promise<User | null>;
 
   createOne(payload: UserCreateRequestDto): Promise<User>;
+
+  updateProfile(payload: UserUpdateRequestDto & { userId: string }): Promise<User>;
 }

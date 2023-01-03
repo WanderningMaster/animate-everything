@@ -1,4 +1,4 @@
-import { Storage } from "firebase-admin/storage";
+import { Storage } from "@google-cloud/storage";
 
 export interface CloudServiceContainer {
   storage: Storage;

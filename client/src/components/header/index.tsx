@@ -1,12 +1,13 @@
-import { useMe } from "api/api";
 import React, { FC } from "react";
 import { ReactComponent as Logo } from "assets/images/logo.svg";
 import { Typography } from "components/common/typography";
 import { Button, Link } from "components/common";
 import { AppRoute } from "shared/build";
+import { useAuth } from "hooks/use-auth-hook";
+import { ProfileButton } from "components/profile-button";
 
 export const Header: FC = () => {
-  const { isAuth } = useMe();
+  const { isAuth, data } = useAuth();
   return (
     <div className={"flex flex-row justify-between"}>
       <Link to={AppRoute.ROOT}>
@@ -20,9 +21,13 @@ export const Header: FC = () => {
           <Button disabled={!isAuth} title={"Upload"} />
         </div>
         <div className={"w-5/12"}>
-          <Link to={isAuth ? AppRoute.ROOT : AppRoute.LOGIN}>
-            <Button title={isAuth ? "Profile" : "Sign in"} />
-          </Link>
+          {isAuth && data ? (
+            <ProfileButton author={data.me.username} authorId={data.me.id} avatar={data.me.avatar} />
+          ) : (
+            <Link to={isAuth ? AppRoute.ROOT : AppRoute.LOGIN}>
+              <Button title={"Sign in"} />
+            </Link>
+          )}
         </div>
       </div>
     </div>

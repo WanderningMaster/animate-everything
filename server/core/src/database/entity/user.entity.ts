@@ -17,6 +17,12 @@ export class User implements UserModel {
   @Column()
   password!: string;
 
+  @Column({ type: "text" })
+  avatar!: string;
+
+  @Column({ type: "bool", width: 1, default: false })
+  privacy!: boolean;
+
   @OneToMany(() => Gif, (gif) => gif.author)
   gifs!: Gif[];
 

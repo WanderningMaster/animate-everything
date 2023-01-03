@@ -9,5 +9,9 @@ type TypographyProps = {
 export const Typography: FC<TypographyProps> = ({ type = "default", text, bold }) => {
   const fontSize = type === "default" ? "text-lg" : type === "heading" ? "text-4xl" : "text-6xl";
   const fontWeight = type === "default" ? "font-normal" : "font-medium";
-  return <span className={`text-white ${fontSize} ${bold ? "font-bold" : fontWeight}`}>{text}</span>;
+  return (
+    <span className={`text-white ${fontSize} w-full text-ellipsis overflow-hidden ${bold ? "font-bold" : fontWeight}`}>
+      {text}
+    </span>
+  );
 };

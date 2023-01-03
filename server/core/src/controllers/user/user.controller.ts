@@ -6,6 +6,7 @@ import {
   Pagination,
   UserCreateRequestDto,
   UserResponseDto,
+  UserUpdateRequestDto,
 } from "shared/build";
 import { FastifyRequest } from "fastify";
 import { userService, cloudService } from "~/services/services";
@@ -50,6 +51,21 @@ export class UserController {
     const user = await userService.getOne(payload);
     if (!user) {
       throw new HttpError({ message: "UserEntity not found", status: HttpCode.NOT_FOUND });
+    }
+
+    return user;
+  }
+
+  public async updateProfile(
+    request: FastifyRequest<{
+      Body: UserUpdateRequestDto;
+    }>,
+  ): Promise<UserResponseDto> {
+    const payload = request.body;
+
+    const user = await userService.updateProfile({ userId: request.user.id, ...payload });
+    if (!user) {
+      throw new HttpError({ message: "User not found", status: HttpCode.NOT_FOUND });
     }
 
     return user;
@@ -144,19 +160,24 @@ export class UserController {
     };
   }
 
-  //NOTE: only for test purposes
-  public async upload(
-    request: FastifyRequest<{
-      Body: { base64Str: string; dest: string };
-    }>,
-  ): Promise<string> {
-    const { base64Str, dest } = request.body;
+  public async updateAvatar(request: FastifyRequest): Promise<UserResponseDto> {
+    const file = await request.file();
+    if (!file) {
+      throw new HttpError({
+        message: "File not found",
+        status: HttpCode.BAD_REQUEST,
+      });
+    }
+    const ext = file?.mimetype.split("/")[1];
+    const base64Str = (await file.toBuffer()).toString("base64");
+    const { id } = request.user;
 
-    const signedUrl = await cloudService.upload({
+    const avatar = await cloudService.upload({
       base64Str,
-      dest,
+      dest: `avatar/${id}.${ext}`,
     });
 
-    return signedUrl;
+    const user = await userService.updateAvatar({ avatar, userId: id });
+    return user;
   }
 }

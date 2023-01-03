@@ -45,6 +45,8 @@ export class GifController {
     const payload = request.body;
     const { id } = request.user;
 
+    console.log({ payload });
+
     const reaction = await gifService.addReaction({ authorId: id, ...payload });
     if (reaction === null) {
       throw new HttpError({
@@ -64,14 +66,25 @@ export class GifController {
       Params: DefaultRequestParam;
     }>,
   ): Promise<GifResponseDto> {
-    const payload = request.params;
+    const { id } = request.params;
 
-    const gif = await gifService.getOne(payload);
+    const gif = await gifService.getOne({ id, userId: request?.user?.id });
     if (!gif) {
       throw new HttpError({ message: "GifEntity not found", status: HttpCode.NOT_FOUND });
     }
 
     return gif;
+  }
+
+  public async getByAuthorId(
+    request: FastifyRequest<{
+      Params: DefaultRequestParam;
+    }>,
+  ): Promise<GifResponseDto[]> {
+    const { id } = request.params;
+    const gifs = await gifService.getByAuthorId(id, request?.user?.id);
+
+    return gifs;
   }
 
   public async processVideoAndReturnGif(request: FastifyRequest): Promise<{ res: string }> {

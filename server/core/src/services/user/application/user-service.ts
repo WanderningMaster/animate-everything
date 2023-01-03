@@ -4,6 +4,7 @@ import {
   UserCreateRequestDto,
   UserGetAllRequestDto,
   UserResponseDto,
+  UserUpdateRequestDto,
 } from "shared/build";
 import { castToUserDto } from "~/services/user/application/dtos";
 import { UserServiceContainer } from "~/services/user/user-service-container";
@@ -48,10 +49,22 @@ export class UserService {
     return castToUserDto(user);
   }
 
+  async updateProfile(payload: UserUpdateRequestDto & { userId: string }): Promise<UserResponseDto> {
+    const user = await this.userRepository.updateProfile(payload);
+
+    return castToUserDto(user);
+  }
+
+  async updateAvatar(payload: { avatar: string } & { userId: string }): Promise<UserResponseDto> {
+    const user = await this.userRepository.updateProfile(payload);
+
+    return castToUserDto(user);
+  }
+
   async signIn({
-                 email,
-                 password: passwordToCompare,
-               }: Omit<UserCreateRequestDto, "username">): Promise<UserResponseDto & JwtPair | null> {
+    email,
+    password: passwordToCompare,
+  }: Omit<UserCreateRequestDto, "username">): Promise<(UserResponseDto & JwtPair) | null> {
     const createdUser = await this.userRepository.getByEmailOrUsername({
       email,
     });
