@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { createContext, FC, PropsWithChildren, useContext, useMemo, useState } from "react";
+import React, { createContext, FC, PropsWithChildren, useContext, useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { GifResponseDto } from "shared/build";
 
 type GifListType = Array<GifResponseDto & { isLiked: boolean }>;
@@ -20,6 +21,7 @@ interface CardContextType {
 export const CardsContext = createContext<CardContextType>({} as CardContextType);
 
 export const CardProvider: FC<PropsWithChildren> = ({ children }) => {
+  const location = useLocation();
   const [triggerReset, setTriggerReset] = useState(true);
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [itemCount, setItemCount] = useState<number>(0);
@@ -28,6 +30,13 @@ export const CardProvider: FC<PropsWithChildren> = ({ children }) => {
     skip: 0,
   });
   const [cards, setCards] = useState<GifListType | undefined>(undefined);
+
+  useEffect(() => {
+    setTriggerReset((state) => !state);
+    setCards(undefined);
+    setPagination({ take: 6, skip: 0 });
+    setSearch(undefined);
+  }, [location.pathname]);
 
   const memoedData = useMemo(
     () => ({

@@ -31,6 +31,17 @@ export class GifService {
     );
   }
 
+  getFavorites(
+    payload?: GifGetAllRequestDto,
+  ): Promise<{ data: (GifResponseDto & { isLiked: boolean })[]; itemCount: number }> {
+    return this.http.load<{ data: (GifResponseDto & { isLiked: boolean })[]; itemCount: number }>(
+      `${this.baseUrl}/favorites`,
+      {
+        query: payload,
+      },
+    );
+  }
+
   getOne(id: string): Promise<GifResponseDto & { isLiked: boolean; likeCount: number }> {
     return this.http.load<GifResponseDto & { isLiked: boolean; likeCount: number }>(`${this.baseUrl}/${id}`);
   }
