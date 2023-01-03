@@ -9,16 +9,18 @@ import { useCards } from "providers/card-provider";
 
 export const Header: FC = () => {
   const { isAuth, data } = useAuth();
-  const { setSearch } = useCards();
+  const { setTriggerReset, setPagination, setCards } = useCards();
 
   const handleClickLogo = (): void => {
-    setSearch(undefined);
+    setTriggerReset((state) => !state);
+    setCards(undefined);
+    setPagination({ take: 6, skip: 0 });
   };
 
   return (
-    <div onClick={handleClickLogo} className={"flex flex-row justify-between"}>
+    <div className={"flex flex-row justify-between"}>
       <Link to={AppRoute.ROOT}>
-        <div className={"flex flex-row space-x-4 items-end"}>
+        <div onClick={handleClickLogo} className={"flex flex-row space-x-4 items-end"}>
           <Logo className={"w-10 h-auto fill-white"} />
           <Typography type="heading" text="Animate everything" />
         </div>

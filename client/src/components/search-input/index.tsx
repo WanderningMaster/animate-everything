@@ -3,12 +3,15 @@ import React, { FC, useRef } from "react";
 
 export const SearchInput: FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { setSearch } = useCards();
+  const { setSearch, setCards, setTriggerReset, setPagination } = useCards();
 
   const handleClickSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     if (inputRef) {
       setSearch(inputRef.current?.value);
+      setTriggerReset((state) => !state);
+      setCards(undefined);
+      setPagination({ take: 6, skip: 0 });
     }
   };
 

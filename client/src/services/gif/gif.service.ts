@@ -11,14 +11,24 @@ export class GifService {
     this.http = http;
   }
 
-  getAll(payload?: GifGetAllRequestDto): Promise<(GifResponseDto & { isLiked: boolean })[]> {
-    return this.http.load<(GifResponseDto & { isLiked: boolean })[]>(`${this.baseUrl}`, {
+  getAll(
+    payload?: GifGetAllRequestDto,
+  ): Promise<{ data: (GifResponseDto & { isLiked: boolean })[]; itemCount: number }> {
+    return this.http.load<{ data: (GifResponseDto & { isLiked: boolean })[]; itemCount: number }>(`${this.baseUrl}`, {
       query: payload,
     });
   }
 
-  getByAuthor(id: string): Promise<(GifResponseDto & { isLiked: boolean })[]> {
-    return this.http.load<(GifResponseDto & { isLiked: boolean })[]>(`${this.baseUrl}/author/${id}`);
+  getByAuthor(
+    id: string,
+    payload?: GifGetAllRequestDto,
+  ): Promise<{ data: (GifResponseDto & { isLiked: boolean })[]; itemCount: number }> {
+    return this.http.load<{ data: (GifResponseDto & { isLiked: boolean })[]; itemCount: number }>(
+      `${this.baseUrl}/author/${id}`,
+      {
+        query: payload,
+      },
+    );
   }
 
   getOne(id: string): Promise<GifResponseDto & { isLiked: boolean; likeCount: number }> {

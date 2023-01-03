@@ -5,6 +5,7 @@ import { AppRoute } from "shared/build";
 import { ReactComponent as ArrowDown } from "assets/images/arrow-down.svg";
 import { ReactComponent as ArrowUp } from "assets/images/arrow-up.svg";
 import { useAuth } from "hooks/use-auth-hook";
+import { useCards } from "providers/card-provider";
 
 type ProfileButoonProps = {
   avatar: string;
@@ -14,6 +15,7 @@ type ProfileButoonProps = {
 
 export const ProfileButton: FC<ProfileButoonProps> = ({ author, avatar, authorId }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { setCards, setPagination, setTriggerReset, setSearch } = useCards();
   const ref = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: MouseEvent): void => {
@@ -36,7 +38,14 @@ export const ProfileButton: FC<ProfileButoonProps> = ({ author, avatar, authorId
   const { signOutAsync } = useAuth();
 
   const handleClickSignOut = async (): Promise<void> => {
-    signOutAsync();
+    await signOutAsync();
+  };
+
+  const handleClickResetCards = (): void => {
+    setTriggerReset((state) => !state);
+    setCards(undefined);
+    setPagination({ take: 6, skip: 0 });
+    setSearch(undefined);
   };
 
   return (
@@ -53,13 +62,19 @@ export const ProfileButton: FC<ProfileButoonProps> = ({ author, avatar, authorId
          flex-col bg-slate-700 drop-shadow-xl divide-solid`}
       >
         <Link to={`/author/${authorId}`} className={"text-lg text-slate-200 hover:text-white font-bold"}>
-          <div className="px-5 py-3">{"My profile"}</div>
+          <div onClick={handleClickResetCards} className="px-5 py-3">
+            {"My profile"}
+          </div>
         </Link>
         <Link to={AppRoute.ROOT} className={"text-lg text-slate-200 hover:text-white font-bold"}>
-          <div className="px-5 py-3">{"Favorites"}</div>
+          <div onClick={handleClickResetCards} className="px-5 py-3">
+            {"Favorites"}
+          </div>
         </Link>
         <Link to={"/settings"} className={"text-lg text-slate-200 hover:text-white font-bold"}>
-          <div className=" px-5 py-3">{"Settings"}</div>
+          <div onClick={handleClickResetCards} className=" px-5 py-3">
+            {"Settings"}
+          </div>
         </Link>
         <Link to={AppRoute.LOGIN} className={"text-lg text-slate-200 hover:text-white font-bold"}>
           <div onClick={handleClickSignOut} className="px-5 py-3">

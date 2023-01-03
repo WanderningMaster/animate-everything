@@ -5,16 +5,30 @@ import { Typography } from "components/common/typography";
 import { useQuery } from "react-query";
 import { QueryKeys } from "shared/build";
 import { gifService } from "services/services";
+import { useCards } from "providers/card-provider";
+import { LoadMore } from "components/load-more";
 
 export const AuthorPage: FC = () => {
   const { id } = useParams() as { id: string };
-  const { isLoading, isFetching, data } = useQuery([QueryKeys.GIF, QueryKeys.USER], () => gifService.getByAuthor(id), {
-    refetchOnMount: true,
-  });
-
-  if (isLoading || isFetching) {
-    return <div>Loading...</div>;
-  }
+  const { pagination, setItemCount, setCards, cards: data, triggerReset } = useCards();
+  useQuery(
+    [QueryKeys.GIF, QueryKeys.USER, pagination, triggerReset],
+    () => gifService.getByAuthor(id, { ...pagination }),
+    {
+      refetchOnMount: true,
+      onSuccess: (data) => {
+        if (data) {
+          setCards((state) => {
+            if (!state) {
+              return data.data;
+            }
+            return [...state, ...data.data];
+          });
+          setItemCount(data.itemCount);
+        }
+      },
+    },
+  );
 
   if (!data) {
     return <div>Failed to fetch</div>;
@@ -38,6 +52,7 @@ export const AuthorPage: FC = () => {
       <div className="pt-8 flex flex-col space-y-8">
         <Typography type="heading" text={"Gif`s:"} />
         <GifList list={listItems} />
+        <LoadMore />
       </div>
     </div>
   );

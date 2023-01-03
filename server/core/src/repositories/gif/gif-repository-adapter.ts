@@ -13,7 +13,12 @@ export class GifRepositoryAdapter implements GifRepository {
     this.dataSource = dataSource;
   }
 
-  public getAll({ take, skip, userId, search }: GifGetAllRequestDto): Promise<Gif[]> {
+  public async getAll({
+    take,
+    skip,
+    userId,
+    search,
+  }: GifGetAllRequestDto): Promise<{ gif: Gif[] } & { itemCount: number }> {
     const searchQuery = search
       ? {
           title: Like(`%${search}%`),
@@ -41,15 +46,27 @@ export class GifRepositoryAdapter implements GifRepository {
           ...searchQuery,
         };
 
-    return this.dataSource.gif.find({
-      take,
-      skip,
-      where: query,
-      relations: {
-        author: true,
-        reactions: true,
-      },
+    const { gif, itemCount } = await this.dataSource.gif.manager.transaction(async (manager) => {
+      const gif = await manager.find(Gif, {
+        take,
+        skip,
+        where: query,
+        relations: {
+          author: true,
+          reactions: true,
+        },
+      });
+      const itemCount = await manager.countBy(Gif, query);
+      return {
+        gif,
+        itemCount,
+      };
     });
+
+    return {
+      gif,
+      itemCount,
+    };
   }
 
   public async getById({
@@ -142,7 +159,12 @@ export class GifRepositoryAdapter implements GifRepository {
     return createdGif;
   }
 
-  public async getByAuthor(id: string, userId?: string): Promise<Gif[]> {
+  public async getByAuthor({
+    id,
+    userId,
+    take,
+    skip,
+  }: GifGetAllRequestDto & { id: string }): Promise<{ gif: Gif[] } & { itemCount: number }> {
     const query =
       userId === id
         ? {
@@ -156,14 +178,28 @@ export class GifRepositoryAdapter implements GifRepository {
               id,
             },
           };
-    const gifs = await this.dataSource.gif.find({
-      where: query,
-      relations: {
-        author: true,
-        reactions: true,
-      },
+
+    const { gif, itemCount } = await this.dataSource.gif.manager.transaction(async (manager) => {
+      const gif = await manager.find(Gif, {
+        where: query,
+        take,
+        skip,
+        relations: {
+          author: true,
+          reactions: true,
+        },
+      });
+      const itemCount = await manager.countBy(Gif, query);
+
+      return {
+        gif,
+        itemCount,
+      };
     });
 
-    return gifs;
+    return {
+      gif,
+      itemCount,
+    };
   }
 }
