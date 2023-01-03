@@ -1,5 +1,5 @@
 import { Http } from "services/http/http.service";
-import { ApiPath, ContentType, GifResponseDto, HttpMethod } from "shared/build";
+import { ApiPath, ContentType, GifGetAllRequestDto, GifResponseDto, HttpMethod } from "shared/build";
 import { CONFIG } from "../../config/config";
 
 export class GifService {
@@ -11,8 +11,10 @@ export class GifService {
     this.http = http;
   }
 
-  getAll(): Promise<(GifResponseDto & { isLiked: boolean })[]> {
-    return this.http.load<(GifResponseDto & { isLiked: boolean })[]>(`${this.baseUrl}`);
+  getAll(payload?: GifGetAllRequestDto): Promise<(GifResponseDto & { isLiked: boolean })[]> {
+    return this.http.load<(GifResponseDto & { isLiked: boolean })[]>(`${this.baseUrl}`, {
+      query: payload,
+    });
   }
 
   getByAuthor(id: string): Promise<(GifResponseDto & { isLiked: boolean })[]> {

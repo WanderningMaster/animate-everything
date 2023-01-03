@@ -1,17 +1,16 @@
 import { PostInterceptor, PreInterceptor } from "./interceptors/interceptors";
 import { ContentType, HttpError, HttpHeader, HttpMethod } from "shared/build";
+import stringify from "query-string";
 
 export type HttpOptions = {
   method: HttpMethod;
   contentType: ContentType;
   payload: BodyInit | null;
+  query: Record<string, unknown> | undefined;
 };
 
 class Http {
-  constructor(
-    private preInterceptors: PreInterceptor[],
-    private postInterceptors: PostInterceptor[]) {
-  }
+  constructor(private preInterceptors: PreInterceptor[], private postInterceptors: PostInterceptor[]) {}
 
   public async load<T = unknown>(
     url: string,
@@ -19,7 +18,7 @@ class Http {
     preInterceptors = this.preInterceptors,
     postInterceptors = this.postInterceptors,
   ): Promise<T> {
-    const { method = HttpMethod.GET, payload = null, contentType } = options;
+    const { method = HttpMethod.GET, payload = null, contentType, query } = options;
     const headers = this._getHeaders(contentType);
 
     let requestOptions: RequestInit = {
@@ -27,6 +26,8 @@ class Http {
       headers,
       body: payload,
     };
+
+    url = this.getQueriedUrl(url, query);
 
     for (const preInterceptor of preInterceptors) {
       [url, requestOptions] = await preInterceptor({ url, options: requestOptions });
@@ -46,6 +47,10 @@ class Http {
     return this._checkStatus(response)
       .then((res) => this._parseJSON<T>(res))
       .catch(this._throwError);
+  }
+
+  private getQueriedUrl(url: string, query: Record<string, unknown> | undefined): string {
+    return `${url}${query ? `?${stringify.stringify(query)}` : ""}`;
   }
 
   private _getHeaders(contentType?: ContentType): Headers {

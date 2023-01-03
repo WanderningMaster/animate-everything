@@ -39,6 +39,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<{ me: UserResponseDto } | undefined>();
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const notifyFailedSignIn = (): Id => toast("Invalid credentials", { type: "error" });
   const notifySignIn = (): Id => toast("You successfully signed in", { type: "success" });
   const notifySignOut = (): Id => toast("You successfully signed out", { type: "success" });
 
@@ -64,6 +66,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         navigate("/");
       },
       onError: (err: any) => {
+        notifyFailedSignIn();
         setError(err?.message);
       },
     },

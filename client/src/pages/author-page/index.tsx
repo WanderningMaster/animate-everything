@@ -32,7 +32,7 @@ export const AuthorPage: FC = () => {
   return (
     <div className="flex flex-col space-y-4 mt-10">
       <div className="flex items-end space-x-10">
-        <img src={data[0].author.avatar} className={" w-32 h-32 object-cover"} />
+        <img src={data[0].author.avatar} className={"rounded-xl drop-shadow-2xl w-32 h-32 object-cover"} />
         <Typography type="heading" text={data[0].author.username} />
       </div>
       <div className="pt-8 flex flex-col space-y-8">

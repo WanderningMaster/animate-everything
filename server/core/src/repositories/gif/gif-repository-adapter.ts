@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { Gif, Reaction } from "~/database/entity";
 import { DefaultRequestParam, GifAddReactionRequestDto, GifCreateRequestDto, GifGetAllRequestDto } from "shared/build";
 import { GifRepository } from "~/services/gif/port/gif-repository";
@@ -13,24 +13,32 @@ export class GifRepositoryAdapter implements GifRepository {
     this.dataSource = dataSource;
   }
 
-  public getAll({ take, skip, userId }: GifGetAllRequestDto): Promise<Gif[]> {
+  public getAll({ take, skip, userId, search }: GifGetAllRequestDto): Promise<Gif[]> {
+    const searchQuery = search
+      ? {
+          title: Like(`%${search}%`),
+        }
+      : {};
     const query = userId
       ? [
           {
             author: {
               privacy: false,
             },
+            ...searchQuery,
           },
           {
             author: {
               id: userId,
             },
+            ...searchQuery,
           },
         ]
       : {
           author: {
             privacy: false,
           },
+          ...searchQuery,
         };
 
     return this.dataSource.gif.find({
@@ -74,7 +82,6 @@ export class GifRepositoryAdapter implements GifRepository {
         },
       });
       const res = await manager.query("CALL COUNT_REACTIONS(?)", [id]);
-
       return {
         gif,
         likeCount: Number(res[0][0].count),

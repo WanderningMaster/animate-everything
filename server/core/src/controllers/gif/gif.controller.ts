@@ -14,14 +14,15 @@ import { Reaction } from "~/database/entity";
 export class GifController {
   public async getAll(
     request: FastifyRequest<{
-      Querystring: Pagination;
+      Querystring: Pagination & { search?: string };
     }>,
   ): Promise<GifResponseDto[]> {
-    const { take, skip } = request.query;
+    const { take, skip, search } = request.query;
     return gifService.getAll({
       take,
       skip,
       userId: request?.user?.id,
+      search,
     });
   }
 

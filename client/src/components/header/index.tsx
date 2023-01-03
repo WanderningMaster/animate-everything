@@ -5,11 +5,18 @@ import { Button, Link } from "components/common";
 import { AppRoute } from "shared/build";
 import { useAuth } from "hooks/use-auth-hook";
 import { ProfileButton } from "components/profile-button";
+import { useCards } from "providers/card-provider";
 
 export const Header: FC = () => {
   const { isAuth, data } = useAuth();
+  const { setSearch } = useCards();
+
+  const handleClickLogo = (): void => {
+    setSearch(undefined);
+  };
+
   return (
-    <div className={"flex flex-row justify-between"}>
+    <div onClick={handleClickLogo} className={"flex flex-row justify-between"}>
       <Link to={AppRoute.ROOT}>
         <div className={"flex flex-row space-x-4 items-end"}>
           <Logo className={"w-10 h-auto fill-white"} />

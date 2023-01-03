@@ -1,14 +1,20 @@
 import { GifList } from "components/gif/gif-list";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 // import { listItems } from "components/gif/gif-list/items.mock";
 import { useQuery } from "react-query";
 import { QueryKeys } from "shared/build";
 import { gifService } from "services/services";
+import { useCards } from "providers/card-provider";
 
 export const MainPage: FC = () => {
-  const { isLoading, isFetching, data } = useQuery([QueryKeys.GIF], () => gifService.getAll(), {
+  const { search } = useCards();
+  const { isLoading, isFetching, data } = useQuery([QueryKeys.GIF, search], () => gifService.getAll({ search }), {
     refetchOnMount: true,
   });
+
+  useEffect(() => {
+    console.log(search);
+  }, [search]);
 
   if (isLoading || isFetching) {
     return <div>Loading...</div>;

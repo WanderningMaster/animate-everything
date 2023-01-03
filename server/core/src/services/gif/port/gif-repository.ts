@@ -2,7 +2,7 @@ import { DefaultRequestParam, GifAddReactionRequestDto, GifCreateRequestDto, Gif
 import { Gif, Reaction } from "~/database/entity";
 
 export interface GifRepository {
-  getAll({ take, skip }: GifGetAllRequestDto): Promise<Gif[]>;
+  getAll({ take, skip, userId, search }: GifGetAllRequestDto): Promise<Gif[]>;
 
   getById({ id, userId }: DefaultRequestParam & { userId?: string }): Promise<{ gif: Gif | null; likeCount: number }>;
 

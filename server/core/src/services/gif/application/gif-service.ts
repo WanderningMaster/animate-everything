@@ -27,11 +27,17 @@ export class GifService {
     this.amqpService = amqpService;
   }
 
-  async getAll({ take, skip, userId }: GifGetAllRequestDto): Promise<Array<GifResponseDto & { isLiked: boolean }>> {
+  async getAll({
+    take,
+    skip,
+    userId,
+    search,
+  }: GifGetAllRequestDto): Promise<Array<GifResponseDto & { isLiked: boolean }>> {
     const gifs = await this.gifRepository.getAll({
       take,
       skip,
       userId,
+      search,
     });
 
     return gifs.map((gif) => castToGifWithReactionDto(userId, gif));
