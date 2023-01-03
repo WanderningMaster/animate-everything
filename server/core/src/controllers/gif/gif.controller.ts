@@ -34,6 +34,27 @@ export class GifController {
     };
   }
 
+  public async getFavorites(
+    request: FastifyRequest<{
+      Querystring: Pagination;
+    }>,
+  ): Promise<{
+    data: GifResponseDto[];
+    itemCount: number;
+  }> {
+    const { take, skip } = request.query;
+    const { serializedGifs, itemCount } = await gifService.getFavorites({
+      take,
+      skip,
+      userId: request?.user?.id,
+    });
+
+    return {
+      data: serializedGifs,
+      itemCount,
+    };
+  }
+
   public async create(
     request: FastifyRequest<{
       Body: Omit<GifCreateRequestDto, "authorId">;

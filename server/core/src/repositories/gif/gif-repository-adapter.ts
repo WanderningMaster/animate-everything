@@ -159,6 +159,40 @@ export class GifRepositoryAdapter implements GifRepository {
     return createdGif;
   }
 
+  public async getFavorites({
+    userId,
+    take,
+    skip,
+  }: GifGetAllRequestDto): Promise<{ gif: Gif[] } & { itemCount: number }> {
+    const query = {
+      reactions: {
+        authorId: userId,
+      },
+    };
+    const { gif, itemCount } = await this.dataSource.gif.manager.transaction(async (manager) => {
+      const gif = await manager.find(Gif, {
+        where: query,
+        relations: {
+          author: true,
+          reactions: true,
+        },
+        take,
+        skip,
+      });
+      const itemCount = await manager.countBy(Gif, query);
+
+      return {
+        gif,
+        itemCount,
+      };
+    });
+
+    return {
+      gif,
+      itemCount,
+    };
+  }
+
   public async getByAuthor({
     id,
     userId,

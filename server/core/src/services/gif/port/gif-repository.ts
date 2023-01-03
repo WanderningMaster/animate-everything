@@ -11,4 +11,6 @@ export interface GifRepository {
   addReaction({ authorId, gifId }: GifAddReactionRequestDto): Promise<Reaction | undefined>;
 
   getByAuthor(payload: GifGetAllRequestDto & { id: string }): Promise<{ gif: Gif[] } & { itemCount: number }>;
+
+  getFavorites({ take, skip, userId }: GifGetAllRequestDto): Promise<{ gif: Gif[] } & { itemCount: number }>;
 }

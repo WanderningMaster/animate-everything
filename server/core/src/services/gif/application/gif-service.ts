@@ -46,6 +46,23 @@ export class GifService {
     return { serializedGifs, itemCount };
   }
 
+  async getFavorites({
+    take,
+    skip,
+    userId,
+  }: GifGetAllRequestDto): Promise<
+    { serializedGifs: Array<GifResponseDto & { isLiked: boolean }> } & { itemCount: number }
+  > {
+    const { gif: gifs, itemCount } = await this.gifRepository.getFavorites({
+      take,
+      skip,
+      userId,
+    });
+    const serializedGifs = gifs.map((gif) => castToGifWithReactionDto(userId, gif));
+
+    return { serializedGifs, itemCount };
+  }
+
   async getOne({
     id,
     userId,
