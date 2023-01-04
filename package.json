@@ -17,7 +17,7 @@
     "docker:up": "docker-compose -f .docker/docker-compose.dev.yml up",
     "docker:up:db": "docker-compose -f .docker/docker-compose.dev.yml up -d db",
     "docker:up:debug:backend": "docker-compose -f .docker/docker-compose.dev.yml up db rabbitmq",
-    "docker:up:debug": "docker-compose -f .docker/docker-compose.dev.yml up mysql rabbitmq server",
+    "docker:up:debug": "docker-compose -f .docker/docker-compose.dev.yml up db rabbitmq server",
     "docker:up:d": "docker-compose -f .docker/docker-compose.dev.yml up -d",
     "docker:down": "docker-compose -f .docker/docker-compose.dev.yml down",
     "docker:build:client": "docker build --build-arg REACT_APP_API_ORIGIN_URL=/api/v1 -f .docker/client.dockerfile -t client .",

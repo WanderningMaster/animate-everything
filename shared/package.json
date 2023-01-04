@@ -9,6 +9,7 @@
     "tsc-alias": "^1.7.0"
   },
   "dependencies": {
+    "cloudinary": "^1.33.0",
     "joi": "^17.6.3"
   }
 }

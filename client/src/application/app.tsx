@@ -12,6 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { SettingsPage } from "pages/settings-page";
 import { CardProvider } from "providers/card-provider";
 import { FavoritesPage } from "pages/favorites-page";
+import { UploadPage } from "pages/upload-page";
+import { Main } from "pages/example/main";
 
 const App: FC = () => {
   return (
@@ -20,6 +22,7 @@ const App: FC = () => {
         <CardProvider>
           <AppLayout>
             <Routes>
+              <Route path={"/example"} element={<Main />} />
               <Route path={"/"} element={<MainPage />} />
               <Route path={"/author/:id"} element={<AuthorPage />} />
               <Route path={"/favorites"} element={<FavoritesPage />} />
@@ -28,6 +31,7 @@ const App: FC = () => {
               <Route path={"/gif/shared/:id"} element={<GifPageShared />} />
               <Route path={"/login"} element={<Auth />} />
               <Route path={"/settings"} element={<SettingsPage />} />
+              <Route path={"/upload"} element={<UploadPage />} />
             </Routes>
           </AppLayout>
         </CardProvider>

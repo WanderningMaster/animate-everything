@@ -1,45 +1,59 @@
-import { Storage } from "@google-cloud/storage";
-import { CONFIG } from "~/configuration/config";
+import { CloudinaryApi } from "shared/build";
 import { CloudServiceContainer } from "../cloud-service-container";
 
 export class CloudService {
-  private storage: Storage;
+  private storage: CloudinaryApi;
 
   constructor({ storage }: CloudServiceContainer) {
     this.storage = storage;
   }
 
-  public async getDownLoadUrl(dest: string): Promise<string> {
-    const url = await this.storage
-      .bucket("gs://animate-everything.appspot.com")
-      .file(dest)
-      .getSignedUrl({
-        action: "read",
-        expires: CONFIG.CLOUD.CLOUD_SIGNED_URL_EXPIRATION,
-      })
-      .then((url) => url[0]);
+  public async destroy(name: string): Promise<string> {
+    const res = await this.storage.uploader.destroy(`temp/${name}`, {
+      resource_type: "video",
+      invalidate: true,
+    });
 
-    return url;
+    return res;
   }
 
-  public async upload({ base64Str, dest }: { base64Str: string; dest: string }): Promise<string> {
-    const file = this.storage.bucket("gs://animate-everything.appspot.com").file(dest);
-
-    const imageBuff = Buffer.from(base64Str, "base64");
-    await file.save(imageBuff);
-
-    const url = await file
-      .getSignedUrl({
-        action: "read",
-        expires: CONFIG.CLOUD.CLOUD_SIGNED_URL_EXPIRATION,
-      })
-      .then((url) => url[0]);
-
-    return url;
+  getGifUrl(name: string): string {
+    return `https://res.cloudinary.com/ds5b5u8go/image/upload/v1672868102/gif/${name}.gif`;
   }
 
-  public async remove({ dest }: { dest: string }): Promise<void> {
-    const fileToDelete = this.storage.bucket("default").file(dest);
-    await fileToDelete.delete();
+  public async uploadLarge({
+    base64Str,
+    type,
+    name,
+  }: {
+    base64Str: string;
+    type: "avatar" | "temp" | "gif";
+    name: string;
+  }): Promise<string> {
+    const apiResponse = await this.storage.uploader.upload_large(base64Str, {
+      upload_preset: type,
+      public_id: `${name}`,
+      resource_type: type === "temp" ? "video" : "image",
+    });
+
+    return apiResponse.url;
+  }
+
+  public async upload({
+    base64Str,
+    type,
+    name,
+  }: {
+    base64Str: string;
+    type: "avatar" | "temp" | "gif";
+    name: string;
+  }): Promise<string> {
+    const apiResponse = await this.storage.uploader.upload(base64Str, {
+      upload_preset: type,
+      public_id: `${name}`,
+      resource_type: type === "temp" ? "video" : "image",
+    });
+
+    return apiResponse.url;
   }
 }

@@ -131,17 +131,17 @@ export class GifController {
   }
 
   public async processVideoAndReturnGif(request: FastifyRequest): Promise<{ res: string }> {
-    const data = await request
-      .file()
-      .then((val) => val?.toBuffer())
-      .then((buff) => buff?.toString("base64"));
-    if (!data) {
+    const file = await request.file();
+    if (!file) {
       throw new HttpError({
         message: "File not found",
         status: HttpCode.BAD_REQUEST,
       });
     }
-    const res = await gifService.uploadVideo(data);
+    const ext = file?.mimetype.split("/")[1];
+    const base64Str = (await file.toBuffer()).toString("base64");
+
+    const res = await gifService.uploadVideo(`data:video/${ext};base64,` + base64Str);
     return { res };
   }
 }

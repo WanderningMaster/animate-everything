@@ -29,9 +29,9 @@ export type DbConfig = {
 };
 
 export type CloundConfig = {
-  SERVICE_ACCOUNT_PATH: string;
-  DEFAULT_BUCKET: string;
-  CLOUD_SIGNED_URL_EXPIRATION: string;
+  CLOUDINARY_API_KEY: string;
+  CLOUDINARY_API_SECRET: string;
+  CLOUDINARY_NAME: string;
 };
 
 export type Config = {
@@ -61,9 +61,9 @@ const configuration = (): Config => {
     REFRESH_TOKEN_SECRET,
     ACCESS_TOKEN_LIFETIME,
     REFRESH_TOKEN_LIFETIME,
-    SERVICE_ACCOUNT_PATH,
-    DEFAULT_BUCKET,
-    CLOUD_SIGNED_URL_EXPIRATION,
+    CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET,
+    CLOUDINARY_NAME,
     RABBITMQ_HOST,
     RABBITMQ_PORT,
   } = process.env;
@@ -72,8 +72,8 @@ const configuration = (): Config => {
     throw new Error("Missing jwt token secrets");
   }
 
-  if (!SERVICE_ACCOUNT_PATH || !DEFAULT_BUCKET) {
-    throw new Error("Missing firestore secrets");
+  if (!CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET || !CLOUDINARY_NAME) {
+    throw new Error("Missing cloud secrets");
   }
 
   return {
@@ -102,9 +102,9 @@ const configuration = (): Config => {
       DB_PASSWORD: DB_PASSWORD || "",
     },
     CLOUD: {
-      SERVICE_ACCOUNT_PATH,
-      DEFAULT_BUCKET,
-      CLOUD_SIGNED_URL_EXPIRATION: CLOUD_SIGNED_URL_EXPIRATION || "2100-03-09",
+      CLOUDINARY_API_KEY,
+      CLOUDINARY_API_SECRET,
+      CLOUDINARY_NAME,
     },
   };
 };

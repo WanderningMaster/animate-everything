@@ -1,5 +1,5 @@
-import { Storage } from "@google-cloud/storage";
+import { CloudinaryApi } from "shared/build";
 
 export interface CloudServiceContainer {
-  storage: Storage;
+  storage: CloudinaryApi;
 }

@@ -174,7 +174,8 @@ export class UserController {
 
     const avatar = await cloudService.upload({
       base64Str,
-      dest: `avatar/${id}.${ext}`,
+      name: `${id}.${ext}`,
+      type: "avatar",
     });
 
     const user = await userService.updateAvatar({ avatar, userId: id });

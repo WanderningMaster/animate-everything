@@ -1,5 +1,12 @@
 import { Http } from "services/http/http.service";
-import { ApiPath, ContentType, GifGetAllRequestDto, GifResponseDto, HttpMethod } from "shared/build";
+import {
+  ApiPath,
+  ContentType,
+  GifCreateRequestDto,
+  GifGetAllRequestDto,
+  GifResponseDto,
+  HttpMethod,
+} from "shared/build";
 import { CONFIG } from "../../config/config";
 
 export class GifService {
@@ -55,14 +62,17 @@ export class GifService {
   }
 
   upload(data: FormData): Promise<{ res: string }> {
-    return this.http.load<{ res: string }>(
-      `${this.baseUrl}/upload`,
-      {
-        method: HttpMethod.POST,
-        payload: data,
-      },
-      [],
-      [],
-    );
+    return this.http.load<{ res: string }>(`${this.baseUrl}/upload`, {
+      method: HttpMethod.POST,
+      payload: data,
+    });
+  }
+
+  create(payload: Omit<GifCreateRequestDto, "authorId">): Promise<GifResponseDto & { isLiked: boolean }> {
+    return this.http.load<GifResponseDto & { isLiked: boolean }>(`${this.baseUrl}`, {
+      method: HttpMethod.POST,
+      payload: JSON.stringify(payload),
+      contentType: ContentType.JSON,
+    });
   }
 }

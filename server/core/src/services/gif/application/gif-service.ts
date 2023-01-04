@@ -13,7 +13,6 @@ import { castToGifWithReactionDto } from "./dtos/cast-to-gif-with-reaction-dto";
 import { CloudService } from "~/services/common/cloud/application/cloud-service";
 import { AmqpService } from "~/services/common/amqp/application/amqp-service";
 import { amqpService, eventEmitter } from "~/services/services";
-import { logger } from "~/configuration/logger";
 import { genUUID } from "~/utils/generate-uuid";
 
 export class GifService {
@@ -126,7 +125,8 @@ export class GifService {
     const id = genUUID();
     const input = await this.cloudService.upload({
       base64Str: data,
-      dest: `temp/${id}.mp4`,
+      name: `${id}`,
+      type: "temp",
     });
     await amqpService.sendToQueue({
       queue: AmqpQueue.VIDEO_INPUT,
@@ -138,8 +138,7 @@ export class GifService {
       ),
     });
     await new Promise((resolve) => eventEmitter.once(`${id}`, resolve));
-    const url = await this.cloudService.getDownLoadUrl(`gif/${id}.gif`);
-    logger.info({ url });
+    const url = this.cloudService.getGifUrl(id);
 
     return url;
   }

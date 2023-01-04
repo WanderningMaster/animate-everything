@@ -1,4 +1,3 @@
-import { initFirebaseStorage } from "./../configuration/firebase-conf";
 import { CloudService } from "~/services/common/cloud/application/cloud-service";
 import { AmqpService } from "~/services/common/amqp/application/amqp-service";
 import { UserServiceContainer } from "~/services/user/user-service-container";
@@ -9,6 +8,7 @@ import { UserService } from "~/services/user/application/user-service";
 import { TokenRepositoryAdapter } from "~/repositories/token/token-repository-adapter";
 import { GifRepositoryAdapter } from "~/repositories/gif/gif-repository-adapter";
 import { GifService } from "./gif/application/gif-service";
+import { initCloud } from "~/configuration/cloud-conf";
 import EventEmitter from "events";
 
 const userServiceContainer: UserServiceContainer = {
@@ -22,7 +22,7 @@ let gifService: GifService;
 
 const amqpService = new AmqpService();
 (async (): Promise<void> => {
-  const storage = await initFirebaseStorage();
+  const storage = initCloud();
 
   cloudService = new CloudService({
     storage,

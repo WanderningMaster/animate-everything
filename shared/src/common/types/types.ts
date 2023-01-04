@@ -6,3 +6,4 @@ export * from "./jwt/jwt";
 export * from "./validation/validation";
 export * from "./amqp/amqp";
 export * from "./gif/gif";
+export * from "./cloudinary/cloudinary";

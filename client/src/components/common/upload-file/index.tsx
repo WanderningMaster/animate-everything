@@ -1,10 +1,11 @@
 import React, { FC } from "react";
 
 type UploadFileProps = {
+  title?: string;
   eventCb: (selectedFile: File) => void;
 };
 
-export const UploadFile: FC<UploadFileProps> = ({ eventCb }) => {
+export const UploadFile: FC<UploadFileProps> = ({ eventCb, title = "Upload Avatar" }) => {
   const hiddenFileInput = React.useRef<HTMLInputElement>(null);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files) {
@@ -22,7 +23,7 @@ export const UploadFile: FC<UploadFileProps> = ({ eventCb }) => {
         onClick={handleClick}
         className="py-2 px-4 w-full block text-center bg-slate-600 text-white font-semibold shadow-md hover:bg-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 rounded cursor-pointer"
       >
-        Upload Avatar
+        {title}
       </label>
       <input
         ref={hiddenFileInput}

@@ -85,13 +85,18 @@ class Application {
           const { videoId } = JSON.parse(data.toString("utf-8"));
           const gifDest = `/home/andrii/repo/animate-everything/output/${videoId}/output.gif`;
           const base64Str = await readFile(gifDest, { encoding: "base64" });
-          await cloudService.remove({
-            dest: `temp/${videoId}.mp4`,
-          });
-          await cloudService.upload({
-            base64Str,
-            dest: `gif/${videoId}.gif`,
-          });
+          try {
+            await cloudService.destroy(videoId);
+            const res = await cloudService.uploadLarge({
+              base64Str: "data:image/gif;base64," + base64Str,
+              name: `${videoId}`,
+              type: "gif",
+            });
+            console.log(res);
+          } catch (e) {
+            console.error(e);
+          }
+
           await rm(gifDest);
           eventEmitter.emit(`${videoId}`);
           logger.info("Data cleared");
