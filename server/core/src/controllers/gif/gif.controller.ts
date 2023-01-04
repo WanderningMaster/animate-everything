@@ -14,15 +14,45 @@ import { Reaction } from "~/database/entity";
 export class GifController {
   public async getAll(
     request: FastifyRequest<{
+      Querystring: Pagination & { search?: string };
+    }>,
+  ): Promise<{
+    data: GifResponseDto[];
+    itemCount: number;
+  }> {
+    const { take, skip, search } = request.query;
+    const { serializedGifs, itemCount } = await gifService.getAll({
+      take,
+      skip,
+      userId: request?.user?.id,
+      search,
+    });
+
+    return {
+      data: serializedGifs,
+      itemCount,
+    };
+  }
+
+  public async getFavorites(
+    request: FastifyRequest<{
       Querystring: Pagination;
     }>,
-  ): Promise<GifResponseDto[]> {
+  ): Promise<{
+    data: GifResponseDto[];
+    itemCount: number;
+  }> {
     const { take, skip } = request.query;
-    return gifService.getAll({
+    const { serializedGifs, itemCount } = await gifService.getFavorites({
       take,
       skip,
       userId: request?.user?.id,
     });
+
+    return {
+      data: serializedGifs,
+      itemCount,
+    };
   }
 
   public async create(
@@ -79,12 +109,25 @@ export class GifController {
   public async getByAuthorId(
     request: FastifyRequest<{
       Params: DefaultRequestParam;
+      Querystring: Pagination;
     }>,
-  ): Promise<GifResponseDto[]> {
+  ): Promise<{
+    data: GifResponseDto[];
+    itemCount: number;
+  }> {
     const { id } = request.params;
-    const gifs = await gifService.getByAuthorId(id, request?.user?.id);
+    const { take, skip } = request.query;
+    const { serializedGifs, itemCount } = await gifService.getByAuthorId({
+      take,
+      skip,
+      userId: request?.user?.id,
+      id,
+    });
 
-    return gifs;
+    return {
+      data: serializedGifs,
+      itemCount,
+    };
   }
 
   public async processVideoAndReturnGif(request: FastifyRequest): Promise<{ res: string }> {

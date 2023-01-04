@@ -2,7 +2,7 @@ import { DefaultRequestParam, GifAddReactionRequestDto, GifCreateRequestDto, Gif
 import { Gif, Reaction } from "~/database/entity";
 
 export interface GifRepository {
-  getAll({ take, skip }: GifGetAllRequestDto): Promise<Gif[]>;
+  getAll({ take, skip, userId, search }: GifGetAllRequestDto): Promise<{ gif: Gif[] } & { itemCount: number }>;
 
   getById({ id, userId }: DefaultRequestParam & { userId?: string }): Promise<{ gif: Gif | null; likeCount: number }>;
 
@@ -10,5 +10,7 @@ export interface GifRepository {
 
   addReaction({ authorId, gifId }: GifAddReactionRequestDto): Promise<Reaction | undefined>;
 
-  getByAuthor(id: string, userId?: string): Promise<Gif[]>;
+  getByAuthor(payload: GifGetAllRequestDto & { id: string }): Promise<{ gif: Gif[] } & { itemCount: number }>;
+
+  getFavorites({ take, skip, userId }: GifGetAllRequestDto): Promise<{ gif: Gif[] } & { itemCount: number }>;
 }

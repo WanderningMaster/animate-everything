@@ -1,18 +1,32 @@
 import { GifList } from "components/gif/gif-list";
-import React, { FC } from "react";
-// import { listItems } from "components/gif/gif-list/items.mock";
+import React, { FC, useEffect } from "react";
 import { useQuery } from "react-query";
 import { QueryKeys } from "shared/build";
 import { gifService } from "services/services";
+import { useCards } from "providers/card-provider";
+import { LoadMore } from "components/load-more";
 
 export const MainPage: FC = () => {
-  const { isLoading, isFetching, data } = useQuery([QueryKeys.GIF], () => gifService.getAll(), {
+  const { search, pagination, setItemCount, setCards, cards: data, triggerReset } = useCards();
+
+  useQuery([QueryKeys.GIF, search, pagination, triggerReset], () => gifService.getAll({ search, ...pagination }), {
     refetchOnMount: true,
+    onSuccess: (data) => {
+      if (data) {
+        setCards((state) => {
+          if (!state) {
+            return data.data;
+          }
+          return [...state, ...data.data];
+        });
+        setItemCount(data.itemCount);
+      }
+    },
   });
 
-  if (isLoading || isFetching) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    console.log(search);
+  }, [search]);
 
   if (!data) {
     return <div>Failed to fetch</div>;
@@ -30,6 +44,9 @@ export const MainPage: FC = () => {
   return (
     <div className="pt-8">
       <GifList list={listItems} />
+      <div className="pt-8">
+        <LoadMore />
+      </div>
     </div>
   );
 };

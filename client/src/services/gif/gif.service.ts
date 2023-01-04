@@ -1,5 +1,5 @@
 import { Http } from "services/http/http.service";
-import { ApiPath, ContentType, GifResponseDto, HttpMethod } from "shared/build";
+import { ApiPath, ContentType, GifGetAllRequestDto, GifResponseDto, HttpMethod } from "shared/build";
 import { CONFIG } from "../../config/config";
 
 export class GifService {
@@ -11,12 +11,35 @@ export class GifService {
     this.http = http;
   }
 
-  getAll(): Promise<(GifResponseDto & { isLiked: boolean })[]> {
-    return this.http.load<(GifResponseDto & { isLiked: boolean })[]>(`${this.baseUrl}`);
+  getAll(
+    payload?: GifGetAllRequestDto,
+  ): Promise<{ data: (GifResponseDto & { isLiked: boolean })[]; itemCount: number }> {
+    return this.http.load<{ data: (GifResponseDto & { isLiked: boolean })[]; itemCount: number }>(`${this.baseUrl}`, {
+      query: payload,
+    });
   }
 
-  getByAuthor(id: string): Promise<(GifResponseDto & { isLiked: boolean })[]> {
-    return this.http.load<(GifResponseDto & { isLiked: boolean })[]>(`${this.baseUrl}/author/${id}`);
+  getByAuthor(
+    id: string,
+    payload?: GifGetAllRequestDto,
+  ): Promise<{ data: (GifResponseDto & { isLiked: boolean })[]; itemCount: number }> {
+    return this.http.load<{ data: (GifResponseDto & { isLiked: boolean })[]; itemCount: number }>(
+      `${this.baseUrl}/author/${id}`,
+      {
+        query: payload,
+      },
+    );
+  }
+
+  getFavorites(
+    payload?: GifGetAllRequestDto,
+  ): Promise<{ data: (GifResponseDto & { isLiked: boolean })[]; itemCount: number }> {
+    return this.http.load<{ data: (GifResponseDto & { isLiked: boolean })[]; itemCount: number }>(
+      `${this.baseUrl}/favorites`,
+      {
+        query: payload,
+      },
+    );
   }
 
   getOne(id: string): Promise<GifResponseDto & { isLiked: boolean; likeCount: number }> {

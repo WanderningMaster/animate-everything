@@ -30,7 +30,7 @@ export const SettingsPage: FC = () => {
     <div className="flex flex-row h-auto space-x-4">
       <div className="w-3/12 h-96">
         <div className="w-full h-2/3">
-          <img className="w-full h-full object-cover" src={avatar} />
+          <img className="rounded w-full h-full object-cover" src={avatar} />
         </div>
         <UploadFile eventCb={handleClickUpdateAvatar} />
       </div>

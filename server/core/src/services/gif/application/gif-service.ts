@@ -27,14 +27,40 @@ export class GifService {
     this.amqpService = amqpService;
   }
 
-  async getAll({ take, skip, userId }: GifGetAllRequestDto): Promise<Array<GifResponseDto & { isLiked: boolean }>> {
-    const gifs = await this.gifRepository.getAll({
+  async getAll({
+    take,
+    skip,
+    userId,
+    search,
+  }: GifGetAllRequestDto): Promise<
+    { serializedGifs: Array<GifResponseDto & { isLiked: boolean }> } & { itemCount: number }
+  > {
+    const { gif: gifs, itemCount } = await this.gifRepository.getAll({
+      take,
+      skip,
+      userId,
+      search,
+    });
+    const serializedGifs = gifs.map((gif) => castToGifWithReactionDto(userId, gif));
+
+    return { serializedGifs, itemCount };
+  }
+
+  async getFavorites({
+    take,
+    skip,
+    userId,
+  }: GifGetAllRequestDto): Promise<
+    { serializedGifs: Array<GifResponseDto & { isLiked: boolean }> } & { itemCount: number }
+  > {
+    const { gif: gifs, itemCount } = await this.gifRepository.getFavorites({
       take,
       skip,
       userId,
     });
+    const serializedGifs = gifs.map((gif) => castToGifWithReactionDto(userId, gif));
 
-    return gifs.map((gif) => castToGifWithReactionDto(userId, gif));
+    return { serializedGifs, itemCount };
   }
 
   async getOne({
@@ -64,10 +90,23 @@ export class GifService {
     return gif;
   }
 
-  async getByAuthorId(id: string, userId?: string): Promise<GifResponseDto[]> {
-    const gifs = await this.gifRepository.getByAuthor(id, userId);
+  async getByAuthorId({
+    take,
+    skip,
+    id,
+    userId,
+  }: GifGetAllRequestDto & { id: string }): Promise<
+    { serializedGifs: Array<GifResponseDto & { isLiked: boolean }> } & { itemCount: number }
+  > {
+    const { gif: gifs, itemCount } = await this.gifRepository.getByAuthor({
+      take,
+      skip,
+      id,
+      userId,
+    });
 
-    return gifs.map((gif) => castToGifWithReactionDto(userId, gif));
+    const serializedGifs = gifs.map((gif) => castToGifWithReactionDto(userId, gif));
+    return { serializedGifs, itemCount };
   }
 
   async addReaction(payload: GifAddReactionRequestDto): Promise<Reaction | undefined | null> {

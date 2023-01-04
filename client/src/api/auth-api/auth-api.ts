@@ -1,6 +1,7 @@
 import { JwtPair, UserCreateRequestDto, UserResponseDto, QueryKeys } from "shared/build";
 import { _localStorage, authService } from "services/services";
 import { UseMutateAsyncFunction, UseMutateFunction, useMutation, useQuery } from "react-query";
+import { toast, Id } from "react-toastify";
 
 export const useSignIn = (): {
   isError: boolean;
@@ -63,6 +64,8 @@ export const useSignUp = (): {
   isSuccess: boolean;
   mutateAsync: UseMutateAsyncFunction<UserResponseDto, unknown, UserCreateRequestDto, unknown>;
 } => {
+  const notifySignUp = (): Id => toast("You successfully signed up", { type: "success" });
+  const notifyFailedSignUp = (): Id => toast("This email already used", { type: "error" });
   const fetcher = (payload: UserCreateRequestDto): Promise<UserResponseDto> => authService.signUp(payload);
 
   const {
@@ -71,7 +74,14 @@ export const useSignUp = (): {
     isSuccess,
     mutateAsync,
     data: user,
-  } = useMutation([QueryKeys.AUTH, QueryKeys.USER], fetcher);
+  } = useMutation([QueryKeys.AUTH, QueryKeys.USER], fetcher, {
+    onSuccess: () => {
+      notifySignUp();
+    },
+    onError: () => {
+      notifyFailedSignUp();
+    },
+  });
 
   return {
     isError,

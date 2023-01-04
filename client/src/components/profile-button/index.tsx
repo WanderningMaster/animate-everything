@@ -36,7 +36,7 @@ export const ProfileButton: FC<ProfileButoonProps> = ({ author, avatar, authorId
   const { signOutAsync } = useAuth();
 
   const handleClickSignOut = async (): Promise<void> => {
-    signOutAsync();
+    await signOutAsync();
   };
 
   return (
@@ -55,7 +55,7 @@ export const ProfileButton: FC<ProfileButoonProps> = ({ author, avatar, authorId
         <Link to={`/author/${authorId}`} className={"text-lg text-slate-200 hover:text-white font-bold"}>
           <div className="px-5 py-3">{"My profile"}</div>
         </Link>
-        <Link to={AppRoute.ROOT} className={"text-lg text-slate-200 hover:text-white font-bold"}>
+        <Link to={"/favorites"} className={"text-lg text-slate-200 hover:text-white font-bold"}>
           <div className="px-5 py-3">{"Favorites"}</div>
         </Link>
         <Link to={"/settings"} className={"text-lg text-slate-200 hover:text-white font-bold"}>

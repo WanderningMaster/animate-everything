@@ -5,13 +5,22 @@ import { Button, Link } from "components/common";
 import { AppRoute } from "shared/build";
 import { useAuth } from "hooks/use-auth-hook";
 import { ProfileButton } from "components/profile-button";
+import { useCards } from "providers/card-provider";
 
 export const Header: FC = () => {
   const { isAuth, data } = useAuth();
+  const { setTriggerReset, setPagination, setCards } = useCards();
+
+  const handleClickLogo = (): void => {
+    setTriggerReset((state) => !state);
+    setCards(undefined);
+    setPagination({ take: 6, skip: 0 });
+  };
+
   return (
     <div className={"flex flex-row justify-between"}>
       <Link to={AppRoute.ROOT}>
-        <div className={"flex flex-row space-x-4 items-end"}>
+        <div onClick={handleClickLogo} className={"flex flex-row space-x-4 items-end"}>
           <Logo className={"w-10 h-auto fill-white"} />
           <Typography type="heading" text="Animate everything" />
         </div>

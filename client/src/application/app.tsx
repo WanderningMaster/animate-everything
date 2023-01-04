@@ -10,22 +10,27 @@ import { AuthorPage } from "pages/author-page";
 import { AuthProvider } from "providers/auth-provider";
 import "react-toastify/dist/ReactToastify.css";
 import { SettingsPage } from "pages/settings-page";
+import { CardProvider } from "providers/card-provider";
+import { FavoritesPage } from "pages/favorites-page";
 
 const App: FC = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <AppLayout>
-          <Routes>
-            <Route path={"/"} element={<MainPage />} />
-            <Route path={"/author/:id"} element={<AuthorPage />} />
-            <Route path={"/gif/:id"} element={<GifPage />} />
-            <Route path={"/gif/fullscreen/:id"} element={<GifPageFullScreen />} />
-            <Route path={"/gif/shared/:id"} element={<GifPageShared />} />
-            <Route path={"/login"} element={<Auth />} />
-            <Route path={"/settings"} element={<SettingsPage />} />
-          </Routes>
-        </AppLayout>
+        <CardProvider>
+          <AppLayout>
+            <Routes>
+              <Route path={"/"} element={<MainPage />} />
+              <Route path={"/author/:id"} element={<AuthorPage />} />
+              <Route path={"/favorites"} element={<FavoritesPage />} />
+              <Route path={"/gif/:id"} element={<GifPage />} />
+              <Route path={"/gif/fullscreen/:id"} element={<GifPageFullScreen />} />
+              <Route path={"/gif/shared/:id"} element={<GifPageShared />} />
+              <Route path={"/login"} element={<Auth />} />
+              <Route path={"/settings"} element={<SettingsPage />} />
+            </Routes>
+          </AppLayout>
+        </CardProvider>
       </AuthProvider>
     </BrowserRouter>
   );
