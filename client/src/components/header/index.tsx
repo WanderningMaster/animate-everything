@@ -27,7 +27,9 @@ export const Header: FC = () => {
       </Link>
       <div className={"flex space-x-4 justify-end w-6/12"}>
         <div className={"w-3/12"}>
-          <Button disabled={!isAuth} title={"Upload"} />
+          <Link to={isAuth ? "/upload" : AppRoute.LOGIN}>
+            <Button disabled={!isAuth} title={"Upload"} />
+          </Link>
         </div>
         <div className={"w-5/12"}>
           {isAuth && data ? (

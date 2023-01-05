@@ -6,16 +6,16 @@ COPY ./package*.json ./
 COPY ./tsconfig.json ./
 COPY ./.eslintrc.yml ./
 COPY ./shared ./shared/
-COPY ./server/package.json ./server/
+COPY ./core/package.json ./core/
 
 RUN npm i -g typescript
 
-RUN npm ci -w shared -w server
-COPY ./server ./server
+RUN npm ci -w shared -w core
+COPY ./core ./core
 
 RUN npm run build:server
-RUN rm -rf ./server/src
+RUN rm -rf ./core/src
 RUN rm -rf ./shared/src
 
 EXPOSE 5001
-CMD npm start -w server
+CMD npm start -w core
