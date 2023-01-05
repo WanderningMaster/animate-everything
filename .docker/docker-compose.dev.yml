@@ -32,6 +32,25 @@ services:
     networks:
       - server_network
       - client_network
+    volumes:
+      - ../output:/app/output
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+  transcoding-server:
+    image: transcoder
+    container_name: transcoding-server
+    depends_on:
+      - rabbitmq
+    env_file:
+      - ../.env/transcoder.env
+    networks:
+      - server_network
+      - client_network
+    volumes:
+      - ../output:/app/output
     logging:
       driver: "json-file"
       options:
@@ -39,8 +58,11 @@ services:
         max-file: "5"
   db:
     image: mysql:5.7
+    hostname: api-db
     volumes:
       - mysql-data:/var/lib/mysql
+    networks:
+      - server_network
     ports:
       - "3306:3306"
     env_file:

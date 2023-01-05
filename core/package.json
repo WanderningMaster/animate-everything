@@ -38,6 +38,7 @@
     "typeorm": "^0.3.10"
   },
   "devDependencies": {
+    "@types/amqplib": "0.8.2",
     "@types/bcrypt": "^5.0.0",
     "@types/fastify-cors": "^2.1.0",
     "@types/node": "^16.11.10",

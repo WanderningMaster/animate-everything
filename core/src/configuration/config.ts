@@ -11,6 +11,7 @@ export type AppConfig = {
   HOST: string;
   PORT: number;
   RABBITMQ_URL: string;
+  OUTPUT_PATH: string;
   enscryption: {
     SALT_ROUNDS: number;
     ACCESS_TOKEN_SECRET: string;
@@ -66,6 +67,7 @@ const configuration = (): Config => {
     CLOUDINARY_NAME,
     RABBITMQ_HOST,
     RABBITMQ_PORT,
+    OUTPUT_PATH,
   } = process.env;
 
   if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
@@ -83,6 +85,7 @@ const configuration = (): Config => {
       HOST: HOST || "localhost",
       PORT: Number(PORT) || 5001,
       RABBITMQ_URL: `amqp://${RABBITMQ_HOST || "localhost"}:${Number(RABBITMQ_PORT) || 5672}`,
+      OUTPUT_PATH: OUTPUT_PATH || "/home/andrii/repo/animate-everything/output/",
       enscryption: {
         SALT_ROUNDS: Number(SALT_ROUNDS) || 10,
         ACCESS_TOKEN_SECRET,

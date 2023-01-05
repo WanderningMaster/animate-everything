@@ -51,6 +51,9 @@ export class GifRepositoryAdapter implements GifRepository {
         take,
         skip,
         where: query,
+        order: {
+          createdAt: "DESC",
+        },
         relations: {
           author: true,
           reactions: true,
@@ -176,6 +179,9 @@ export class GifRepositoryAdapter implements GifRepository {
           author: true,
           reactions: true,
         },
+        order: {
+          createdAt: "DESC",
+        },
         take,
         skip,
       });
@@ -218,6 +224,9 @@ export class GifRepositoryAdapter implements GifRepository {
         where: query,
         take,
         skip,
+        order: {
+          createdAt: "DESC",
+        },
         relations: {
           author: true,
           reactions: true,

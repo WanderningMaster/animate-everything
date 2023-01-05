@@ -1,14 +1,16 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../tsconfig.json",
   "include": ["./src"],
   "exclude": ["node_modules"],
   "compilerOptions": {
+    "target": "ES2021",
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
     },
     "outDir": "build",
-    "module": "commonjs",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   }

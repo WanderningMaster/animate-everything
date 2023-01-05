@@ -11,6 +11,7 @@ import { amqpService, cloudService, eventEmitter } from "./services/services";
 import multipart from "@fastify/multipart";
 import { AmqpQueue } from "shared/build";
 import { readFile, rm } from "fs/promises";
+import { CONFIG } from "~/configuration/config";
 
 class Application {
   public async initialize(): Promise<FastifyInstance> {
@@ -83,7 +84,10 @@ class Application {
           }
 
           const { videoId } = JSON.parse(data.toString("utf-8"));
-          const gifDest = `/home/andrii/repo/animate-everything/output/${videoId}/output.gif`;
+          const {
+            APP: { OUTPUT_PATH },
+          } = CONFIG;
+          const gifDest = `${OUTPUT_PATH}${videoId}/output.gif`;
           const base64Str = await readFile(gifDest, { encoding: "base64" });
           try {
             await cloudService.destroy(videoId);
@@ -97,7 +101,7 @@ class Application {
             console.error(e);
           }
 
-          await rm(gifDest);
+          await rm(`${OUTPUT_PATH}${videoId}`, { recursive: true, force: true });
           eventEmitter.emit(`${videoId}`);
           logger.info("Data cleared");
         },
