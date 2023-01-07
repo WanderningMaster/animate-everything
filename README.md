@@ -4,7 +4,7 @@
 
 - Install [Node.js](https://nodejs.org/en/) version 16.x.x
 - Install [NPM](https://www.npmjs.com/) version 8.x.x
-- Install [PostgreSQL](https://www.postgresql.org/) (14.0)
+- Install [MySql](https://www.mysql.com/) (5.7)
 - Install [Docker](https://www.docker.com)
 
 # Getting started
@@ -35,12 +35,27 @@ By the way i have been created .env.example files so you can use them or create 
 
 ```
 1) npm i
-2) npm run start  
+2) npm run start:(server|client|transcoder)
+3) You can run rabbitmq and database locally, but envs should match
+or you can just run them in docker (npm run docker:up:debug:backend)
 ```
 
 - API Document endpoints
 
   swagger Spec Endpoint : http://localhost:5001/api-docs
+
+# Cloud
+
+In this project i used cloudinary as media cloud : https://cloudinary.com/.
+
+But you can modify cloud adapter and corresponding interface to replace it with firebase storage or s3 bucket.
+
+# Docker
+
+## Build and run project in docker
+
+1. npm run docker:build - To build images
+2. npm run docker:up or npm run docker:up:d to run project in detached mode
 
 # TypeScript + Node
 
@@ -57,7 +72,7 @@ npm install -D typescript
 The folder structure of this app is explained below:
 
 | Name    | Description        |
-|---------|--------------------|
+| ------- | ------------------ |
 | **dir** | Contains something |
 
 work on it later...
@@ -65,7 +80,7 @@ work on it later...
 ### NPM Scripts (run from the root folder)
 
 | Npm Script     | Description                                |
-|----------------|--------------------------------------------|
+| -------------- | ------------------------------------------ |
 | `build:shared` | Build shared module                        |
 | `start:server` | Runs server locally                        |
 | `start:client` | Runs client locally                        |
@@ -82,4 +97,3 @@ To find problems in your code
 ```
 npm run lint
 ```
-
