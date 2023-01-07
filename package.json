@@ -24,7 +24,8 @@
     "docker:down": "docker-compose -f .docker/docker-compose.dev.yml down",
     "docker:build:client": "docker build --build-arg REACT_APP_API_ORIGIN_URL=/api/v1 -f .docker/client.dockerfile -t client .",
     "docker:build:server": "docker build -f .docker/server.dockerfile -t server .",
-    "docker:build:trascoder": "docker build -f .docker/transcoder.dockerfile -t transcoder ."
+    "docker:build:transcoder": "docker build -f .docker/transcoder.dockerfile -t transcoder .",
+    "docker:build": "npm run docker:build:client && npm run docker:build:server && npm run docker:build:transcoder"
   },
   "keywords": [],
   "author": "",
