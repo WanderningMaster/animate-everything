@@ -173,8 +173,8 @@ export class UserController {
     const { id } = request.user;
 
     const avatar = await cloudService.upload({
-      base64Str,
-      name: `${id}.${ext}`,
+      base64Str: `data:image/${ext};base64,${base64Str}`,
+      name: `${id}`,
       type: "avatar",
     });
 
