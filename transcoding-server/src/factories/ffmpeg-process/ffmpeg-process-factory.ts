@@ -5,11 +5,19 @@ import { logger } from "~/config/logger";
 import { CONFIG } from "~/config/config";
 import path from "path";
 
+// left: 2, right: 5
 export class FfmpegFactory {
-  public static create({ videoId, input, amqpService }: FffmpegProcessCreatorDto): Ffmpeg.FfmpegCommand {
+  public static create({
+    videoId,
+    input,
+    amqpService,
+    crop: { left, right },
+  }: FffmpegProcessCreatorDto): Ffmpeg.FfmpegCommand {
     Ffmpeg.setFfmpegPath(CONFIG.ffmpegPath);
     return Ffmpeg(input)
       .addOption("-hide_banner")
+      .addOption("-ss", left.toString())
+      .addOption("-t", (right - left).toString())
       .complexFilter([
         {
           filter: "fps",

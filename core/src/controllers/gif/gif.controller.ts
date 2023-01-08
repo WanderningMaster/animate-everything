@@ -130,18 +130,13 @@ export class GifController {
     };
   }
 
-  public async processVideoAndReturnGif(request: FastifyRequest): Promise<{ res: string }> {
-    const file = await request.file();
-    if (!file) {
-      throw new HttpError({
-        message: "File not found",
-        status: HttpCode.BAD_REQUEST,
-      });
-    }
-    const ext = file?.mimetype.split("/")[1];
-    const base64Str = (await file.toBuffer()).toString("base64");
-
-    const res = await gifService.uploadVideo(`data:video/${ext};base64,` + base64Str);
+  public async processVideoAndReturnGif(
+    request: FastifyRequest<{
+      Body: { base64: string; crop: { left: number; right: number } };
+    }>,
+  ): Promise<{ res: string }> {
+    const { base64, crop } = request.body;
+    const res = await gifService.uploadVideo(base64, crop);
     return { res };
   }
 }

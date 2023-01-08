@@ -121,7 +121,13 @@ export class GifService {
     return reaction;
   }
 
-  async uploadVideo(data: string): Promise<string> {
+  async uploadVideo(
+    data: string,
+    crop: {
+      left: number;
+      right: number;
+    },
+  ): Promise<string> {
     const id = genUUID();
     const input = await this.cloudService.upload({
       base64Str: data,
@@ -134,6 +140,7 @@ export class GifService {
         JSON.stringify({
           input,
           videoId: id,
+          crop,
         }),
       ),
     });

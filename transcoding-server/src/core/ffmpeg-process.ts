@@ -6,15 +6,12 @@ export const createProcess = async (
   input: string,
   videoId: string,
   amqpService: AmqpService,
+  crop: { left: number; right: number },
 ): Promise<Ffmpeg.FfmpegCommand> => {
-  // await FfmpegFactory.createPallete({
-  //   input,
-  //   videoId,
-  //   amqpService,
-  // });
   return FfmpegFactory.create({
     input,
     videoId,
     amqpService,
+    crop,
   });
 };

@@ -7,9 +7,10 @@ export const transcode = async (
   input: string,
   videoId: string,
   amqpService: AmqpService,
+  crop: { left: number; right: number },
 ): Promise<Ffmpeg.FfmpegCommand> => {
   await initStore({ videoId });
-  const transcodeProcess = await createProcess(input, videoId, amqpService);
+  const transcodeProcess = await createProcess(input, videoId, amqpService, crop);
   transcodeProcess.run();
   console.log(transcodeProcess._getArguments());
 

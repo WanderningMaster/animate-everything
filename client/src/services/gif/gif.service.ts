@@ -61,10 +61,11 @@ export class GifService {
     });
   }
 
-  upload(data: FormData): Promise<{ res: string }> {
+  upload(payload: { base64: string; crop: { left: number; right: number } }): Promise<{ res: string }> {
     return this.http.load<{ res: string }>(`${this.baseUrl}/upload`, {
       method: HttpMethod.POST,
-      payload: data,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(payload),
     });
   }
 

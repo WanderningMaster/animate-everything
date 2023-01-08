@@ -10,7 +10,7 @@ import { UploadForm, UploadFormValues } from "./form";
 import { toast, Id } from "react-toastify";
 
 export const UploadPage: FC = () => {
-  const [file, setFile] = useState<FormData | undefined>();
+  const [base64, setBase64] = useState<string | undefined>();
   const [fileUrl, setFileUrl] = useState<string>("");
   const ref = useRef<HTMLVideoElement | null>(null);
   const [max, setMax] = useState(100);
@@ -20,9 +20,11 @@ export const UploadPage: FC = () => {
   const handleChange = (selectedFile: File): void => {
     const url = URL.createObjectURL(selectedFile);
     setFileUrl(url);
-    const data = new FormData();
-    data.append("data", selectedFile);
-    setFile(data);
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+    reader.onloadend = (): void => {
+      setBase64(reader.result?.toString());
+    };
   };
 
   const handleChangeDuration = (): void => {
@@ -36,21 +38,12 @@ export const UploadPage: FC = () => {
   };
 
   const handleLoad = (): void => {
-    console.log("here1");
     if (!ref.current?.duration) {
       return;
     }
-    console.log("here2");
     setMax(ref.current.duration);
     setValue({ left: 0, right: ref.current.duration });
   };
-
-  useEffect(() => {
-    if (ref.current?.duration) {
-      setMax(ref.current.duration);
-      setValue({ left: 0, right: ref.current.duration });
-    }
-  }, [ref.current?.duration]);
 
   useEffect(() => {
     if (ref.current) {
@@ -83,15 +76,15 @@ export const UploadPage: FC = () => {
 
   const { mutateAsync: uploadAsync, isLoading: isUploading } = useMutation(
     [QueryKeys.GIF, QueryKeys.USER],
-    (data: FormData) => gifService.upload(data),
+    (data: { base64: string; crop: { left: number; right: number } }) => gifService.upload(data),
   );
 
   const handleClickUpload = async ({ title }: UploadFormValues): Promise<void> => {
-    console.log(value);
-    console.log(title);
-
-    if (file) {
-      const { res } = await uploadAsync(file);
+    if (base64) {
+      const { res } = await uploadAsync({
+        base64,
+        crop: value,
+      });
       await createGifAsync({
         mediaSrc: res,
         title,
@@ -114,11 +107,12 @@ export const UploadPage: FC = () => {
         <div className="flex flex-row justify-between space-x-4">
           <video
             className="h-auto w-7/12"
-            onLoad={handleLoad}
+            onDurationChange={handleLoad}
             onTimeUpdate={handleChangeDuration}
             ref={ref}
             muted
             autoPlay
+            loop
             src={fileUrl}
           />
           {ref.current && (
@@ -135,7 +129,7 @@ export const UploadPage: FC = () => {
               initialMax={value.right}
               min={0}
               max={max}
-              step={0.1}
+              step={1}
             />
           </div>
         )}

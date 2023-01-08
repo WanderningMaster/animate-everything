@@ -1,5 +1,6 @@
 import { Typography } from "components/common/typography";
 import React, { useEffect, useRef, FC } from "react";
+import { formatSeconds } from "utils";
 
 type RangeSliderProps = {
   initialMin: number;
@@ -19,29 +20,17 @@ export const RangeSlider: FC<RangeSliderProps> = ({ initialMin, initialMax, min,
   const progressRef = useRef<HTMLDivElement>(null);
 
   const handleMin = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (initialMax <= max) {
-      if (parseInt(e.target.value) > initialMax) {
-        return;
-      }
-      setValue((state) => ({ left: parseInt(e.target.value), right: state.right }));
+    if (parseInt(e.target.value) > initialMax) {
       return;
     }
-    if (parseInt(e.target.value) < initialMin) {
-      setValue((state) => ({ left: parseInt(e.target.value), right: state.right }));
-    }
+    setValue((state) => ({ left: parseInt(e.target.value), right: state.right }));
   };
 
   const handleMax = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (initialMax <= max) {
-      if (parseInt(e.target.value) < initialMin) {
-        return;
-      }
-      setValue((state) => ({ left: state.left, right: parseInt(e.target.value) }));
+    if (parseInt(e.target.value) < initialMin) {
       return;
     }
-    if (parseInt(e.target.value) > initialMax) {
-      setValue((state) => ({ left: state.left, right: parseInt(e.target.value) }));
-    }
+    setValue((state) => ({ left: state.left, right: parseInt(e.target.value) }));
   };
 
   useEffect(() => {
@@ -80,10 +69,10 @@ export const RangeSlider: FC<RangeSliderProps> = ({ initialMin, initialMax, min,
 
       <div className=" pt-4 w-full flex flex-row justify-between">
         <div>
-          <Typography text={initialMin.toString()} />
+          <Typography text={formatSeconds(initialMin)} />
         </div>
         <div>
-          <Typography text={initialMax.toString()} />
+          <Typography text={formatSeconds(initialMax)} />
         </div>
       </div>
     </div>

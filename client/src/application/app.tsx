@@ -13,7 +13,6 @@ import { SettingsPage } from "pages/settings-page";
 import { CardProvider } from "providers/card-provider";
 import { FavoritesPage } from "pages/favorites-page";
 import { UploadPage } from "pages/upload-page";
-import { Main } from "pages/example/main";
 
 const App: FC = () => {
   return (
@@ -22,7 +21,6 @@ const App: FC = () => {
         <CardProvider>
           <AppLayout>
             <Routes>
-              <Route path={"/example"} element={<Main />} />
               <Route path={"/"} element={<MainPage />} />
               <Route path={"/author/:id"} element={<AuthorPage />} />
               <Route path={"/favorites"} element={<FavoritesPage />} />

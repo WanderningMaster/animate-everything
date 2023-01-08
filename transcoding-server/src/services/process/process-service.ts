@@ -23,11 +23,9 @@ export class ProcessService {
           return;
         }
 
-        const { input, videoId } = JSON.parse(videoData.toString("utf-8"));
-        logger.info({ input, videoId });
-        // const videoId = "123";
-        // const input = "https://res.cloudinary.com/ds5b5u8go/video/upload/v1672873716/temp/input_pywnez.mp4";
-        await transcode(input, videoId, this.amqpService);
+        const { input, videoId, crop } = JSON.parse(videoData.toString("utf-8"));
+        logger.info({ input, videoId, crop });
+        await transcode(input, videoId, this.amqpService, crop);
       },
     });
   }
