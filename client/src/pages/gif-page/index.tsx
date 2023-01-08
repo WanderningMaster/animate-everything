@@ -73,7 +73,7 @@ export const GifPage: FC = () => {
           </Link>
         </div>
         <div className=" w-full h-full">
-          <img src={src} className={"rounded-xl drop-shadow-2xl w-full object-cover"} />
+          <img src={src} className={"rounded-xl drop-shadow-2xl w-full h-auto object-cover"} />
           <Link to={`/gif/fullscreen/${id}`}>
             <div className="relative bottom-16 left-6 w-10 cursor-pointer">
               <FullScreen className="fill-white" />

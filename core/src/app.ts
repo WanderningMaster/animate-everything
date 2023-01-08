@@ -17,6 +17,7 @@ class Application {
   public async initialize(): Promise<FastifyInstance> {
     const instance = Fastify({
       logger,
+      bodyLimit: 20971520,
     });
     await this.initDb(instance);
     await this.initAmqp(instance);

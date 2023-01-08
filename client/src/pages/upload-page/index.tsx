@@ -103,7 +103,7 @@ export const UploadPage: FC = () => {
   return (
     <div className="flex flex-col space-y-6 justify-between">
       <div className="flex flex-col space-y-4 h-1/3">
-        <UploadFile title="Upload Video" eventCb={handleChange} />
+        <UploadFile title="Upload Video (up to 1mb)" eventCb={handleChange} />
         <div className="flex flex-row justify-between space-x-4">
           <video
             className="h-auto w-7/12"

@@ -37,7 +37,7 @@ export const GifPageShared: FC = () => {
             <UploadButton cb={(): void => console.log("uploaded")} title={title} url={src} />
           </div>
         </div>
-        <img src={src} className={" self-center w-10/12 h-auto"} />
+        <img src={src} className={" self-center w-auto h-full"} />
       </div>
     </div>
   );

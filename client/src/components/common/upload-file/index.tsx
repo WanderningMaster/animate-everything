@@ -1,15 +1,25 @@
 import React, { FC } from "react";
+import { toast, Id } from "react-toastify";
 
 type UploadFileProps = {
   title?: string;
   eventCb: (selectedFile: File) => void;
 };
 
+// due to file size upload limit to cloud we cant handle large files
+const FILE_SIZE_LIMIT = 1048576; //1mb in bytes
+
 export const UploadFile: FC<UploadFileProps> = ({ eventCb, title = "Upload Avatar" }) => {
   const hiddenFileInput = React.useRef<HTMLInputElement>(null);
+
+  const notifyToLarge = (): Id => toast("File too large", { type: "error" });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files) {
-      eventCb(e.target.files[0]);
+      if (e.target.files[0].size <= FILE_SIZE_LIMIT) {
+        eventCb(e.target.files[0]);
+        return;
+      }
+      notifyToLarge();
     }
   };
 
