@@ -31,6 +31,7 @@ interface AuthContextType {
     }>,
     unknown
   >;
+  deleteProfileAsync: UseMutateAsyncFunction<UserResponseDto, unknown, void, unknown>;
 }
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -80,10 +81,26 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         _localStorage.remove("accessToken");
         _localStorage.remove("refreshToken");
         setUser(undefined);
+        navigate("/login");
         notifySignOut();
       },
       onError: (err: any) => {
         setError(err?.message);
+      },
+    },
+  );
+
+  const notifyProfileDeleted = (): Id => toast("Profile successfully deleted", { type: "success" });
+  const { mutateAsync: deleteProfileAsync } = useMutation(
+    [QueryKeys.USER, QueryKeys.AUTH],
+    () => userService.deleteProfile(),
+    {
+      onSuccess: () => {
+        _localStorage.remove("accessToken");
+        _localStorage.remove("refreshToken");
+        setUser(undefined);
+        navigate("/login");
+        notifyProfileDeleted();
       },
     },
   );
@@ -141,6 +158,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       signOutAsync,
       updateAvatarAsync,
       updateProfileAsync,
+      deleteProfileAsync,
     }),
     [
       user,
@@ -152,6 +170,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       signOutAsync,
       updateAvatarAsync,
       updateProfileAsync,
+      deleteProfileAsync,
     ],
   );
 

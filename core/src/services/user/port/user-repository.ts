@@ -11,4 +11,6 @@ export interface UserRepository {
   createOne(payload: UserCreateRequestDto): Promise<User>;
 
   updateProfile(payload: UserUpdateRequestDto & { userId: string }): Promise<User>;
+
+  delete({ id }: DefaultRequestParam): Promise<void>;
 }

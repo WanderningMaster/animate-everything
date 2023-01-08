@@ -67,6 +67,12 @@ export const UserRouter = async (instance: FastifyInstance): Promise<void> => {
   });
   instance.route({
     preHandler: authHook(false),
+    method: "DELETE",
+    url: UserApiPath.ROOT,
+    handler: userController.delete,
+  });
+  instance.route({
+    preHandler: authHook(false),
     method: "GET",
     url: UserApiPath.ME,
     schema: {

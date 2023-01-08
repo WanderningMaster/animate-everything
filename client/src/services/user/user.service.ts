@@ -28,6 +28,12 @@ export class UserService {
     });
   }
 
+  deleteProfile(): Promise<UserResponseDto> {
+    return this.http.load<UserResponseDto>(`${this.baseUrl}${UserApiPath.ROOT}`, {
+      method: HttpMethod.DELETE,
+    });
+  }
+
   updateProfile(payload: UserUpdateRequestDto): Promise<UserResponseDto> {
     return this.http.load<UserResponseDto>(`${this.baseUrl}/profile`, {
       method: HttpMethod.PUT,

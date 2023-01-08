@@ -25,6 +25,7 @@ export const useAuth = (): {
     }>,
     unknown
   >;
+  deleteProfileAsync: UseMutateAsyncFunction<UserResponseDto, unknown, void, unknown>;
 } => {
   const {
     user: data,
@@ -33,6 +34,7 @@ export const useAuth = (): {
     signOutAsync,
     updateAvatarAsync,
     updateProfileAsync,
+    deleteProfileAsync,
   } = useContext(AuthContext);
 
   return {
@@ -43,5 +45,6 @@ export const useAuth = (): {
     signOutAsync,
     updateAvatarAsync,
     updateProfileAsync,
+    deleteProfileAsync,
   };
 };

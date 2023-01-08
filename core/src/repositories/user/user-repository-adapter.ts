@@ -45,4 +45,8 @@ export class UserRepositoryAdapter implements UserRepository {
       where: [{ email }, { username }],
     });
   }
+
+  async delete({ id }: DefaultRequestParam): Promise<void> {
+    await this.dataSource.delete(id);
+  }
 }

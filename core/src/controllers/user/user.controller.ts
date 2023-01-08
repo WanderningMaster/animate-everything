@@ -34,6 +34,21 @@ export class UserController {
     return userService.createOne(payload);
   }
 
+  public async delete(request: FastifyRequest): Promise<UserResponseDto> {
+    const payload = request.user.id;
+
+    const deletedUser = await userService.deleteById({ id: payload });
+
+    if (!deletedUser) {
+      throw new HttpError({
+        status: HttpCode.NOT_FOUND,
+        message: "User not found",
+      });
+    }
+
+    return deletedUser;
+  }
+
   public async getOne(
     request: FastifyRequest<{
       Params: DefaultRequestParam;

@@ -43,6 +43,22 @@ export class UserService {
     return castToUserDto(user);
   }
 
+  async deleteById({ id }: DefaultRequestParam): Promise<UserResponseDto | null> {
+    const userToDelete = await this.userRepository.getById({
+      id,
+    });
+
+    if (!userToDelete) {
+      return null;
+    }
+
+    await this.userRepository.delete({
+      id,
+    });
+
+    return castToUserDto(userToDelete);
+  }
+
   async createOne(payload: UserCreateRequestDto): Promise<UserResponseDto> {
     const user = await this.userRepository.createOne(payload);
 

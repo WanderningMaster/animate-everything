@@ -35,7 +35,7 @@ class Application {
     instance.register(gracefulShutdownPlugin);
     instance.register(corsPlugin, {
       origin: "*",
-      methods: ["GET", "PUT", "POST"],
+      methods: ["GET", "PUT", "POST", "DELETE"],
     });
     instance.register(multipart, {
       limits: {
