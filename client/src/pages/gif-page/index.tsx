@@ -11,6 +11,7 @@ import { QueryKeys } from "shared/build";
 import { gifService } from "services/services";
 import { useAuth } from "hooks/use-auth-hook";
 import { toast, Id } from "react-toastify";
+import { CONFIG } from "config/config";
 
 export const GifPage: FC = () => {
   const { id } = useParams() as { id: string };
@@ -58,7 +59,7 @@ export const GifPage: FC = () => {
 
   const notifyCopied = (): Id => toast("Copied", { type: "info" });
   const handleClickCopy = (): void => {
-    navigator.clipboard.writeText(`http://localhost:3000/gif/shared/${id}`);
+    navigator.clipboard.writeText(`${CONFIG.CLIENT_URL}/gif/shared/${id}`);
     notifyCopied();
   };
 

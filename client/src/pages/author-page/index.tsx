@@ -10,7 +10,7 @@ import { LoadMore } from "components/load-more";
 
 export const AuthorPage: FC = () => {
   const { id } = useParams() as { id: string };
-  const { pagination, setItemCount, setCards, cards: data, triggerReset } = useCards();
+  const { pagination, setItemCount, setCards, cards: data, triggerReset, itemCount } = useCards();
   useQuery(
     [QueryKeys.GIF, QueryKeys.USER, pagination, triggerReset],
     () => gifService.getByAuthor(id, { ...pagination }),
@@ -31,7 +31,11 @@ export const AuthorPage: FC = () => {
   );
 
   if (!data) {
-    return <div>Failed to fetch</div>;
+    return <Typography text={"Failed to fetch"} />;
+  }
+
+  if (itemCount === 0) {
+    return <Typography text={"There is no gifs yet"} />;
   }
 
   const listItems = data.map(({ id, mediaSrc, isLiked, author: { username, avatar, id: authorId } }) => ({
